@@ -132,6 +132,15 @@ textarea::placeholder {
   padding: 0.3rem 1.2rem;
   margin-right: 0.6rem;
 }
+.small-tab {
+  background-color: #f1f3f4;
+  color: #606469;
+  border-radius: 0.3rem;
+  font-weight: 500;
+  font-size: 0.8rem;
+  padding: 0.3rem 1rem;
+  margin-right: 0.4rem;
+}
 .tab-theme-default {
   border: solid 1px #dadce0;
   background-color: white;

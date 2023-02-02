@@ -127,22 +127,22 @@ const Home = () => {
                 key={subject.code}
               >
                 <div className="card-body">
-                  <h3 className="card-title">{subject.name}</h3>
-                  <div className="card-subtitle text-sm text-grey-500">
-                    {subject.code}
+                  <div className="mb-2">
+                    <h3 className="card-title">{subject.name}</h3>
+                    <div className="card-subtitle text-sm text-grey-500">
+                      {subject.code}
+                    </div>
                   </div>
                   <p className="card-text">
                     {truncateString(subject.description, 120)}
                   </p>
                 </div>
                 <div className="card-footer">
-                  {subject.gate && <span className="mr-2 text-sm">GATE</span>}
+                  {subject.gate && <span className="small-tab">GATE</span>}
                   {subject.practical && (
-                    <span className="mr-2 text-sm">Practical-Subject</span>
+                    <span className="small-tab">Practicals</span>
                   )}
-                  <span className="mr-2 text-sm">
-                    {subject.credits}-credits
-                  </span>
+                  <span className="small-tab">{subject.credits} credits</span>
                 </div>
               </div>
             ))}
