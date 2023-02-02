@@ -109,9 +109,6 @@ textarea::placeholder {
   background-color: white;
   border: solid 1px #dadce0;
   border-radius: 0.6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 .card .card-body {
   padding: 1rem;

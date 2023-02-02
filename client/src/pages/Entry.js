@@ -27,12 +27,15 @@ const Entry = () => {
   };
   const addUser = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3001/api/users/register", {
-        user: {
-          username,
-          password,
-        },
-      });
+      const { data } = await axios.post(
+        "http://localhost:3001/api/users/register",
+        {
+          user: {
+            username,
+            password,
+          },
+        }
+      );
       console.log(data);
       setLoginTab(true);
     } catch (e) {
@@ -49,7 +52,7 @@ const Entry = () => {
       <Header loggedIn={false} loginTab={loginTab} setLoginTab={setLoginTab} />
       <div className="flex justify-center items-center page-template entry">
         <form
-          className="card"
+          className="card flex justify-between items-center"
           onSubmit={async (e) => {
             e.preventDefault();
             if (loginTab) {
@@ -57,40 +60,46 @@ const Entry = () => {
             } else addUser();
           }}
         >
-          <h2 className="text-center mt-8 card-title">
-            {loginTab ? "Log In" : "Sign Up"}
-          </h2>
-          <div className="card-body">
-            <div className="mb-4">
-              <input
-                className="w-full"
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                className="w-full"
-                placeholder="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {errorMsg && (
-              <div className="text-red-500 text-end text-sm err-msg">
-                {errorMsg}
+          <div className="w-1/2">
+            <h2 className="text-center mt-8 card-title">
+              {loginTab ? "Log In" : "Sign Up"}
+            </h2>
+            <div className="card-body">
+              <div className="mb-4">
+                <input
+                  className="w-full"
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
               </div>
-            )}
-            <div>
-              <button className="w-full btn-primary">
-                {loginTab ? "Enter" : "Join"}
-              </button>
+              <div className="mb-4">
+                <input
+                  className="w-full"
+                  placeholder="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              {errorMsg && (
+                <div className="text-red-500 text-end text-sm err-msg">
+                  {errorMsg}
+                </div>
+              )}
+              <div>
+                <button className="w-full btn-primary">
+                  {loginTab ? "Enter" : "Join"}
+                </button>
+              </div>
             </div>
           </div>
+          <div
+            style={{ backgroundImage: `url("./assets/login.png")` }}
+            className="login-side w-1/2"
+          ></div>
         </form>
       </div>
     </>
