@@ -123,7 +123,7 @@ app.get("/api/subjects/get_subject/:code", (req, res) => {
 //   res.json({ file: files });
 // });
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
-  console.log("Listening on port 3001");
+  console.log("Server listening the port http://localhost/" + port);
 });
