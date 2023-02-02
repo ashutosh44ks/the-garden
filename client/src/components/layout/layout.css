@@ -25,10 +25,14 @@
 .header_btn-grp button {
   padding: 0.9rem 1rem;
   transition: all 0.2s ease-in-out;
-  color: #3c4043;
 }
 .header_btn-grp button:hover {
+  background-color: #e8eaed;
   color: #303336;
+}
+.header_btn-grp button.text-blue:hover {
+  color: #185abc;
+  background-color: #e8eaed;
 }
 .header svg.user-icon {
   transform: scale(2.2);

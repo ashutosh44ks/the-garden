@@ -35,7 +35,7 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
       ) : (
         <div className="header_btn-grp">
           <button
-            className="cursor-pointer share-icon-parent"
+            className="text-dark share-icon-parent"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
               alert("Link Copied!");
@@ -44,7 +44,7 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
             <HiOutlineShare className="share-icon" />
           </button>
           <button
-            className="cursor-pointer user-icon-parent"
+            className="text-dark user-icon-parent"
             onClick={() => setOpenDropdown(!openDropdown)}
             onBlur={() => {
               setOpenDropdown(false);
