@@ -6,5 +6,5 @@ Express.js ReactJS TailwindCSS + more soon
 
 ### How to run in local
 1. Clone this repository
-2. cd server
-3. npm run dev
+2. Install node modules in client & server
+3. Goto server directory and run command ```npm run dev```
