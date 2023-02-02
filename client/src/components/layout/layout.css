@@ -1,0 +1,79 @@
+.header {
+  color: #3c4043;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  border-bottom: solid 1px rgba(112, 118, 140, 0.2);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.header .logo {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+.header h2 {
+  font-family: "Roboto", sans-serif;
+  color: #5f6368;
+}
+.header_btn-grp {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+.header_btn-grp button {
+  padding: 0.9rem 1rem;
+  transition: all 0.2s ease-in-out;
+  color: #3c4043;
+}
+.header_btn-grp button:hover {
+  color: #303336;
+}
+.header svg.user-icon {
+  transform: scale(2.2);
+}
+.header svg.share-icon {
+  transform: scale(1.5);
+}
+.header .share-icon-parent:hover,
+.header .share-icon-parent:active {
+  background-color: #e8eaed;
+}
+.header .user-icon-parent {
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+  padding: 0.7rem;
+}
+.header .user-icon-parent:hover,
+.header .user-icon-parent:active {
+  background-color: #e8f0fe;
+}
+.header .user-icon-parent .dropdown {
+  position: absolute;
+  top: 3.1rem;
+  right: 0.2rem;
+  width: 9rem;
+  background-color: #fff;
+  border-radius: 0.3rem;
+  box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
+    rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+  padding: 0.5rem 0;
+}
+.header .user-icon-parent .dropdown .dropdown-item {
+  padding: 0.8rem 1rem;
+  color: #5f6368;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+}
+.header .user-icon-parent .dropdown .dropdown-item:hover {
+  background-color: #e8eaed;
+}
+
+.page-template {
+  padding-top: 2.8rem;
+  min-height: 100vh;
+  background-color: rgb(248, 248, 248);
+}

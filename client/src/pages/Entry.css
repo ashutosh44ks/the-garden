@@ -1,0 +1,10 @@
+.entry .card {
+  width: 40vw;
+}
+.entry .card-body {
+  padding: 2rem 1.5rem;
+}
+.entry .err-msg {
+  position: relative;
+  top: -0.5rem;
+}

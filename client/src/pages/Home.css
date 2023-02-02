@@ -1,0 +1,24 @@
+.banner-img {
+  height: 10rem;
+  aspect-ratio: 720/416;
+  border-radius: 0.5rem;
+}
+.year-tab {
+  background-color: white;
+  border: solid 1px #dadce0;
+  border-radius: 0.3rem;
+  color: #202124;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.3rem 1.2rem;
+  margin-right: 0.6rem;
+  transition: all 0.2s ease-in-out;
+}
+.year-tab:hover {
+  background-color: #f8f9fa;
+}
+.year-tab.active {
+  background-color: #e8f0fe;
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
