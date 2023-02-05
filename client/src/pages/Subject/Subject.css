@@ -1,0 +1,21 @@
+.difficulty-dropdown .dropdown {
+  position: absolute;
+  width: 10rem;
+  background-color: #fff;
+  border-radius: 0.3rem;
+  box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
+    rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+  padding: 0.5rem 0;
+}
+.difficulty-dropdown .dropdown .dropdown-item {
+  cursor: pointer;
+  padding: 0.8rem 1rem;
+  color: #5f6368;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+}
+.difficulty-dropdown .dropdown .dropdown-item:hover {
+  background-color: #e8eaed;
+}

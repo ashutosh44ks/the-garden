@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import truncateString from "../components/utils/truncateString";
+import truncateString from "../../components/utils/truncateString";
 import { FiAlertCircle } from "react-icons/fi";
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import "./Home.css";
@@ -69,27 +69,27 @@ const Home = () => {
             <span>Show more filters</span>
           </div>
         </div>
-        <div className="mt-5">
+        <div className="mt-5 flex gap-2">
           <button
-            className={`year-tab ${year === 1 && "active"}`}
+            className={`year-tab ${year === 1 ? "active" : ""}`}
             onClick={() => setYear(1)}
           >
             First Year
           </button>
           <button
-            className={`year-tab ${year === 2 && "active"}`}
+            className={`year-tab ${year === 2 ? "active" : ""}`}
             onClick={() => setYear(2)}
           >
             Second Year
           </button>
           <button
-            className={`year-tab ${year === 3 && "active"}`}
+            className={`year-tab ${year === 3 ? "active" : ""}`}
             onClick={() => setYear(3)}
           >
             Third Year
           </button>
           <button
-            className={`year-tab ${year === 4 && "active"}`}
+            className={`year-tab ${year === 4 ? "active" : ""}`}
             onClick={() => setYear(4)}
           >
             Fourth Year
@@ -123,21 +123,21 @@ const Home = () => {
             {subjects.map((subject) => (
               <div
                 className="card cursor-pointer"
-                onClick={() => navigate(`/subject/${subject.code}`)}
-                key={subject.code}
+                onClick={() => navigate(`/subject/${subject.subject_code}`)}
+                key={subject.subject_code}
               >
                 <div className="card-body">
                   <div className="mb-2">
                     <h3 className="card-title">{subject.name}</h3>
                     <div className="card-subtitle text-sm text-grey-500">
-                      {subject.code}
+                      {subject.subject_code}
                     </div>
                   </div>
                   <p className="card-text">
                     {truncateString(subject.description, 120)}
                   </p>
                 </div>
-                <div className="card-footer">
+                <div className="card-footer flex gap-2">
                   {subject.gate && <span className="small-tab">GATE</span>}
                   {subject.practical && (
                     <span className="small-tab">Practicals</span>

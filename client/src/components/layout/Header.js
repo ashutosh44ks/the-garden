@@ -20,13 +20,13 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
       {!loggedIn ? (
         <div className="header_btn-grp">
           <button
-            className={loginTab && "text-blue"}
+            className={loginTab ? "text-blue" : ""}
             onClick={() => setLoginTab(true)}
           >
             Log In
           </button>
           <button
-            className={!loginTab && "text-blue"}
+            className={!loginTab ? "text-blue" : ""}
             onClick={() => setLoginTab(false)}
           >
             Sign Up
@@ -49,7 +49,7 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
             onBlur={() => {
               setOpenDropdown(false);
             }}
-            tabindex="0"
+            tabIndex="0"
           >
             <HiUserCircle className="user-icon" />
             {openDropdown && (

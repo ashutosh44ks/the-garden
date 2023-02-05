@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/utils/ProtectedRoute";
 import Home from "./pages/Home";
 import Entry from "./pages/Entry";
-import ProtectedRoute from "./components/utils/ProtectedRoute";
 import Subject from "./pages/Subject";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";

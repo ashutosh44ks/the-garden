@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Header from "../components/layout/Header";
+import Header from "../../components/layout/Header";
 import "./Entry.css";
 
 const Entry = () => {
@@ -18,7 +18,7 @@ const Entry = () => {
         `http://localhost:3001/api/users/login?username=${username}&password=${password}`
       );
       console.log(data);
-      localStorage.setItem("logged", JSON.stringify({ username, password }));
+      localStorage.setItem("logged", JSON.stringify(data.user));
       navigate("/");
     } catch (e) {
       console.log(e);
