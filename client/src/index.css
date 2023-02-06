@@ -165,3 +165,17 @@ textarea::placeholder {
   border: solid 1px rgb(33, 150, 243);
   background-color: rgba(33, 150, 243, 0.1);
 }
+
+
+.modal {
+  background-color: white;
+  border-radius: 0.6rem;
+  padding: 1.5rem;
+  width: 65vw;
+  max-width: 40rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
