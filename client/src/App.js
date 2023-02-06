@@ -3,6 +3,7 @@ import ProtectedRoute from "./components/utils/ProtectedRoute";
 import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
+import Professor from "./pages/Professor";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -24,6 +25,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Subject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/professor/:professorCode"
+          element={
+            <ProtectedRoute>
+              <Professor />
             </ProtectedRoute>
           }
         />

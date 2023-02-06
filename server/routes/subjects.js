@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { users, subjects } = require("../data");
+const { users, subjects, professors } = require("../data");
 
 router.get("/get_all_subjects/:year", (req, res) => {
   let year = req.params.year;

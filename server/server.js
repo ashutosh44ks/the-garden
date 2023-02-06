@@ -11,6 +11,8 @@ const usersRouter = require("./routes/users");
 app.use("/api/users", usersRouter);
 const subjectsRouter = require("./routes/subjects");
 app.use("/api/subjects", subjectsRouter);
+const professorsRouter = require("./routes/professors");
+app.use("/api/professors", professorsRouter);
 
 // let files = [];
 // app.post("/api/upload", (req, res) => {

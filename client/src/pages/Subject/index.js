@@ -9,6 +9,7 @@ const Subject = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [subject, setSubject] = useState({});
+  const [professors, setProfessors] = useState([]);
   const [myRatedDifficulty, setMyRatedDifficulty] = useState(0);
   const subjectId = window.location.pathname.split("/")[2];
 
@@ -24,8 +25,21 @@ const Subject = () => {
       setIsLoading(false);
     }
   };
+  const getProfessorList = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:3001/api/professors/get_professors_by_subject/" +
+          subjectId
+      );
+      setProfessors(data);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     getSubject();
+    getProfessorList();
     let mySubject = JSON.parse(
       localStorage.getItem("logged")
     ).rated_difficulties.find((x) => x.subject_code === subjectId);
@@ -54,7 +68,7 @@ const Subject = () => {
         { username, subjectCode: subjectId, userDifficulty }
       );
       console.log(data);
-      setMyRatedDifficulty(userDifficulty)
+      setMyRatedDifficulty(userDifficulty);
       getSubject();
     } catch (err) {
       console.log(err);
@@ -118,7 +132,9 @@ const Subject = () => {
               </span>
               <span
                 className={`
-              simple-tab ${myRatedDifficulty === 0 ? "tab-theme-red" : "tab-theme-blue"}
+              simple-tab ${
+                myRatedDifficulty === 0 ? "tab-theme-red" : "tab-theme-blue"
+              }
               `}
               >
                 Your vote: {myRatedDifficulty}
@@ -181,19 +197,20 @@ const Subject = () => {
         gap-4
         "
           >
-            {subject.professors.map((professor) => {
+            {professors.map((professor) => {
               return (
                 <div className="card" key={professor.code}>
                   <div className="card-body">
-                    <h3 className="card-title">
+                    <h3
+                      className="card-title"
+                      onClick={() => {
+                        navigate(`/professor/${professor.code}`);
+                      }}
+                    >
                       {`${professor.name} (${professor.code})`}
                     </h3>
                     <div className="text-dark text-sm mb-2">
-                      {professor.designation +
-                        ", " +
-                        (professor.active
-                          ? "Current lecturer"
-                          : "Former lecturer")}
+                      {professor.designation}
                     </div>
                     {Object.entries(professor.ratings).map(([key, value]) => {
                       return (

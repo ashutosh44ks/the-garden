@@ -11,6 +11,7 @@ const users = [
     ],
   },
 ];
+
 const subjects = [
   {
     name: "Computer Networks",
@@ -22,34 +23,7 @@ const subjects = [
     gate: true,
     practical: false,
     difficulty: 3,
-    professors: [
-      {
-        name: "Mr. Smith",
-        code: "TITS",
-        designation: "Assistant Professor",
-        active: true,
-        ratings: {
-          marks_rating: 4,
-          attendance_rating: 4,
-          personality: 4,
-          teaching: 2,
-          knowledge: 4,
-        },
-      },
-      {
-        name: "Dr. John Doe",
-        code: "TITJD",
-        designation: "Assistant Professor",
-        active: false,
-        ratings: {
-          marks_rating: 4,
-          attendance_rating: 4,
-          personality: 4,
-          teaching: 2,
-          knowledge: 4,
-        },
-      },
-    ],
+    professors: ["TITKJ", "TITS"],
   },
   {
     name: "Compiler Design",
@@ -61,22 +35,53 @@ const subjects = [
     gate: true,
     practical: true,
     difficulty: 2,
-    professors: [
-      {
-        name: "Prof. Dr. Eng. Ionut Mihai",
-        code: "TITS",
-        designation: "Assistant Professor",
-        active: false,
-        ratings: {
-          marks_rating: 4,
-          attendance_rating: 4,
-          personality: 4,
-          teaching: 2,
-          knowledge: 4,
-        },
-      },
-    ],
+    professors: ["TITJD", "TITS"],
   },
 ];
 
-module.exports = { users, subjects };
+const professors = [
+  {
+    name: "Mr. Kim Jong",
+    code: "TITKJ",
+    designation: "Professor",
+    nicknames: ["Chomu"],
+    subjects: ["TIT69", "TIT44"],
+    ratings: {
+      marks_rating: 3,
+      attendance_rating: 5,
+      personality: 4,
+      teaching: 2,
+      knowledge: 4,
+    },
+  },
+  {
+    name: "Prof. Dr. Eng. Ionut Mihai",
+    code: "TITS",
+    designation: "Assistant Professor",
+    nicknames: ["Bhendi"],
+    subjects: ["TIT69", "TIT420"],
+    ratings: {
+      marks_rating: 4,
+      attendance_rating: 4,
+      personality: 4,
+      teaching: 2,
+      knowledge: 4,
+    },
+  },
+  {
+    name: "Dr. John Doe",
+    code: "TITJD",
+    designation: "Assistant Professor",
+    nicknames: [],
+    subjects: ["TIT69", "TIT420"],
+    ratings: {
+      marks_rating: 4,
+      attendance_rating: 4,
+      personality: 4,
+      teaching: 2,
+      knowledge: 4,
+    },
+  },
+];
+
+module.exports = { users, subjects, professors };
