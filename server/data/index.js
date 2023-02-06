@@ -47,10 +47,10 @@ const professors = [
     nicknames: ["Chomu"],
     subjects: ["TIT69", "TIT44"],
     ratings: {
-      marks_rating: 3,
+      marks_rating: 3.5,
       attendance_rating: 5,
       personality: 4,
-      teaching: 2,
+      teaching: 2.25,
       knowledge: 4,
     },
   },
