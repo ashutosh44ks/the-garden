@@ -54,7 +54,6 @@ const Professor = () => {
           username,
         }
       );
-      console.log(data)
       setProfessor(data);
     } catch (error) {
       console.log(error);
@@ -112,33 +111,39 @@ const Professor = () => {
               <div className="mb-2 font-medium">Rating Metric</div>
               <div className="mb-2 font-medium">Current Rating</div>
               <div className="mb-2 text-center font-medium">Your Rating</div>
-              {Object.entries(professor.ratings).map(([key, value]) => (
-                <>
-                  <div className="flex items-center">{toLabel(key)}</div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(Math.floor(value))].map((_, index) => (
-                      <BsStarFill className="text-blue" key={index} />
-                    ))}
-                    {value % 1 >= 0.5 && <BsStarHalf className="text-blue" />}
-                    {value < 5 &&
-                      [
-                        ...Array(
-                          Math.ceil(5 - (value % 1 >= 0.5 ? value + 1 : value))
-                        ),
-                      ].map((_, index) => <BsStar className="text-blue" key={index} />)}
-                  </div>
-                  <Slider
-                    min={0}
-                    max={5}
-                    step={0.5}
-                    defaultValue={ratings[key]}
-                    handleRender={handleRender}
-                    onChange={(value) =>
-                      setRatings({ ...ratings, [key]: value })
-                    }
-                  />
-                </>
-              ))}
+              {Object.entries(professor.ratings).map(([key, value]) =>
+                key === "count" ? null : (
+                  <>
+                    <div className="flex items-center">{toLabel(key)}</div>
+                    <div className="flex items-center gap-1">
+                      {[...Array(Math.floor(value))].map((_, index) => (
+                        <BsStarFill className="text-blue" key={index} />
+                      ))}
+                      {value % 1 >= 0.5 && <BsStarHalf className="text-blue" />}
+                      {value < 5 &&
+                        [
+                          ...Array(
+                            Math.ceil(
+                              5 - (value % 1 >= 0.5 ? value + 1 : value)
+                            )
+                          ),
+                        ].map((_, index) => (
+                          <BsStar className="text-blue" key={index} />
+                        ))}
+                    </div>
+                    <Slider
+                      min={0}
+                      max={5}
+                      step={0.5}
+                      defaultValue={ratings[key]}
+                      handleRender={handleRender}
+                      onChange={(value) =>
+                        setRatings({ ...ratings, [key]: value })
+                      }
+                    />
+                  </>
+                )
+              )}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { users, subjects, professors } = require("../data");
+const {addToAverage, replaceInAverage} = require('../utils')
 
 router.get("/get_all_subjects/:year", (req, res) => {
   let year = req.params.year;
@@ -13,12 +14,7 @@ router.get("/get_subject/:code", (req, res) => {
   res.json({ subject });
 });
 
-const addToAverage = (oldAvg, oldCount, newValue) => {
-  return oldAvg + (newValue - oldAvg) / (oldCount + 1);
-};
-const replaceInAverage = (oldAvg, oldCount, oldValue, newValue) => {
-  return oldAvg + (newValue - oldValue) / oldCount;
-};
+
 router.post("/rate_difficulty", (req, res) => {
   const { username, subjectCode, userDifficulty } = req.body;
 
@@ -35,8 +31,10 @@ router.post("/rate_difficulty", (req, res) => {
     return;
   }
 
-  let alreadyVoted = 
-    user.rated_difficulties.find((subj) => subj.subject_code === subjectCode) !== undefined;
+  let alreadyVoted =
+    user.rated_difficulties.find(
+      (subj) => subj.subject_code === subjectCode
+    ) !== undefined;
 
   if (alreadyVoted) {
     // update difficulty
@@ -70,7 +68,7 @@ router.post("/rate_difficulty", (req, res) => {
     if (u.username === username) u.rated_difficulties = user.rated_difficulties;
   });
   subjects.forEach((s) => {
-    if (s.code === subjectCode) s.difficulty = subject.difficulty;
+    if (s.subject_code === subjectCode) s.difficulty = subject.difficulty;
   });
 
   let newDifficulty = subject.difficulty;

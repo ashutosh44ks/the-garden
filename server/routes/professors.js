@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { professors, users } = require("../data");
+const { addToAverage, replaceInAverage } = require("../utils");
 
 router.get("/get_professor_details/:professorCode", (req, res) => {
   const professorCode = req.params.professorCode;
@@ -20,12 +21,6 @@ router.get("/get_professors_by_subject/:subjectCode", (req, res) => {
   res.json(professorList);
 });
 
-const addToAverage = (oldAvg, oldCount, newValue) => {
-  return oldAvg + (newValue - oldAvg) / (oldCount + 1);
-};
-const replaceInAverage = (oldAvg, oldCount, oldValue, newValue) => {
-  return oldAvg + (newValue - oldValue) / oldCount;
-};
 router.put("/update_professor_ratings/:professorCode", (req, res) => {
   // this has lots of bugs
   // set initial count to 2 in professors
@@ -38,12 +33,13 @@ router.put("/update_professor_ratings/:professorCode", (req, res) => {
   let user = users.find((u) => u.username === username);
   if (!user) return res.status(404).send("User not found");
 
-  let alreadyVoted = user.rated_professors.find(
-    (prof) => prof.professor_code === professorCode
-  );
+  let alreadyVoted =
+    user.rated_professors.find(
+      (prof) => prof.professor_code === professorCode
+    ) !== undefined;
+
   if (alreadyVoted) {
     // update difficulty
-    console.log("already voted");
     let oldRating = user.rated_professors.find(
       (prof) => prof.professor_code === professorCode
     );
@@ -88,7 +84,6 @@ router.put("/update_professor_ratings/:professorCode", (req, res) => {
     });
   } else {
     // add new difficulty
-    console.log("new vote");
     user.rated_professors.push({
       professor_code: professorCode,
       marks_rating: ratings.marks_rating,
@@ -123,6 +118,14 @@ router.put("/update_professor_ratings/:professorCode", (req, res) => {
       ratings.knowledge
     );
   }
+
+  // commit in database
+  users.forEach((u) => {
+    if (u.username === username) u.rated_professors = user.rated_professors;
+  });
+  professors.forEach((p) => {
+    if (p.code === professorCode) p.ratings = professor.ratings;
+  });
 
   res.json(professor);
 });
