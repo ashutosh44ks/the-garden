@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import Professor from "./pages/Professor";
+import Error404 from "./pages/Error404";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -52,7 +53,7 @@ function App() {
             </ProtectedRoute>
           }
         /> */}
-        <Route path="*" element={<div>404</div>} />
+        <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>
   );
