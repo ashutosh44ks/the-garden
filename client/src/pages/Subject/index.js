@@ -56,7 +56,7 @@ const Subject = () => {
     let scores = Object.values(ratings);
     if (scores.length === 0) return 0;
     let sum = scores.reduce((acc, curr) => acc + curr, 0);
-    return sum / scores.length;
+    return (sum / scores.length).toFixed(2);
   };
 
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -216,7 +216,7 @@ const Subject = () => {
                       return (
                         <div className="flex items-center" key={key}>
                           <span className="w-[10rem]">{toLabel(key)}:</span>
-                          <span className="mr-1">{value}</span>
+                          <span className="mr-1">{value.toFixed(2)}</span>
                           <AiFillStar className="text-blue" />
                         </div>
                       );

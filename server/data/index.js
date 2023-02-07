@@ -9,6 +9,7 @@ const users = [
         difficulty: 3,
       },
     ],
+    rated_professors: [],
   },
 ];
 
@@ -23,6 +24,7 @@ const subjects = [
     gate: true,
     practical: false,
     difficulty: 3,
+    ratings_count: 1,
     professors: ["TITKJ", "TITS"],
   },
   {
@@ -35,6 +37,7 @@ const subjects = [
     gate: true,
     practical: true,
     difficulty: 2,
+    ratings_count: 1,
     professors: ["TITJD", "TITS"],
   },
 ];
@@ -52,6 +55,7 @@ const professors = [
       personality: 4,
       teaching: 2.25,
       knowledge: 4,
+      count: 2,
     },
   },
   {
@@ -66,6 +70,7 @@ const professors = [
       personality: 4,
       teaching: 2,
       knowledge: 4,
+      count: 2,
     },
   },
   {
@@ -80,6 +85,7 @@ const professors = [
       personality: 4,
       teaching: 2,
       knowledge: 4,
+      count: 2,
     },
   },
 ];

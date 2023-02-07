@@ -18,7 +18,6 @@ const Professor = () => {
         const { data } = await axios.get(
           `http://localhost:3001/api/professors/get_professor_details/${professorCode}`
         );
-        console.log(data);
         setProfessor(data);
       } catch (error) {
         console.log(error);
@@ -42,7 +41,24 @@ const Professor = () => {
     let scores = Object.values(ratings);
     if (scores.length === 0) return 0;
     let sum = scores.reduce((acc, curr) => acc + curr, 0);
-    return sum / scores.length;
+    return (sum / scores.length).toFixed(2);
+  };
+
+  const updateRatings = async () => {
+    try {
+      let username = JSON.parse(localStorage.getItem("logged")).username;
+      const { data } = await axios.put(
+        `http://localhost:3001/api/professors/update_professor_ratings/${professor.code}`,
+        {
+          ratings,
+          username,
+        }
+      );
+      console.log(data)
+      setProfessor(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -65,7 +81,9 @@ const Professor = () => {
           <h3 className="mb-2">Nicknames</h3>
           <div className="flex flex-wrap gap-2">
             {professor.nicknames?.map((nickname) => (
-              <div className="simple-tab tab-theme-blue">{nickname}</div>
+              <div className="simple-tab tab-theme-blue" key={nickname}>
+                {nickname}
+              </div>
             ))}
             <div
               className="simple-tab tab-theme-default cursor-pointer"
@@ -81,8 +99,8 @@ const Professor = () => {
             className="btn-primary"
             onClick={() => {
               if (Object.values(ratings).every((rating) => rating > 0))
-                console.log(ratings);
-              else alert("Please rate all the metrics");
+                updateRatings();
+              else alert("Minimum rating for any metric is 0.5");
             }}
           >
             Submit
@@ -99,7 +117,7 @@ const Professor = () => {
                   <div className="flex items-center">{toLabel(key)}</div>
                   <div className="flex items-center gap-1">
                     {[...Array(Math.floor(value))].map((_, index) => (
-                      <BsStarFill className="text-blue" />
+                      <BsStarFill className="text-blue" key={index} />
                     ))}
                     {value % 1 >= 0.5 && <BsStarHalf className="text-blue" />}
                     {value < 5 &&
@@ -107,7 +125,7 @@ const Professor = () => {
                         ...Array(
                           Math.ceil(5 - (value % 1 >= 0.5 ? value + 1 : value))
                         ),
-                      ].map((_, index) => <BsStar className="text-blue" />)}
+                      ].map((_, index) => <BsStar className="text-blue" key={index} />)}
                   </div>
                   <Slider
                     min={0}

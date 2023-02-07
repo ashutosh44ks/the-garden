@@ -12,6 +12,13 @@ router.get("/get_subject/:code", (req, res) => {
   let subject = subjects.find((s) => s.subject_code === code);
   res.json({ subject });
 });
+
+const addToAverage = (oldAvg, oldCount, newValue) => {
+  return oldAvg + (newValue - oldAvg) / (oldCount + 1);
+};
+const replaceInAverage = (oldAvg, oldCount, oldValue, newValue) => {
+  return oldAvg + (newValue - oldValue) / oldCount;
+};
 router.post("/rate_difficulty", (req, res) => {
   const { username, subjectCode, userDifficulty } = req.body;
 
@@ -39,14 +46,23 @@ router.post("/rate_difficulty", (req, res) => {
     user.rated_difficulties.forEach((subj) => {
       if (subj.subject_code === subjectCode) subj.difficulty = userDifficulty;
     });
-    subject.difficulty = subject.difficulty - (oldRating / 2) + (userDifficulty / 2);
+    subject.difficulty = replaceInAverage(
+      subject.difficulty,
+      subject.ratings_count,
+      oldRating,
+      userDifficulty
+    );
   } else {
     // add new difficulty
     user.rated_difficulties.push({
       subject_code: subjectCode,
       difficulty: userDifficulty,
     });
-    subject.difficulty = (subject.difficulty + userDifficulty) / 2;
+    subject.difficulty = addToAverage(
+      subject.difficulty,
+      subject.ratings_count,
+      userDifficulty
+    );
   }
 
   // commit in database
