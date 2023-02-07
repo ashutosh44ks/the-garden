@@ -14,7 +14,7 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
         className="flex items-center cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img src="assets/logo.webp" alt="logo" className="logo" />
+        <img src="/assets/logo.webp" alt="logo" className="logo" />
         <h2>The Garden</h2>
       </div>
       {!loggedIn ? (

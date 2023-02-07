@@ -11,7 +11,7 @@ const Error404 = () => {
             <h2 className="font-bold">Under Construction</h2>
             <p> or something like that...</p>
           </div>
-          <img src="assets/404.png" alt="Under Construction" />
+          <img src="/assets/404.png" alt="Under Construction" />
         </div>
         <div className="flex justify-end mt-2">
           <button
