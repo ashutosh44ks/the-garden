@@ -117,6 +117,7 @@ router.put("/update_professor_ratings/:professorCode", (req, res) => {
       professor.ratings.count,
       ratings.knowledge
     );
+    professor.ratings.count += 1;
   }
 
   // commit in database

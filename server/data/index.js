@@ -9,7 +9,16 @@ const users = [
         difficulty: 3,
       },
     ],
-    rated_professors: [],
+    rated_professors: [
+      {
+        professor_code: "TITKJ",
+        marks_rating: 1.5,
+        attendance_rating: 2,
+        personality: 2.5,
+        teaching: 3,
+        knowledge: 3.5,
+      },
+    ],
   },
 ];
 
