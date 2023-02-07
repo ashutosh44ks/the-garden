@@ -181,14 +181,13 @@ const Subject = () => {
           </div>
         </div>
       </div>
-      <div className="py-4">
-        <div className="mb-4">
-          <h3>Professor History</h3>
-          <div className="text-dark text-sm mb-2">
-            Ratings ranges from 1 (bad) to 5 (good)
-          </div>
-          <div
-            className="
+      <div className="my-4">
+        <h3>Professor History</h3>
+        <div className="text-dark text-sm mb-2">
+          Ratings ranges from 1 (bad) to 5 (good)
+        </div>
+        <div
+          className="
         grid
         grid-cols-1
         md:grid-cols-2
@@ -196,72 +195,71 @@ const Subject = () => {
         xl:grid-cols-4
         gap-4
         "
-          >
-            {professors.map((professor) => {
-              return (
-                <div className="card" key={professor.code}>
-                  <div className="card-body">
-                    <h3
-                      className="card-title"
-                      onClick={() => {
-                        navigate(`/professor/${professor.code}`);
-                      }}
-                    >
-                      {`${professor.name} (${professor.code})`}
-                    </h3>
-                    <div className="text-dark text-sm mb-2">
-                      {professor.designation}
-                    </div>
-                    {Object.entries(professor.ratings).map(([key, value]) => {
-                      return (
-                        <div className="flex items-center" key={key}>
-                          <span className="w-[10rem]">{toLabel(key)}:</span>
-                          <span className="mr-1">{value.toFixed(2)}</span>
-                          <AiFillStar className="text-blue" />
-                        </div>
-                      );
-                    })}
-                    <div className="flex items-center">
-                      <span className="w-[10rem]">Average Rating:</span>
-                      <span className="mr-1">
-                        {calcAvgRating(professor.ratings)}
-                      </span>
-                      <AiFillStar className="text-blue" />
-                    </div>
+        >
+          {professors.map((professor) => {
+            return (
+              <div className="card" key={professor.code}>
+                <div className="card-body">
+                  <h3
+                    className="card-title"
+                    onClick={() => {
+                      navigate(`/professor/${professor.code}`);
+                    }}
+                  >
+                    {`${professor.name} (${professor.code})`}
+                  </h3>
+                  <div className="text-dark text-sm mb-2">
+                    {professor.designation}
+                  </div>
+                  {Object.entries(professor.ratings).map(([key, value]) => {
+                    return (
+                      <div className="flex items-center" key={key}>
+                        <span className="w-[10rem]">{toLabel(key)}:</span>
+                        <span className="mr-1">{value.toFixed(2)}</span>
+                        <AiFillStar className="text-blue" />
+                      </div>
+                    );
+                  })}
+                  <div className="flex items-center">
+                    <span className="w-[10rem]">Average Rating:</span>
+                    <span className="mr-1">
+                      {calcAvgRating(professor.ratings)}
+                    </span>
+                    <AiFillStar className="text-blue" />
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
-        <div>
-          <h3 className="mb-4">Resources</h3>
-          <div className="flex gap-4">
-            <button
-              className="btn-secondary"
-              onClick={() => {
-                navigate(`/subject/${subjectId}/syllabus`);
-              }}
-            >
-              Syllabus
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={() => {
-                navigate(`/subject/${subjectId}/notes`);
-              }}
-            >
-              Notes
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={() => {
-                navigate(`/subject/${subjectId}/question_papers`);
-              }}
-            >
-              Previous Year Papers
-            </button>
-          </div>
+      </div>
+      <div>
+        <h3 className="mb-4">Resources</h3>
+        <div className="flex gap-4">
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              navigate(`/subject/${subjectId}/syllabus`);
+            }}
+          >
+            Syllabus
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              navigate(`/subject/${subjectId}/notes`);
+            }}
+          >
+            Notes
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              navigate(`/subject/${subjectId}/question_papers`);
+            }}
+          >
+            Previous Year Papers
+          </button>
         </div>
       </div>
     </div>
