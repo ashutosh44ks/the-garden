@@ -11,6 +11,7 @@ import "./Professor.css";
 const Professor = () => {
   const [professor, setProfessor] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const professorCode = window.location.pathname.split("/")[2];
     const getProfessor = async () => {
@@ -27,16 +28,32 @@ const Professor = () => {
     getProfessor();
   }, []);
 
-  const [nicknameModal, setNicknameModal] = useState(false);
-  const [newNickname, setNewNickname] = useState("");
-
-  const [ratings, setRatings] = useState({
+  const [userRatings, setUserRatings] = useState({
     marks_rating: 0,
     attendance_rating: 0,
     personality: 0,
     teaching: 0,
     knowledge: 0,
   });
+  useEffect(() => {
+    if (professor.code === undefined) return;
+    let ourRating = JSON.parse(
+      localStorage.getItem("logged")
+    ).rated_professors.find((prof) => prof.professor_code === professor.code);
+    if (ourRating === undefined) return;
+    setUserRatings(
+      JSON.parse(localStorage.getItem("logged")).rated_professors.find(
+        (prof) => prof.professor_code === professor.code
+      )
+    );
+  }, [professor]);
+  useEffect(() => {
+    console.log(userRatings);
+  }, [userRatings]);
+
+  const [nicknameModal, setNicknameModal] = useState(false);
+  const [newNickname, setNewNickname] = useState("");
+
   const calcAvgRating = (ratings) => {
     let scores = Object.values(ratings);
     if (scores.length === 0) return 0;
@@ -50,7 +67,7 @@ const Professor = () => {
       const { data } = await axios.put(
         `http://localhost:3001/api/professors/update_professor_ratings/${professor.code}`,
         {
-          ratings,
+          userRatings,
           username,
         }
       );
@@ -97,7 +114,7 @@ const Professor = () => {
           <button
             className="btn-primary"
             onClick={() => {
-              if (Object.values(ratings).every((rating) => rating > 0))
+              if (Object.values(userRatings).every((rating) => rating > 0))
                 updateRatings();
               else alert("Minimum rating for any metric is 0.5");
             }}
@@ -114,7 +131,7 @@ const Professor = () => {
               {Object.entries(professor.ratings).map(([key, value]) =>
                 key === "count" ? null : (
                   <>
-                    <div className="flex items-center">{toLabel(key)}</div>
+                    <div>{toLabel(key)}</div>
                     <div className="flex items-center gap-1">
                       {[...Array(Math.floor(value))].map((_, index) => (
                         <BsStarFill className="text-blue" key={index} />
@@ -131,14 +148,15 @@ const Professor = () => {
                           <BsStar className="text-blue" key={index} />
                         ))}
                     </div>
+                    {/* {we need default values here from userRatings} */}
                     <Slider
                       min={0}
                       max={5}
                       step={0.5}
-                      defaultValue={ratings[key]}
+                      value={userRatings[key]}
                       handleRender={handleRender}
                       onChange={(value) =>
-                        setRatings({ ...ratings, [key]: value })
+                        setUserRatings({ ...userRatings, [key]: value })
                       }
                     />
                   </>
