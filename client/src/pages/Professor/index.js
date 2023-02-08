@@ -5,8 +5,8 @@ import "rc-slider/assets/index.css";
 import { handleRender } from "./components/TooltipSlider";
 import toLabel from "../../components/utils/toLabel";
 import { AiOutlineClose } from "react-icons/ai";
-import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 import "./Professor.css";
+import StarRating from "../../components/common/StarRating";
 
 const Professor = () => {
   const [professor, setProfessor] = useState({});
@@ -47,15 +47,15 @@ const Professor = () => {
       )
     );
   }, [professor]);
-  useEffect(() => {
-    console.log(userRatings);
-  }, [userRatings]);
 
   const [nicknameModal, setNicknameModal] = useState(false);
   const [newNickname, setNewNickname] = useState("");
 
   const calcAvgRating = (ratings) => {
-    let scores = Object.values(ratings);
+    let temp = { ...ratings };
+    // remove a key 'count'
+    delete temp.count;
+    let scores = Object.values(temp);
     if (scores.length === 0) return 0;
     let sum = scores.reduce((acc, curr) => acc + curr, 0);
     return (sum / scores.length).toFixed(2);
@@ -132,22 +132,7 @@ const Professor = () => {
                 key === "count" ? null : (
                   <>
                     <div>{toLabel(key)}</div>
-                    <div className="flex items-center gap-1">
-                      {[...Array(Math.floor(value))].map((_, index) => (
-                        <BsStarFill className="text-blue" key={index} />
-                      ))}
-                      {value % 1 >= 0.5 && <BsStarHalf className="text-blue" />}
-                      {value < 5 &&
-                        [
-                          ...Array(
-                            Math.ceil(
-                              5 - (value % 1 >= 0.5 ? value + 1 : value)
-                            )
-                          ),
-                        ].map((_, index) => (
-                          <BsStar className="text-blue" key={index} />
-                        ))}
-                    </div>
+                    <StarRating value={value} />
                     <Slider
                       min={0}
                       max={5}

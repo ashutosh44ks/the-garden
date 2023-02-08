@@ -4,6 +4,7 @@ import axios from "axios";
 import toLabel from "../../components/utils/toLabel";
 import { AiFillStar } from "react-icons/ai";
 import "./Subject.css";
+import StarRating from "../../components/common/StarRating";
 
 const Subject = () => {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ const Subject = () => {
           subjectId
       );
       setProfessors(data);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +53,10 @@ const Subject = () => {
     return num + "th";
   };
   const calcAvgRating = (ratings) => {
-    let scores = Object.values(ratings);
+    let temp = { ...ratings };
+    // remove a key 'count'
+    delete temp.count;
+    let scores = Object.values(temp);
     if (scores.length === 0) return 0;
     let sum = scores.reduce((acc, curr) => acc + curr, 0);
     return (sum / scores.length).toFixed(2);
@@ -67,7 +70,6 @@ const Subject = () => {
         "http://localhost:3001/api/subjects/rate_difficulty",
         { username, subjectCode: subjectId, userDifficulty }
       );
-      console.log(data);
       setMyRatedDifficulty(userDifficulty);
       getSubject();
     } catch (err) {
@@ -208,25 +210,23 @@ const Subject = () => {
                   >
                     {`${professor.name} (${professor.code})`}
                   </h3>
+                  <div className="text-dark text-sm">
+                    {professor.designation}, Information Technology
+                  </div>
                   <div className="text-dark text-sm mb-2">
-                    {professor.designation}
+                    {`Rated - ${calcAvgRating(professor.ratings)}/5 by ${
+                      professor.ratings.count
+                    } students`}
                   </div>
                   {Object.entries(professor.ratings).map(([key, value]) => {
+                    if (key === "count") return null;
                     return (
                       <div className="flex items-center" key={key}>
                         <span className="w-[10rem]">{toLabel(key)}:</span>
-                        <span className="mr-1">{value.toFixed(2)}</span>
-                        <AiFillStar className="text-blue" />
+                        <StarRating value={value} />
                       </div>
                     );
                   })}
-                  <div className="flex items-center">
-                    <span className="w-[10rem]">Average Rating:</span>
-                    <span className="mr-1">
-                      {calcAvgRating(professor.ratings)}
-                    </span>
-                    <AiFillStar className="text-blue" />
-                  </div>
                 </div>
               </div>
             );
