@@ -81,9 +81,13 @@ router.post("/rate_difficulty", (req, res) => {
 router.get("/view_syllabus/:code", (req, res) => {
   let code = req.params.code;
   var fileName = `${code}_syllabus.jpg`;
-
-  //send a local file to frontend
   res.sendFile(fileName, { root: __dirname + "/../data/syllabus/" });
+});
+
+router.get("/view_notes/:code", (req, res) => {
+  let code = req.params.code;
+  var fileName = `${code}_notes.pdf`;
+  res.sendFile(fileName, { root: __dirname + "/../data/notes/" });
 });
 
 module.exports = router;
