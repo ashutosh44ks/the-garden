@@ -247,7 +247,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/notes`);
+              navigate(`/subject/${subjectId}/view_notes`);
             }}
           >
             Notes

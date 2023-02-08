@@ -4,8 +4,9 @@ import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import Professor from "./pages/Professor";
+import ViewSyllabus from "./pages/Subject/ViewSyllabus";
 import Error404 from "./pages/Error404";
-import SubjectView from "./pages/SubjectView";
+import ViewNotes from "./pages/Subject/ViewNotes";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -42,7 +43,15 @@ function App() {
           path="/subject/:subjectId/view_syllabus"
           element={
             <ProtectedRoute>
-              <SubjectView />
+              <ViewSyllabus />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subject/:subjectId/view_notes"
+          element={
+            <ProtectedRoute>
+              <ViewNotes />
             </ProtectedRoute>
           }
         />

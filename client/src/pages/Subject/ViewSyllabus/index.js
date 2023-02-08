@@ -36,14 +36,13 @@ const SubjectView = () => {
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-dark">Syllabus</h1>
-        <button
+        <a
           className="btn-primary"
-          onClick={() => {
-            getFile();
-          }}
+          href={`data:image/png;base64,${file}`}
+          download="syllabus.png"
         >
-          Reload
-        </button>
+          Download
+        </a>
       </div>
       <div>
         <img

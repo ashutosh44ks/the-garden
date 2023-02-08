@@ -19,3 +19,17 @@
 .difficulty-dropdown .dropdown .dropdown-item:hover {
   background-color: #e8eaed;
 }
+.pdf-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1;
+}
+.react-pdf__Page {
+  min-width: auto !important;
+  position: inherit !important;
+}
+.react-pdf__Page__canvas {
+  height: 100% !important;
+  width: 100% !important;
+  border: solid 1px #dadce0;
+}
