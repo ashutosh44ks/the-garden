@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { users, subjects, professors } = require("../data");
-const {addToAverage, replaceInAverage} = require('../utils')
+const { addToAverage, replaceInAverage } = require("../utils");
+const path = require("path");
 
 router.get("/get_all_subjects/:year", (req, res) => {
   let year = req.params.year;
@@ -13,7 +14,6 @@ router.get("/get_subject/:code", (req, res) => {
   let subject = subjects.find((s) => s.subject_code === code);
   res.json({ subject });
 });
-
 
 router.post("/rate_difficulty", (req, res) => {
   const { username, subjectCode, userDifficulty } = req.body;
@@ -76,6 +76,14 @@ router.post("/rate_difficulty", (req, res) => {
   res.json({
     msg: `Successfully rated ${subject.name} ${userDifficulty} points, new overall rating of the subject is ${newDifficulty}`,
   });
+});
+
+router.get("/view_syllabus/:code", (req, res) => {
+  let code = req.params.code;
+  var fileName = `${code}_syllabus.jpg`;
+
+  //send a local file to frontend
+  res.sendFile(fileName, { root: __dirname + "/../data/syllabus/" });
 });
 
 module.exports = router;

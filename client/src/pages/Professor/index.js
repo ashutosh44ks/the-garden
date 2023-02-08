@@ -148,7 +148,6 @@ const Professor = () => {
                           <BsStar className="text-blue" key={index} />
                         ))}
                     </div>
-                    {/* {we need default values here from userRatings} */}
                     <Slider
                       min={0}
                       max={5}

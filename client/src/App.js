@@ -5,6 +5,7 @@ import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import Professor from "./pages/Professor";
 import Error404 from "./pages/Error404";
+import SubjectView from "./pages/SubjectView";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -34,6 +35,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Professor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subject/:subjectId/view_syllabus"
+          element={
+            <ProtectedRoute>
+              <SubjectView />
             </ProtectedRoute>
           }
         />
