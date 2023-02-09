@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import truncateString from "../../components/utils/truncateString";
 import { FiAlertCircle } from "react-icons/fi";
-import { MdOutlineLibraryAdd } from "react-icons/md";
+import { MdFilterList } from "react-icons/md";
 import "./Home.css";
 
 const Home = () => {
@@ -65,7 +65,7 @@ const Home = () => {
             Select year to filter <FiAlertCircle className="ml-2 text-sm" />
           </p>
           <div className="flex items-center text-blue cursor-pointer">
-            <MdOutlineLibraryAdd className="mr-2" />
+            <MdFilterList className="mr-2" />
             <span>Show more filters</span>
           </div>
         </div>
