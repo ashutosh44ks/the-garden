@@ -1,0 +1,102 @@
+GET http://localhost:3001/api/users/get_users
+
+###
+
+GET http://localhost:3001/api/users/get_user?username=admin
+
+###
+
+POST http://localhost:3001/api/users/register
+Content-Type: application/json
+
+{
+    "user" : {
+        "username": "admin",
+        "password": "1234"
+    }
+}
+
+###
+
+GET http://localhost:3001/api/users/login?username=admin&password=1234
+
+###
+
+DELETE http://localhost:3001/api/users/delete_user?username=admin
+
+###
+
+PATCH http://localhost:3001/api/tests/63e4e8b3a45ce2c91b0ca433
+Content-Type: application/json
+
+{
+    "name": "test2"
+}
+
+###
+
+GET http://localhost:3001/api/subjects/get_all_subjects/4
+
+###
+
+POST http://localhost:3001/api/subjects/set_subject/TIT404
+Content-Type: application/json
+
+{
+    "name": "Computer Graphics and Animations",
+    "description": "Computer graphics refers to the use of computers to define, store, manipulate, and present pictorial output.",
+    "year": 4,
+    "credits": 3,
+    "gate": false,
+    "practical": false,
+    "difficulty": 3
+}
+
+###
+
+###
+
+DELETE http://localhost:3001/api/subjects/delete_subject/TIT404
+
+###
+
+POST http://localhost:3001/api/subjects/rate_difficulty
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "subjectCode": "TIT404",
+    "userDifficulty": 3
+}
+
+###
+
+GET http://localhost:3001/api/professors/get_professors
+
+###
+
+GET http://localhost:3001/api/professors/get_professor_details/TITSG
+
+###
+
+GET http://localhost:3001/api/professors/get_professors_by_subject/TIT404
+
+###
+
+POST http://localhost:3001/api/professors/add_professor
+Content-Type: application/json
+
+{
+    "professor_code": "TITSG",
+    "name": "Shikha Goswami",
+    "designation": "Assistant Professor",
+    "nicknames": ["Haryanvi Remdi"],
+    "subjects": ["TIT404"],
+    "ratings": {
+        "marks_rating": 5,
+        "attendance_rating": 2,
+        "personality": 2,
+        "teaching": 1,
+        "knowledge": 1
+    }
+}

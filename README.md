@@ -1,8 +1,8 @@
 # The Garden
-My first full stack project. I don't know MongoDB as of right now, will learn and finish this by the end of semester.
+My first full stack project. Aim is to streamline basic information about college subjects and professors and what not to help some people out. 
 
 ### Tech Stack Used
-Express.js ReactJS TailwindCSS + more soon
+MERN Stack - MongoDB, Mongoose, Express.js, React JS, Node.js, Tailwind CSS
 
 ### How to run in local
 1. Clone this repository
