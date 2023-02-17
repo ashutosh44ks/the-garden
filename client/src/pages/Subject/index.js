@@ -69,6 +69,7 @@ const Subject = () => {
         "http://localhost:3001/api/subjects/rate_difficulty",
         { username, subjectCode: subjectId, userDifficulty }
       );
+      console.log(data)
       setMyRatedDifficulty(userDifficulty);
       getSubject();
     } catch (err) {
