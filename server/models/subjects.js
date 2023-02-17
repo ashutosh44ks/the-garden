@@ -5,7 +5,7 @@ const subjectsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  code: {
+  subject_code: {
     type: String,
     required: true,
     unique: true,
@@ -40,7 +40,6 @@ const subjectsSchema = new mongoose.Schema({
   },
   ratings_count: {
     type: Number,
-    required: true,
   },
   professors: [String],
 });
