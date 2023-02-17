@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const SubjectView = () => {
-  const { subjectCode } = useParams();
+  const { subjectId } = useParams();
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   function _arrayBufferToBase64(buffer) {
@@ -18,7 +18,7 @@ const SubjectView = () => {
   const getFile = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3001/api/subjects/view_syllabus/${subjectCode}`,
+        `http://localhost:3001/api/subjects/view_syllabus/${subjectId}`,
         {
           responseType: "arraybuffer",
         }

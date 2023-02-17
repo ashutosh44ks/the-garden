@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { pdfjs, Document, Page } from "react-pdf";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const ViewNotes = () => {
@@ -20,11 +21,11 @@ const ViewNotes = () => {
     return window.btoa(binary);
   }
   const [isLoading, setIsLoading] = useState(true);
+  const { subjectId } = useParams();
   const getFile = async () => {
-    let subjectCode = window.location.pathname.split("/")[2];
     try {
       const { data } = await axios.get(
-        `http://localhost:3001/api/subjects/view_notes/${subjectCode}`,
+        `http://localhost:3001/api/subjects/view_notes/${subjectId}`,
         {
           responseType: "arraybuffer",
         }
