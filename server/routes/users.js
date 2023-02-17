@@ -66,11 +66,10 @@ router.get("/login", async (req, res) => {
 });
 
 router.delete("/delete_user", async (req, res) => {
-  let user = await Users.find({
-    username: req.query.username,
-  });
   try {
-    await user.deleteOne();
+    await Users.findOneAndRemove({
+      username: req.query.username,
+    });
     res.json({ message: "Deleted User" });
   } catch (e) {
     res.status(500).json({ message: e.message });

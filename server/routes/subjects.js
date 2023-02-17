@@ -2,80 +2,129 @@ const express = require("express");
 const router = express.Router();
 const { users, subjects, professors } = require("../data");
 const { addToAverage, replaceInAverage } = require("../utils");
-const path = require("path");
+const Subjects = require("../models/subjects");
+const Users = require("../models/users");
 
-router.get("/get_all_subjects/:year", (req, res) => {
+router.get("/get_all_subjects/:year", async (req, res) => {
   let year = req.params.year;
-  let filteredSubjects = subjects.filter((s) => s.year === parseInt(year));
-  res.json({ filteredSubjects, count: filteredSubjects.length });
-});
-router.get("/get_subject/:code", (req, res) => {
-  let code = req.params.code;
-  let subject = subjects.find((s) => s.subject_code === code);
-  res.json({ subject });
+  let filteredSubjects;
+  try {
+    filteredSubjects = await Subjects.find({ year: parseInt(year) });
+    if (filteredSubjects.length === 0) {
+      return res.status(404).json({ message: "Cannot find subjects" });
+    }
+    res.json({ filteredSubjects, count: filteredSubjects.length });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
 });
 
-router.post("/rate_difficulty", (req, res) => {
+router.post("/set_subject/:code", async (req, res) => {
+  const newSubject = new Subjects({
+    name: req.body.name,
+    subject_code: req.params.code,
+    description: req.body.description,
+    year: req.body.year,
+    credits: req.body.credits,
+    gate: req.body.gate,
+    practical: req.body.practical,
+    difficulty: req.body.difficulty,
+    ratings_count: 1,
+    professors: [],
+  });
+  try {
+    const subject = await newSubject.save();
+    res.status(201).json({ subject });
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+});
+
+router.delete("/delete_subject/:code", async (req, res) => {
+  try {
+    const subject = await Subjects.findOneAndDelete({
+      subject_code: req.params.code,
+    });
+    if (subject === null) {
+      return res.status(404).json({ message: "Cannot find subject" });
+    }
+    res.json({ subject });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+router.get("/get_subject/:code", async (req, res) => {
+  try {
+    const subject = await Subjects.findOne({ subject_code: req.params.code });
+    if (subject.length === 0) {
+      return res.status(404).json({ message: "Cannot find subject" });
+    }
+    res.json({ subject });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+router.patch("/rate_difficulty", async (req, res) => {
   const { username, subjectCode, userDifficulty } = req.body;
+  try {
+    // get current user and subject
+    const user = await Users.findOne({ username: username });
+    const subject = await Subjects.findOne({ subject_code: subjectCode });
 
-  // get current user and subject
-  let user = users.find((u) => u.username === username);
-  let subject = subjects.find((s) => s.subject_code === subjectCode);
+    if (user === null) {
+      return res.status(404).json({ message: "Cannot find user" });
+    }
+    if (subject === null) {
+      return res.status(404).json({ message: "Cannot find subject" });
+    }
 
-  if (user === undefined) {
-    res.json({ error: "User not found" });
-    return;
-  }
-  if (subject === undefined) {
-    res.json({ error: "Subject not found" });
-    return;
-  }
+    const alreadyVoted =
+      user.rated_difficulties.find(
+        (subj) => subj.subject_code === subjectCode
+      ) !== undefined;
 
-  let alreadyVoted =
-    user.rated_difficulties.find(
-      (subj) => subj.subject_code === subjectCode
-    ) !== undefined;
+    if (alreadyVoted) {
+      // update difficulty
+      let oldRating = user.rated_difficulties.find(
+        (subj) => subj.subject_code === subjectCode
+      ).difficulty;
+      user.rated_difficulties.forEach((subj) => {
+        if (subj.subject_code === subjectCode) subj.difficulty = userDifficulty;
+      });
+      console.log(subject.difficulty, subject.ratings_count, oldRating, userDifficulty)
+      subject.difficulty = replaceInAverage(
+        subject.difficulty,
+        subject.ratings_count,
+        oldRating,
+        userDifficulty
+      );
+      console.log(subject.difficulty, subject.ratings_count, oldRating, userDifficulty)
+    } else {
+      // add new difficulty
+      user.rated_difficulties.push({
+        subject_code: subjectCode,
+        difficulty: userDifficulty,
+      });
+      subject.difficulty = addToAverage(
+        subject.difficulty,
+        subject.ratings_count,
+        userDifficulty
+      );
+      subject.ratings_count += 1;
+    }
 
-  if (alreadyVoted) {
-    // update difficulty
-    oldRating = user.rated_difficulties.find(
-      (subj) => subj.subject_code === subjectCode
-    ).difficulty;
-    user.rated_difficulties.forEach((subj) => {
-      if (subj.subject_code === subjectCode) subj.difficulty = userDifficulty;
+    // commit in database
+    await user.save();
+    await subject.save();
+    let newDifficulty = subject.difficulty;
+    res.json({
+      msg: `Successfully rated ${subject.name} ${userDifficulty} points, new overall rating of the subject is ${newDifficulty}`,
     });
-    subject.difficulty = replaceInAverage(
-      subject.difficulty,
-      subject.ratings_count,
-      oldRating,
-      userDifficulty
-    );
-  } else {
-    // add new difficulty
-    user.rated_difficulties.push({
-      subject_code: subjectCode,
-      difficulty: userDifficulty,
-    });
-    subject.difficulty = addToAverage(
-      subject.difficulty,
-      subject.ratings_count,
-      userDifficulty
-    );
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
-
-  // commit in database
-  users.forEach((u) => {
-    if (u.username === username) u.rated_difficulties = user.rated_difficulties;
-  });
-  subjects.forEach((s) => {
-    if (s.subject_code === subjectCode) s.difficulty = subject.difficulty;
-  });
-
-  let newDifficulty = subject.difficulty;
-
-  res.json({
-    msg: `Successfully rated ${subject.name} ${userDifficulty} points, new overall rating of the subject is ${newDifficulty}`,
-  });
 });
 
 router.get("/view_syllabus/:code", (req, res) => {
