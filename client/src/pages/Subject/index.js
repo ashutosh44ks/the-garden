@@ -200,15 +200,15 @@ const Subject = () => {
         >
           {professors.length > 0 && professors.map((professor) => {
             return (
-              <div className="card" key={professor.code}>
+              <div className="card" key={professor.professor_code}>
                 <div className="card-body">
                   <h3
                     className="card-title"
                     onClick={() => {
-                      navigate(`/professor/${professor.code}`);
+                      navigate(`/professor/${professor.professor_code}`);
                     }}
                   >
-                    {`${professor.name} (${professor.code})`}
+                    {`${professor.name} (${professor.professor_code})`}
                   </h3>
                   <div className="text-dark text-sm">
                     {professor.designation}, Information Technology

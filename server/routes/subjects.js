@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { users, subjects, professors } = require("../data");
-const { addToAverage, replaceInAverage } = require("../utils");
 const Subjects = require("../models/subjects");
 const Users = require("../models/users");
+const { addToAverage, replaceInAverage } = require("../utils");
 
 router.get("/get_all_subjects/:year", async (req, res) => {
   let year = req.params.year;

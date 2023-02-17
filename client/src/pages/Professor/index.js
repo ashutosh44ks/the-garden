@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -11,9 +12,9 @@ import StarRating from "../../components/common/StarRating";
 const Professor = () => {
   const [professor, setProfessor] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { professorCode } = useParams();
 
   useEffect(() => {
-    const professorCode = window.location.pathname.split("/")[2];
     const getProfessor = async () => {
       try {
         const { data } = await axios.get(
@@ -36,14 +37,16 @@ const Professor = () => {
     knowledge: 0,
   });
   useEffect(() => {
-    if (professor.code === undefined) return;
+    if (professor.professor_code === undefined) return;
     let ourRating = JSON.parse(
       localStorage.getItem("logged")
-    ).rated_professors.find((prof) => prof.professor_code === professor.code);
+    ).rated_professors.find(
+      (prof) => prof.professor_code === professor.professor_code
+    );
     if (ourRating === undefined) return;
     setUserRatings(
       JSON.parse(localStorage.getItem("logged")).rated_professors.find(
-        (prof) => prof.professor_code === professor.code
+        (prof) => prof.professor_code === professor.professor_code
       )
     );
   }, [professor]);
@@ -65,9 +68,9 @@ const Professor = () => {
     try {
       let username = JSON.parse(localStorage.getItem("logged")).username;
       const { data } = await axios.put(
-        `http://localhost:3001/api/professors/update_professor_ratings/${professor.code}`,
+        `http://localhost:3001/api/professors/update_professor_ratings/${professor.professor_code}`,
         {
-          userRatings,
+          ratings: userRatings,
           username,
         }
       );
@@ -87,7 +90,9 @@ const Professor = () => {
           <div className="card-body">
             <div className="flex items-end">
               <h2>{professor.name}</h2>
-              <span className="ml-2 pt-2 pb-1">({professor.code})</span>
+              <span className="ml-2 pt-2 pb-1">
+                ({professor.professor_code})
+              </span>
             </div>
             <div>{professor.designation + ", Information Technology"}</div>
             <div>College of Technology, Pantnagar</div>
@@ -111,14 +116,7 @@ const Professor = () => {
         </div>
         <div className="flex items-center justify-between my-4">
           <h3>Ratings ({calcAvgRating(professor.ratings)}/5)</h3>
-          <button
-            className="btn-primary"
-            onClick={() => {
-              if (Object.values(userRatings).every((rating) => rating > 0))
-                updateRatings();
-              else alert("Minimum rating for any metric is 0.5");
-            }}
-          >
+          <button className="btn-primary" onClick={updateRatings}>
             Submit
           </button>
         </div>
