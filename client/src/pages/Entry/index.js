@@ -18,10 +18,6 @@ const Entry = () => {
         `http://localhost:3001/api/users/login?username=${username}&password=${password}`
       );
       console.log(data);
-      // const obj = data.user[0]
-      // console.log("test", JSON.stringify(obj))
-      // localStorage.setItem("test", JSON.stringify(obj));
-      console.log("logged", JSON.stringify(data.user[0]))
       localStorage.setItem("logged", JSON.stringify(data.user[0]));
       navigate("/");
     } catch (e) {
@@ -44,7 +40,7 @@ const Entry = () => {
       setLoginTab(true);
     } catch (e) {
       console.log(e);
-      if (e.response.status === 401) setErrorMsg(e.response.data.msg);
+      if (e.response.status === 400) setErrorMsg(e.response.data.msg);
     }
   };
   useEffect(() => {
