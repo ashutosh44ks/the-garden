@@ -18,31 +18,31 @@ const professorsSchema = new mongoose.Schema([
       marks_rating: {
         type: Number,
         required: true,
-        min: 1,
+        min: 0,
         max: 5,
       },
       attendance_rating: {
         type: Number,
         required: true,
-        min: 1,
+        min: 0,
         max: 5,
       },
       personality: {
         type: Number,
         required: true,
-        min: 1,
+        min: 0,
         max: 5,
       },
       teaching: {
         type: Number,
         required: true,
-        min: 1,
+        min: 0,
         max: 5,
       },
       knowledge: {
         type: Number,
         required: true,
-        min: 1,
+        min: 0,
         max: 5,
       },
       count: {
