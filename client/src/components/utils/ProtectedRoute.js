@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
           JSON.parse(localStorage.getItem("logged")).username
         }&password=${JSON.parse(localStorage.getItem("logged")).password}`
       );
-      localStorage.setItem("logged", JSON.stringify(data.user[0]));
+      localStorage.setItem("logged", JSON.stringify(data.user));
       setIsAuthenticated(true);
     } catch (e) {
       console.log(e);

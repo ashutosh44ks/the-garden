@@ -18,7 +18,7 @@ const Entry = () => {
         `http://localhost:3001/api/users/login?username=${username}&password=${password}`
       );
       console.log(data);
-      localStorage.setItem("logged", JSON.stringify(data.user[0]));
+      localStorage.setItem("logged", JSON.stringify(data.user));
       navigate("/");
     } catch (e) {
       console.log(e);

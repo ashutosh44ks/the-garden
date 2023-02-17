@@ -59,7 +59,7 @@ router.get("/login", async (req, res) => {
     password: req.query.password,
   });
   if (user.length > 0) {
-    res.json({ msg: "Logging in", user });
+    res.json({ msg: "Logging in", user: user[0] });
   } else {
     res.status(401).send({ msg: "Wrong Credentials, please try again" });
   }
