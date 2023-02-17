@@ -25,14 +25,14 @@ const Home = () => {
     };
     getSubjects();
   }, [year]);
-
+  
   return (
     <>
       <div className="bg-blue p-8 text-white flex justify-between items-center gap-8">
         <div className="w-3/4">
           <h1 className="mb-4">
             Hi,{" "}
-            {JSON.parse(localStorage.getItem("logged")).username.split("@")[0]}
+            {JSON.parse(localStorage.getItem("logged")).username}
           </h1>
           <p>
             This a new online space for IT students of College of Technology,

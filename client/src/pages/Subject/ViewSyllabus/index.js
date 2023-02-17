@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const SubjectView = () => {
+  const { subjectCode } = useParams();
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   function _arrayBufferToBase64(buffer) {
@@ -14,7 +16,6 @@ const SubjectView = () => {
     return window.btoa(binary);
   }
   const getFile = async () => {
-    let subjectCode = window.location.pathname.split("/")[2];
     try {
       const { data } = await axios.get(
         `http://localhost:3001/api/subjects/view_syllabus/${subjectCode}`,
@@ -23,15 +24,16 @@ const SubjectView = () => {
         }
       );
       setFile(_arrayBufferToBase64(data));
-      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     getFile();
   }, []);
   if (isLoading) return <div>Loading...</div>;
+  if (file === null) return <div>No Syllabus</div>;
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">

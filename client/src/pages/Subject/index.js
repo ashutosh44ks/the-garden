@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toLabel from "../../components/utils/toLabel";
-import { AiFillStar } from "react-icons/ai";
 import "./Subject.css";
 import StarRating from "../../components/common/StarRating";
 
@@ -12,7 +11,7 @@ const Subject = () => {
   const [subject, setSubject] = useState({});
   const [professors, setProfessors] = useState([]);
   const [myRatedDifficulty, setMyRatedDifficulty] = useState(0);
-  const subjectId = window.location.pathname.split("/")[2];
+  const { subjectId } = useParams();
 
   const getSubject = async () => {
     try {
@@ -66,10 +65,11 @@ const Subject = () => {
   const vote_difficulty = async (userDifficulty) => {
     try {
       let username = JSON.parse(localStorage.getItem("logged")).username;
-      const { data } = await axios.post(
+      const { data } = await axios.patch(
         "http://localhost:3001/api/subjects/rate_difficulty",
         { username, subjectCode: subjectId, userDifficulty }
       );
+      console.log(data)
       setMyRatedDifficulty(userDifficulty);
       getSubject();
     } catch (err) {
@@ -79,7 +79,7 @@ const Subject = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (Object.keys(subject) === 0)
+  if (Object.entries(subject).length === 0)
     return <div className="p-8">Subject not found</div>;
   return (
     <div className="p-8">
@@ -198,17 +198,17 @@ const Subject = () => {
         gap-4
         "
         >
-          {professors.map((professor) => {
+          {professors.length > 0 && professors.map((professor) => {
             return (
-              <div className="card" key={professor.code}>
+              <div className="card" key={professor.professor_code}>
                 <div className="card-body">
                   <h3
                     className="card-title"
                     onClick={() => {
-                      navigate(`/professor/${professor.code}`);
+                      navigate(`/professor/${professor.professor_code}`);
                     }}
                   >
-                    {`${professor.name} (${professor.code})`}
+                    {`${professor.name} (${professor.professor_code})`}
                   </h3>
                   <div className="text-dark text-sm">
                     {professor.designation}, Information Technology
@@ -231,6 +231,20 @@ const Subject = () => {
               </div>
             );
           })}
+          {professors.length === 0 && (
+            <div className="text-dark">
+              No professors found. Request admin to add professor(s) by
+              clicking{" "}
+              <u
+                className="text-blue cursor-pointer"
+                onClick={() => {
+                  navigate("/about");
+                }}
+              >
+                here
+              </u>
+            </div>
+          )}
         </div>
       </div>
       <div>

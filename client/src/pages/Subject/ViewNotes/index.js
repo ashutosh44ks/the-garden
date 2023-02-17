@@ -31,16 +31,17 @@ const ViewNotes = () => {
       );
       console.log(data);
       setFile(_arrayBufferToBase64(data));
-      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     getFile();
   }, []);
 
   if (isLoading) return <div>Loading...</div>;
+  if (file === null) return <div>No Notes</div>;
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">

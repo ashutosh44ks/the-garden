@@ -40,7 +40,7 @@ const Entry = () => {
       setLoginTab(true);
     } catch (e) {
       console.log(e);
-      if (e.response.status === 401) setErrorMsg(e.response.data.msg);
+      if (e.response.status === 400) setErrorMsg(e.response.data.msg);
     }
   };
   useEffect(() => {
