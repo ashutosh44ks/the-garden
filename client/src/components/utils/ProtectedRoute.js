@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
           JSON.parse(localStorage.getItem("logged")).username
         }&password=${JSON.parse(localStorage.getItem("logged")).password}`
       );
-      localStorage.setItem("logged", JSON.stringify(data.user));
+      localStorage.setItem("logged", JSON.stringify(data.user[0]));
       setIsAuthenticated(true);
     } catch (e) {
       console.log(e);
@@ -23,7 +23,10 @@ const ProtectedRoute = ({ children }) => {
   };
   useEffect(() => {
     //if nothing in localStorage, redirect to login
-    if (localStorage.getItem("logged") === null) {
+    if (
+      localStorage.getItem("logged") === null ||
+      localStorage.getItem("logged") === undefined
+    ) {
       console.log("false localStorage, redirecting to login");
       navigate("/entry");
     } else {

@@ -12,11 +12,6 @@ const usersSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    validate: {
-      validator: function (v) {
-        return /^[a-zA-Z]+$/.test(v);
-      },
-    },
   },
   university_id: {
     type: Number,
