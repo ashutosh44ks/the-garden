@@ -15,7 +15,6 @@ const usersSchema = new mongoose.Schema({
   },
   university_id: {
     type: Number,
-    unique: true,
     min: 54000,
     max: 70000,
   },
