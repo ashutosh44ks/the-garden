@@ -5,7 +5,7 @@ const Error404 = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="p-8 error-404 card">
+      <div className="p-8 modal card">
         <div className="card-body flex flex-col gap-4 ">
           <div>
             <h2 className="font-bold">Under Construction</h2>
