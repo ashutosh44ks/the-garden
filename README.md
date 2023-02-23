@@ -1,5 +1,6 @@
-# The Garden (First Prototype)
+# The Garden
 An online database for viewing and contributing study resources for College of Technology, Pantnagar. Major resources includes - notes, syllabus, previous year questions, etc. 
+
 Note - This app is NOT affiliated to College of Technology, GBPUAT in any way or form. 
 
 ### Tech Stack Used
