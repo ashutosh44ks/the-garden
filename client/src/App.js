@@ -7,6 +7,7 @@ import Professor from "./pages/Professor";
 import ViewSyllabus from "./pages/Subject/ViewSyllabus";
 import Error404 from "./pages/Error404";
 import ViewNotes from "./pages/Subject/ViewNotes";
+import Profile from "./pages/Profile";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -71,6 +72,14 @@ function App() {
             </ProtectedRoute>
           }
         /> */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </Router>

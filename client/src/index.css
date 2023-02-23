@@ -88,7 +88,8 @@ h3 {
 }
 
 input,
-textarea {
+textarea,
+select {
   box-sizing: border-box;
   padding: 0.5rem;
   border: solid 1px #c9d2d3;
@@ -96,7 +97,8 @@ textarea {
   color: #70768c;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   outline: none;
   border-bottom: solid 1px #1a73e8;
 }
@@ -165,7 +167,6 @@ textarea::placeholder {
   border: solid 1px rgb(33, 150, 243);
   background-color: rgba(33, 150, 243, 0.1);
 }
-
 
 .modal {
   background-color: white;

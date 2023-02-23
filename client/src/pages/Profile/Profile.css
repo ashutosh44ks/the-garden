@@ -1,0 +1,10 @@
+.bg-profile {
+  background-image: url("../../../public/assets/side.png");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: cover;
+}
+.profile-page {
+  min-height: calc(100vh - 3rem);
+  padding: 2rem;
+}

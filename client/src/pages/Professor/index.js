@@ -98,7 +98,7 @@ const Professor = () => {
             <div>College of Technology, Pantnagar</div>
           </div>
         </div>
-        <div className="my-4">
+        {/* <div className="my-4">
           <h3 className="mb-2">Nicknames</h3>
           <div className="flex flex-wrap gap-2">
             {professor.nicknames?.map((nickname) => (
@@ -113,7 +113,7 @@ const Professor = () => {
               Click to add new
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex items-center justify-between my-4">
           <h3>Ratings ({calcAvgRating(professor.ratings)}/5)</h3>
           <button className="btn-primary" onClick={updateRatings}>
