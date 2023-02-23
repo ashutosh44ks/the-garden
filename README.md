@@ -1,5 +1,6 @@
-# The Garden
-My first full stack project. Aim is to streamline basic information about college subjects and professors and what not to help some people out. 
+# The Garden (First Prototype)
+An online database for viewing and contributing study resources for College of Technology, Pantnagar. Major resources includes - notes, syllabus, previous year questions, etc. 
+Note - This app is NOT affiliated to College of Technology, GBPUAT in any way or form. 
 
 ### Tech Stack Used
 MERN Stack - MongoDB, Mongoose, Express.js, React JS, Node.js, Tailwind CSS
