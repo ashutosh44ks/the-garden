@@ -5,7 +5,7 @@ const Footer = () => {
 
   return (
     <div className="bg-white footer">
-      <div className="flex items-center gap-10 px-8 py-6">
+      <div className="flex items-center gap-10 px-8 py-6 footer-links">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => navigate("/")}
@@ -13,7 +13,7 @@ const Footer = () => {
           <img src="/assets/logo.webp" alt="logo" className="logo" />
           <h2>The Garden</h2>
         </div>
-        <ul className="flex items-center gap-10">
+        <ul className="flex items-center footer-items">
           <li
             className="cursor-pointer hover-blue"
             onClick={() => (window.location.href = "https://gbpuat.ac.in/")}
@@ -51,7 +51,7 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <div className="flex items-center justify-between mx-8 py-6 separator-top">
+      <div className="flex items-center justify-between mx-8 py-6 separator-top footer-last">
         <div className="flex gap-3">
           <span className="cursor-pointer hover-blue">Terms</span>
           <span className="cursor-default">|</span>

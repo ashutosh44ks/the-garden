@@ -94,3 +94,44 @@
 .footer .hover-blue:hover {
   color: #1a73e8;
 }
+.footer-items {
+  gap: 2.5rem;
+}
+
+
+@media (max-width: 842px) {
+  .footer-items {
+    gap: 1.5rem;
+  }
+}
+@media (max-width: 778px) {
+  .footer .footer-links {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-last {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .footer .footer-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .footer .footer-links ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .footer-last div:last-of-type {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 500px) {
+  .footer div button {
+    width: 100%;
+  }
+}
