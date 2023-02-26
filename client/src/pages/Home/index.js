@@ -25,14 +25,13 @@ const Home = () => {
     };
     getSubjects();
   }, [year]);
-  
+
   return (
     <>
-      <div className="bg-blue p-8 text-white flex justify-between items-center gap-8">
-        <div className="w-3/4">
+      <div className="bg-blue p-8 text-white flex justify-between items-center gap-8 banner">
+        <div className="banner-text">
           <h1 className="mb-4">
-            Hi,{" "}
-            {JSON.parse(localStorage.getItem("logged")).username}
+            Hi, {JSON.parse(localStorage.getItem("logged")).username}
           </h1>
           <p>
             This a new online space for IT students of College of Technology,
@@ -50,17 +49,10 @@ const Home = () => {
             Learn More
           </button>
         </div>
-        <div
-          style={{
-            backgroundImage: "url('/assets/banner.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-          className="banner-img"
-        ></div>
+        <img src="/assets/banner.jpg" alt="banner" className="banner-img" />
       </div>
       <div className="p-8">
-        <div className="flex justify-between">
+        <div className="flex justify-between filters">
           <p className="font-noto text-dark flex items-center">
             Select year to filter <FiAlertCircle className="ml-2 text-sm" />
           </p>
@@ -69,7 +61,7 @@ const Home = () => {
             <span>Show more filters</span>
           </div>
         </div>
-        <div className="mt-5 flex gap-2">
+        <div className="mt-5 flex gap-2 year-tabs">
           <button
             className={`year-tab ${year === 1 ? "active" : ""}`}
             onClick={() => setYear(1)}
@@ -92,7 +84,7 @@ const Home = () => {
             className={`year-tab ${year === 4 ? "active" : ""}`}
             onClick={() => setYear(4)}
           >
-            Fourth Year
+            Final Year
           </button>
         </div>
         {subjects.length === 0 && (
@@ -111,18 +103,11 @@ const Home = () => {
         )}
         {!!subjects.length && (
           <div
-            className="grid
-        grid-cols-1
-        md:grid-cols-2
-        lg:grid-cols-3
-        xl:grid-cols-4
-        gap-4
-        my-5
-        "
+            className="flex flex-wrap justify-between gap-4 my-5"
           >
             {subjects.map((subject) => (
               <div
-                className="card cursor-pointer"
+                className="subject card cursor-pointer"
                 onClick={() => navigate(`/subject/${subject.subject_code}`)}
                 key={subject.subject_code}
               >
