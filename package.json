@@ -5,13 +5,12 @@
   "scripts": {
     "server": "cd server && nodemon server.js",
     "client": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
   },
   "author": "ashutosh44ks",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^7.6.0",
-    "nodemon": "^2.0.20",
-    "react-pdf": "^6.2.2"
+    "nodemon": "^2.0.20"
   }
 }
