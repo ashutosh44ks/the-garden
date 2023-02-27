@@ -33,10 +33,11 @@ const Home = () => {
           <h1 className="mb-4">
             Hi, {JSON.parse(localStorage.getItem("logged")).username}
           </h1>
-          <p>
-            This a new online space for IT students of College of Technology,
-            GBPUAT. The aim of this initiative is to simplify the already
-            "simplified" life of IT students.
+          <p className="mb-2">
+            Welcome to "The Garden," your one-stop platform for all your
+            academic needs. Access notes, previous year exam questions, and
+            syllabus updates for your classes at College of Technology and take
+            your studies to the next level.
           </p>
           <p>
             If you have any suggestions or feedback, please feel free to contact
@@ -102,9 +103,7 @@ const Home = () => {
           </div>
         )}
         {!!subjects.length && (
-          <div
-            className="flex flex-wrap justify-between gap-4 my-5"
-          >
+          <div className="flex flex-wrap justify-between gap-4 my-5">
             {subjects.map((subject) => (
               <div
                 className="subject card cursor-pointer"
