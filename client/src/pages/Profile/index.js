@@ -35,9 +35,12 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-page bg-profile">
-      <h1>User Details</h1>
-      <p>Adding details improves functionality of the app</p>
+    <div className="profile-page">
+      <h1 className="mb-2 text-dark">We're happy to have you here.</h1>
+      <p className="text-dark-2">
+        Tell us about yourself and we can start helping you learn with subjects'
+        details, syllabus, notes, and previous year exam questions.
+      </p>
       <div className="profile-form mt-8 w-1/2">
         <form
           className="flex flex-col gap-4"
