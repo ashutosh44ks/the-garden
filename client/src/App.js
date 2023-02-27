@@ -80,7 +80,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Error404 />} />
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <Error404 />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

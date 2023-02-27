@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Nerko+One&family=Roboto:wght@300;400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,6 +86,9 @@ h3 {
 }
 .text-dark {
   color: #202124;
+}
+.text-dark-2 {
+  color: #3c4043;
 }
 
 input,

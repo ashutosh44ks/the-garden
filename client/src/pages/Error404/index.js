@@ -5,24 +5,19 @@ const Error404 = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="p-8 modal card">
-        <div className="card-body flex flex-col gap-4 ">
-          <div>
-            <h2 className="font-bold">Under Construction</h2>
-            <p> or something like that...</p>
-          </div>
-          <img src="/assets/404.png" alt="Under Construction" />
+      <div className="error-404 p-8 text-dark">
+        <div className="flex flex-col justify-center items-center py-8">
+          <h1>404</h1>
+          <img src="/assets/maintainance.svg" alt="404" className="w-1/2" />
+          <p>Sorry, we couldn't find that page.</p>
         </div>
-        <div className="flex justify-end mt-2">
-          <button
-            className="btn-primary"
-            onClick={() => navigate("/")}
-          >
+        <div className="flex justify-end">
+          <button className="btn-primary" onClick={() => navigate("/")}>
             Navigate to Home
           </button>
         </div>
       </div>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"></div>
+      <div className="bg-404"></div>
     </>
   );
 };

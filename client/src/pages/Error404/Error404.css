@@ -1,8 +1,14 @@
-.modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 5;
-  }
-  
+.error-404 {
+  min-height: calc(100vh - 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.error-404 h1 {
+  font-size: 4.57rem;
+  font-family: 'Roboto Mono', monospace;
+}
+.error-404 img {
+  height: 12rem;
+  width: 100%;
+}
