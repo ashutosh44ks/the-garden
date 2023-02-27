@@ -8,7 +8,7 @@ const Error404 = () => {
       <div className="error-404 p-8 text-dark">
         <div className="flex flex-col justify-center items-center py-8">
           <h1>404</h1>
-          <img src="/assets/maintainance.svg" alt="404" className="w-1/2" />
+          <img src="/assets/maintainance.svg" alt="404" />
           <p>Sorry, we couldn't find that page.</p>
         </div>
         <div className="flex justify-end">

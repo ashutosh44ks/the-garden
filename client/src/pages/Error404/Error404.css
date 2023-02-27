@@ -6,9 +6,13 @@
 }
 .error-404 h1 {
   font-size: 4.57rem;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
 .error-404 img {
   height: 12rem;
-  width: 100%;
+}
+@media (max-width: 500px) {
+  .error-404 button {
+    width: 100%;
+  }
 }
