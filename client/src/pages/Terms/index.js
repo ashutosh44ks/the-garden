@@ -17,10 +17,10 @@ const Terms = () => {
       <div className="page-template">
         <div className="p-8 bg-white terms-page">
           <img src="/assets/terms.svg" alt="terms" />
-          <div className="font-roboto text-sm mt-8 px-16">
+          <div className="font-roboto text-sm mt-8 xs:px-4 sm:px-16">
             THE GARDEN TERMS OF SERVICE
           </div>
-          <div className="py-8 px-16 text-dark-2">
+          <div className="py-8 xs:px-4 sm:px-16 text-dark-2">
             <h2 className="text-2xl font-bold mb-4">
               We know it’s tempting to skip these Terms of Service, but it’s
               important to establish what you can expect from us and what we
