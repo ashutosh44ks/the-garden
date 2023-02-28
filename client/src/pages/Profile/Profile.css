@@ -1,4 +1,24 @@
 .profile-page {
   min-height: calc(100vh - 3rem);
-  padding: 2rem;
+}
+.profile-page .input-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+.profile-page .input-group input,
+.profile-page .input-group select {
+  flex-grow: 1;
+  min-width: 15rem;
+}
+
+@media (max-width: 640px) {
+  .profile-page .input-group {
+    padding: 0.5rem 0;
+    gap: 1rem;
+  }
+  .profile-page .input-group {
+    grid-template-columns: 1fr;
+  }
 }

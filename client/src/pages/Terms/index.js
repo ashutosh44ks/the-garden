@@ -21,7 +21,7 @@ const Terms = () => {
             THE GARDEN TERMS OF SERVICE
           </div>
           <div className="py-8 xs:px-4 sm:px-16 text-dark-2">
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-medium mb-4">
               We know it’s tempting to skip these Terms of Service, but it’s
               important to establish what you can expect from us and what we
               expect from you.
