@@ -81,7 +81,9 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
 };
 
 Header.defaultProps = {
-  loggedIn: true,
+  loggedIn: false,
+  loginTab: true,
+  setLoginTab: () => {},
 };
 
 export default Header;
