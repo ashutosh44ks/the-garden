@@ -10,6 +10,7 @@ const Entry = () => {
   const [loginTab, setLoginTab] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [termsAgreed, setTermsAgreed] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const verifyUser = async () => {
@@ -55,6 +56,8 @@ const Entry = () => {
           className="card flex justify-between items-center"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (!termsAgreed && !loginTab)
+              return setErrorMsg("Please agree to the terms and conditions");
             if (loginTab) {
               verifyUser();
             } else addUser();
@@ -84,6 +87,27 @@ const Entry = () => {
                   required
                 />
               </div>
+              {!loginTab && (
+                <div className="flex items-center mb-4">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    name="terms"
+                    value="terms"
+                    onChange={(e) => setTermsAgreed(e.target.checked)}
+                    className="mr-2"
+                  />
+                  <label htmlFor="terms">
+                    I agree to the{" "}
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => navigate("/terms")}
+                    >
+                      terms and conditions
+                    </span>
+                  </label>
+                </div>
+              )}
               {errorMsg && (
                 <div className="text-red-500 text-end text-sm err-msg">
                   {errorMsg}

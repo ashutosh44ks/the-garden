@@ -8,6 +8,7 @@ import ViewSyllabus from "./pages/Subject/ViewSyllabus";
 import Error404 from "./pages/Error404";
 import ViewNotes from "./pages/Subject/ViewNotes";
 import Profile from "./pages/Profile";
+import Terms from "./pages/Terms";
 // import UploadQP from "./pages/UploadQP";
 // import ViewQP from "./pages/ViewQP";
 
@@ -80,6 +81,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/terms" element={<Terms />} />
         <Route
           path="*"
           element={
