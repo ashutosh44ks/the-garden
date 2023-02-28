@@ -1,0 +1,8 @@
+.terms-page {
+  min-height: calc(100vh - 3rem);
+}
+.terms-page img {
+  height: 15rem;
+  object-fit: contain;
+  width: 100%;
+}

@@ -53,9 +53,19 @@ const Footer = () => {
       </div>
       <div className="flex items-center justify-between mx-8 py-6 separator-top footer-last">
         <div className="flex gap-3">
-          <span className="cursor-pointer hover-blue">Terms</span>
+          <span
+            className="cursor-pointer hover-blue"
+            onClick={() => navigate("/terms")}
+          >
+            Terms
+          </span>
           <span className="cursor-default">|</span>
-          <span className="cursor-pointer hover-blue">Privacy</span>
+          <span
+            className="cursor-pointer hover-blue"
+            onClick={() => navigate("/terms")}
+          >
+            Privacy
+          </span>
         </div>
         <div className="flex items-center gap-4">
           <span>Contact us to report bugs or request features</span>
