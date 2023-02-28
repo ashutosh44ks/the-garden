@@ -76,4 +76,30 @@ router.delete("/delete_user", async (req, res) => {
   }
 });
 
+router.patch("/update_user", async (req, res) => {
+  let user = req.body.user;
+  if (
+    user.name === "" ||
+    user.university_id === "" ||
+    user.branch === "" ||
+    user.year === "" ||
+    user.name === undefined ||
+    user.university_id === undefined ||
+    user.branch === undefined ||
+    user.year === undefined
+  )
+    return res.status(400).send({ msg: "Please fill all the fields" });
+  try {
+    const updatedUser = await Users.findOne({ username: req.query.username });
+    updatedUser.name = user.name;
+    updatedUser.university_id = user.university_id;
+    updatedUser.branch = user.branch;
+    updatedUser.year = user.year;
+    updatedUser.save();
+    res.json(updatedUser);
+  } catch (e) {
+    res.status(400).json({ msg: e.message });
+  }
+});
+
 module.exports = router;

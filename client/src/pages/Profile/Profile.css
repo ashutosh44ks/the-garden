@@ -1,5 +1,5 @@
 .profile-page {
-  min-height: calc(100vh - 3rem);
+  min-height: calc(100vh - 2.8rem);
 }
 .profile-page .input-group {
   display: grid;
@@ -20,5 +20,8 @@
   }
   .profile-page .input-group {
     grid-template-columns: 1fr;
+  }
+  .profile-page button {
+    width: 100%;
   }
 }

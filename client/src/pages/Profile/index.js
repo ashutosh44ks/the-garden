@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Profile.css";
 
@@ -7,6 +7,19 @@ const Profile = () => {
   const [university_id, setUniversity_id] = useState("");
   const [branch, setBranch] = useState("");
   const [year, setYear] = useState("");
+  useEffect(() => {
+    const username = JSON.parse(localStorage.getItem("logged")).username;
+    const fetchUser = async () => {
+      const { data } = await axios.get(
+        `http://localhost:3001/api/users/get_user?username=${username}`
+      );
+      setName(data[0].name);
+      setUniversity_id(data[0].university_id);
+      setBranch(data[0].branch);
+      setYear(data[0].year);
+    };
+    fetchUser();
+  }, []);
 
   const BranchList = [
     { value: "IT", label: "Information Technology" },
@@ -16,9 +29,9 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const updateUserInfo = async () => {
     try {
-      console.log(name, university_id, branch, year);
+      const username = JSON.parse(localStorage.getItem("logged")).username;
       const { data } = await axios.patch(
-        "http://localhost:3001/api/users/update",
+        `http://localhost:3001/api/users/update_user?username=${username}`,
         {
           user: {
             name,
@@ -29,24 +42,26 @@ const Profile = () => {
         }
       );
       console.log(data);
+      setErrorMsg("");
+      localStorage.setItem("logged", JSON.stringify(data));
     } catch (e) {
       console.log(e);
+      setErrorMsg(e.response.data.msg);
     }
   };
 
   return (
-    <div className="profile-page p-8">
+    <div className="profile-page p-8 bg-white">
       <div className="xs:px-4 sm:py-8 xs:px-4 sm:px-12">
         <h1 className="mb-2 text-dark font-medium">
           We're happy to have you here.
         </h1>
         <p className="text-dark-2">
-          Tell us about yourself and we can start helping you learn with
-          content specific to your details.
+          Tell us about yourself and we can start curating content specific to
+          your details and need. You can always change these details later.
         </p>
         <div className="profile-form py-4">
           <form
-            className="flex flex-col gap-4"
             onSubmit={(e) => {
               e.preventDefault();
               updateUserInfo();
@@ -59,7 +74,7 @@ const Profile = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 type="text"
-                required={false}
+                required
               />
               <input
                 className="bg-white"
@@ -67,7 +82,7 @@ const Profile = () => {
                 val={university_id}
                 onChange={(e) => setUniversity_id(e.target.value)}
                 type="number"
-                required={false}
+                required
               />
               <select
                 className="bg-white"
@@ -76,7 +91,7 @@ const Profile = () => {
                 onChange={(e) => {
                   setBranch(e.target.value);
                 }}
-                required={false}
+                required
               >
                 <option value="" disabled>
                   Select Branch
@@ -95,7 +110,7 @@ const Profile = () => {
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
                 type="number"
-                required={false}
+                required
               />
             </div>
             {errorMsg && (
@@ -103,9 +118,9 @@ const Profile = () => {
                 {errorMsg}
               </div>
             )}
-            <div>
+            <div className="mt-4">
               <button className="btn btn-primary" type="submit">
-                Save
+                Update Details
               </button>
             </div>
           </form>
