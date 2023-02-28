@@ -17,3 +17,17 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+@media (max-width: 500px) {
+  .card div {
+    width: 100%;
+  }
+  .login-side {
+    display: none;
+  }
+  .header_btn-grp {
+    gap: 0;
+  }
+  .header_btn-grp button {
+    padding: 0.9rem 0.5rem;
+  }
+}

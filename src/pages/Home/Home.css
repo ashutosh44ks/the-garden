@@ -3,6 +3,13 @@
   aspect-ratio: 720/416;
   border-radius: 0.5rem;
 }
+.banner-text {
+  width: 75%;
+}
+.year-tabs {
+  width: 100%;
+  overflow-x: auto;
+}
 .year-tab {
   background-color: white;
   border: solid 1px #dadce0;
@@ -12,6 +19,7 @@
   font-size: 0.9rem;
   padding: 0.3rem 1.2rem;
   transition: all 0.2s ease-in-out;
+  white-space: nowrap;
 }
 .year-tab:hover {
   background-color: #f8f9fa;
@@ -20,4 +28,22 @@
   background-color: #e8f0fe;
   border-color: #1a73e8;
   color: #1a73e8;
+}
+.subject.card {
+  max-width: 25rem;
+}
+
+@media (max-width: 600px) {
+  .banner {
+    flex-wrap: wrap-reverse;
+  }
+  .banner-img {
+    height: 100%;
+  }
+  .banner-text {
+    width: 100%;
+  }
+  .filters {
+    flex-wrap: wrap;
+  }
 }
