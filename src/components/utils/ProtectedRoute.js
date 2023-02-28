@@ -35,7 +35,8 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (isLoading) return <div>Loading...</div>;
-  else if (isAuthenticated) return <Layout>{children}</Layout>;
+  else if (isAuthenticated)
+    return <Layout loggedIn={isAuthenticated}>{children}</Layout>;
   else return <Navigate to="/entry" />;
 };
 
