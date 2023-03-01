@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import truncateString from "../../components/utils/truncateString";
+import toLabel from "../../components/utils/toLabel";
 import { FiAlertCircle } from "react-icons/fi";
 import { MdFilterList } from "react-icons/md";
 import "./Home.css";
@@ -11,11 +12,16 @@ const Home = () => {
   const [year, setYear] = useState(1);
   const [subjects, setSubjects] = useState([]);
 
+  const [showFilters, setShowFilters] = useState(false);
+  const tags = ["gate", "practicals"];
+  const [activeFilters, setActiveFilters] = useState([]);
+
   useEffect(() => {
-    const getSubjects = async () => {
+    const getFilteredSubjects = async () => {
       try {
-        const { data } = await axios.get(
-          `http://localhost:3001/api/subjects/get_all_subjects/${year}`
+        const { data } = await axios.post(
+          `http://localhost:3001/api/subjects/get_filtered_subjects/${year}`,
+          { activeFilters }
         );
         setSubjects(data.filteredSubjects);
       } catch (err) {
@@ -23,15 +29,17 @@ const Home = () => {
         setSubjects([]);
       }
     };
-    getSubjects();
-  }, [year]);
+    getFilteredSubjects();
+  }, [activeFilters, year]);
 
   return (
     <>
       <div className="bg-blue p-8 text-white flex justify-between items-center gap-8 banner">
         <div className="banner-text">
           <h1 className="mb-4">
-            Hi, {JSON.parse(localStorage.getItem("logged")).username}
+            Hi,{" "}
+            {JSON.parse(localStorage.getItem("logged")).name ||
+              JSON.parse(localStorage.getItem("logged")).username}
           </h1>
           <p className="mb-2">
             Welcome to "The Garden," your one-stop platform for all your
@@ -55,39 +63,66 @@ const Home = () => {
       <div className="p-8">
         <div className="flex justify-between filters">
           <p className="font-noto text-dark flex items-center">
-            Select year to filter <FiAlertCircle className="ml-2 text-sm" />
+            Select year to filter{" "}
+            <FiAlertCircle
+              className="ml-2 text-sm"
+              title="Add profile details to automatically select your current year"
+            />
           </p>
-          <div className="flex items-center text-blue cursor-pointer">
+          <div
+            className="flex items-center text-blue cursor-pointer"
+            onClick={() => setShowFilters(!showFilters)}
+          >
             <MdFilterList className="mr-2" />
-            <span>Show more filters</span>
+            <span>
+              {showFilters ? "Hide extra filters" : "Show more filters"}
+            </span>
           </div>
         </div>
-        <div className="mt-5 flex gap-2 year-tabs">
+        <div className="mt-5 flex gap-2 filter-tabs">
           <button
-            className={`year-tab ${year === 1 ? "active" : ""}`}
+            className={`filter-tab ${year === 1 ? "active" : ""}`}
             onClick={() => setYear(1)}
           >
             First Year
           </button>
           <button
-            className={`year-tab ${year === 2 ? "active" : ""}`}
+            className={`filter-tab ${year === 2 ? "active" : ""}`}
             onClick={() => setYear(2)}
           >
             Second Year
           </button>
           <button
-            className={`year-tab ${year === 3 ? "active" : ""}`}
+            className={`filter-tab ${year === 3 ? "active" : ""}`}
             onClick={() => setYear(3)}
           >
             Third Year
           </button>
           <button
-            className={`year-tab ${year === 4 ? "active" : ""}`}
+            className={`filter-tab ${year === 4 ? "active" : ""}`}
             onClick={() => setYear(4)}
           >
             Final Year
           </button>
         </div>
+        {showFilters && (
+          <div className="mt-5 flex gap-2 filter-tabs">
+            {tags.map((tag) => (
+              <button
+                className={`filter-tab 
+                ${activeFilters.includes(tag) ? "active" : ""}
+                `}
+                onClick={() => {
+                  if (activeFilters.includes(tag))
+                    setActiveFilters(activeFilters.filter((t) => t !== tag));
+                  else setActiveFilters([...activeFilters, tag]);
+                }}
+              >
+                {toLabel(tag)}
+              </button>
+            ))}
+          </div>
+        )}
         {subjects.length === 0 && (
           <div className="my-5">
             No Subjects found. Request admin to add missing subject(s) by
@@ -103,7 +138,7 @@ const Home = () => {
           </div>
         )}
         {!!subjects.length && (
-          <div className="flex flex-wrap justify-between gap-4 my-5">
+          <div className="flex flex-wrap gap-4 my-5">
             {subjects.map((subject) => (
               <div
                 className="subject card cursor-pointer"
@@ -122,11 +157,13 @@ const Home = () => {
                   </p>
                 </div>
                 <div className="card-footer flex gap-2">
-                  {subject.gate && <span className="small-tab">GATE</span>}
-                  {subject.practical && (
+                  <span className="small-tab">{subject.credits} credits</span>
+                  {subject.tags.includes("gate") && (
+                    <span className="small-tab">GATE</span>
+                  )}
+                  {subject.tags.includes("practicals") && (
                     <span className="small-tab">Practicals</span>
                   )}
-                  <span className="small-tab">{subject.credits} credits</span>
                 </div>
               </div>
             ))}
