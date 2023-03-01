@@ -44,9 +44,7 @@ Content-Type: application/json
 
 {
     "name": "Computer System Security",
-    "description": "The protection afforded to an automated information system in order to attain the
-        applicable objectives of preserving the integrity, availability, and confidentiality of
-        information system resources.",
+    "description": "The protection afforded to an automated information system in order to attain the applicable objectives of preserving the integrity, availability, and confidentiality of information system resources.",
     "year": 4,
     "credits": 3,
     "tags": [],
