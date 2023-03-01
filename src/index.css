@@ -94,26 +94,6 @@ h3 {
   color: #3c4043;
 }
 
-input,
-textarea,
-select {
-  box-sizing: border-box;
-  padding: 0.5rem 0.75rem;
-  border: solid 1px #c9d2d3;
-  border-radius: 0.3rem;
-  color: #70768c;
-}
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-bottom: solid 1px #1a73e8;
-}
-input::placeholder,
-textarea::placeholder {
-  font-weight: 400;
-}
-
 .card {
   background-color: white;
   border: solid 1px #dadce0;

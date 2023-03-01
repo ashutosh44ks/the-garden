@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/layout/Header";
 import "./Entry.css";
+import Input from "../../components/common/MUI-themed/Input";
+import Checkbox from "../../components/common/MUI-themed/Checkbox";
 
 const Entry = () => {
   let navigate = useNavigate();
@@ -46,6 +48,8 @@ const Entry = () => {
   };
   useEffect(() => {
     setErrorMsg("");
+    const form = document.querySelector('form');
+    form.reset();
   }, [loginTab]);
 
   return (
@@ -62,50 +66,52 @@ const Entry = () => {
               verifyUser();
             } else addUser();
           }}
+          autoComplete="off"
         >
           <div className="w-1/2">
             <h2 className="text-center mt-8 card-title">
               {loginTab ? "Log In" : "Sign Up"}
             </h2>
             <div className="card-body">
-              <div className="mb-4">
-                <input
+              <div className="mb-6">
+                <Input
+                  label="Username"
+                  type="text"
+                  val={username}
+                  setVal={setUsername}
                   className="w-full"
-                  placeholder="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
-              <div className="mb-4">
-                <input
-                  className="w-full"
-                  placeholder="password"
+              <div className={
+                loginTab ? "mb-6" : "mb-4"
+              }>
+                <Input
+                  label="Password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  val={password}
+                  setVal={setPassword}
+                  className="w-full"
                   required
                 />
               </div>
               {!loginTab && (
                 <div className="flex items-center mb-4">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    name="terms"
-                    value="terms"
-                    onChange={(e) => setTermsAgreed(e.target.checked)}
-                    className="mr-2"
+                  <Checkbox
+                    val={termsAgreed}
+                    setVal={setTermsAgreed}
+                    text={
+                      <>
+                        I agree to the{" "}
+                        <span
+                          className="text-blue-500 cursor-pointer"
+                          onClick={() => navigate("/terms")}
+                        >
+                          terms and conditions
+                        </span>
+                      </>
+                    }
                   />
-                  <label htmlFor="terms">
-                    I agree to the{" "}
-                    <span
-                      className="text-blue-500 cursor-pointer"
-                      onClick={() => navigate("/terms")}
-                    >
-                      terms and conditions
-                    </span>
-                  </label>
                 </div>
               )}
               {errorMsg && (

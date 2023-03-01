@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Profile.css";
+import Input from "../../components/common/MUI-themed/Input";
+import Select from "../../components/common/MUI-themed/Select";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -67,49 +69,46 @@ const Profile = () => {
               updateUserInfo();
             }}
           >
-            <div className="input-group">
-              <input
-                className="bg-white"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+            <div className="profile-input-group">
+              <Input
+                label="Name"
                 type="text"
+                val={name}
+                setVal={setName}
                 required
               />
-              <input
-                className="bg-white"
-                placeholder="University ID"
+              <Input
+                label="University ID"
+                type="number"
                 val={university_id}
-                onChange={(e) => setUniversity_id(e.target.value)}
-                type="number"
+                setVal={setUniversity_id}
                 required
               />
-              <select
-                className="bg-white"
-                placeholder="Branch"
-                value={branch}
-                onChange={(e) => {
-                  setBranch(e.target.value);
-                }}
-                required
-              >
-                <option value="" disabled>
-                  Select Branch
-                </option>
-                {BranchList.map((branch, index) => {
-                  return (
-                    <option key={index} value={branch.value}>
-                      {branch.label}
+              <Select
+                label="Branch"
+                options={
+                  <>
+                    <option value="" disabled>
+                      Select Branch
                     </option>
-                  );
-                })}
-              </select>
-              <input
-                className="bg-white"
-                placeholder="Year"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
+                    {BranchList.map((branch) => {
+                      return (
+                        <option key={branch.value} value={branch.value}>
+                          {branch.label}
+                        </option>
+                      );
+                    })}
+                  </>
+                }
+                val={branch}
+                setVal={setBranch}
+                required
+              />
+              <Input
+                label="Year"
                 type="number"
+                val={year}
+                setVal={setYear}
                 required
               />
             </div>
