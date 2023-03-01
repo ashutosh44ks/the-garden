@@ -69,7 +69,7 @@ const Subject = () => {
         "http://localhost:3001/api/subjects/rate_difficulty",
         { username, subjectCode: subjectId, userDifficulty }
       );
-      console.log(data)
+      console.log(data);
       setMyRatedDifficulty(userDifficulty);
       getSubject();
     } catch (err) {
@@ -107,17 +107,23 @@ const Subject = () => {
               </span>
               <span
                 className={`mr-2 text-sm simple-tab ${
-                  subject.gate ? "tab-theme-red" : "tab-theme-green"
+                  subject.tags.includes("gate")
+                    ? "tab-theme-red"
+                    : "tab-theme-green"
                 }`}
               >
-                {subject.gate ? "Gate Subject" : "Non-Gate Subject"}
+                {subject.tags.includes("gate")
+                  ? "Gate Subject"
+                  : "Non-Gate Subject"}
               </span>
               <span
                 className={`mr-2 text-sm simple-tab ${
-                  subject.practicals ? "tab-theme-yellow" : "tab-theme-green"
+                  subject.tags.includes("practicals")
+                    ? "tab-theme-yellow"
+                    : "tab-theme-green"
                 }`}
               >
-                {subject.practicals
+                {subject.tags.includes("practicals")
                   ? "Practical subject"
                   : "Theoretical subject"}
               </span>
@@ -198,54 +204,54 @@ const Subject = () => {
         gap-4
         "
         >
-          {professors.length > 0 && professors.map((professor) => {
-            return (
-              <div className="card" key={professor.professor_code}>
-                <div className="card-body">
-                  <h3
-                    className="card-title"
-                    onClick={() => {
-                      navigate(`/professor/${professor.professor_code}`);
-                    }}
-                  >
-                    {`${professor.name} (${professor.professor_code})`}
-                  </h3>
-                  <div className="text-dark text-sm">
-                    {professor.designation}, Information Technology
+          {professors.length > 0 &&
+            professors.map((professor) => {
+              return (
+                <div className="card" key={professor.professor_code}>
+                  <div className="card-body">
+                    <h3
+                      className="card-title"
+                      onClick={() => {
+                        navigate(`/professor/${professor.professor_code}`);
+                      }}
+                    >
+                      {`${professor.name} (${professor.professor_code})`}
+                    </h3>
+                    <div className="text-dark text-sm">
+                      {professor.designation}, Information Technology
+                    </div>
+                    <div className="text-dark text-sm mb-2">
+                      {`Rated - ${calcAvgRating(professor.ratings)}/5 by ${
+                        professor.ratings.count
+                      } students`}
+                    </div>
+                    {Object.entries(professor.ratings).map(([key, value]) => {
+                      if (key === "count") return null;
+                      return (
+                        <div className="flex items-center" key={key}>
+                          <span className="w-[10rem]">{toLabel(key)}:</span>
+                          <StarRating value={value} />
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="text-dark text-sm mb-2">
-                    {`Rated - ${calcAvgRating(professor.ratings)}/5 by ${
-                      professor.ratings.count
-                    } students`}
-                  </div>
-                  {Object.entries(professor.ratings).map(([key, value]) => {
-                    if (key === "count") return null;
-                    return (
-                      <div className="flex items-center" key={key}>
-                        <span className="w-[10rem]">{toLabel(key)}:</span>
-                        <StarRating value={value} />
-                      </div>
-                    );
-                  })}
                 </div>
-              </div>
-            );
-          })}
-          {professors.length === 0 && (
-            <div className="text-dark">
-              No professors found. Request admin to add professor(s) by
-              clicking{" "}
-              <u
-                className="text-blue cursor-pointer"
-                onClick={() => {
-                  navigate("/about");
-                }}
-              >
-                here
-              </u>
-            </div>
-          )}
+              );
+            })}
         </div>
+        {professors.length === 0 && (
+          <div className="text-dark">
+            No professors found. Request admin to add professor(s) by clicking{" "}
+            <u
+              className="text-blue cursor-pointer"
+              onClick={() => {
+                navigate("/about");
+              }}
+            >
+              here
+            </u>
+          </div>
+        )}
       </div>
       <div>
         <h3 className="mb-4">Resources</h3>

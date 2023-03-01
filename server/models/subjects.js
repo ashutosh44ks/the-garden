@@ -24,14 +24,7 @@ const subjectsSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  gate: {
-    type: Boolean,
-    required: true,
-  },
-  practical: {
-    type: Boolean,
-    required: true,
-  },
+  tags: [String],
   difficulty: {
     type: Number,
     required: true,

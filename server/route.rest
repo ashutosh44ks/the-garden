@@ -43,12 +43,13 @@ POST http://localhost:3001/api/subjects/set_subject/TIT404
 Content-Type: application/json
 
 {
-    "name": "Computer Graphics and Animations",
-    "description": "Computer graphics refers to the use of computers to define, store, manipulate, and present pictorial output.",
+    "name": "Computer System Security",
+    "description": "The protection afforded to an automated information system in order to attain the
+        applicable objectives of preserving the integrity, availability, and confidentiality of
+        information system resources.",
     "year": 4,
     "credits": 3,
-    "gate": false,
-    "practical": false,
+    "tags": [],
     "difficulty": 3
 }
 

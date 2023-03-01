@@ -18,6 +18,26 @@ router.get("/get_all_subjects/:year", async (req, res) => {
   }
 });
 
+router.post("/get_filtered_subjects/:year", async (req, res) => {
+  let year = req.params.year;
+  let filteredSubjects;
+  try {
+    if (req.body.activeFilters.length === 0)
+      filteredSubjects = await Subjects.find({ year: parseInt(year) });
+    else
+      filteredSubjects = await Subjects.find({
+        year: parseInt(year),
+        tags: { $in: req.body.activeFilters },
+      });
+    if (filteredSubjects.length === 0) {
+      return res.status(404).json({ message: "Cannot find subjects" });
+    }
+    res.json({ filteredSubjects, count: filteredSubjects.length });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
 router.post("/set_subject/:code", async (req, res) => {
   const newSubject = new Subjects({
     name: req.body.name,
@@ -25,11 +45,10 @@ router.post("/set_subject/:code", async (req, res) => {
     description: req.body.description,
     year: req.body.year,
     credits: req.body.credits,
-    gate: req.body.gate,
-    practical: req.body.practical,
+    tags: req.body.tags,
     difficulty: req.body.difficulty,
     ratings_count: 1,
-    professors: [],
+    professors: []
   });
   try {
     const subject = await newSubject.save();
@@ -92,14 +111,24 @@ router.patch("/rate_difficulty", async (req, res) => {
       user.rated_difficulties.forEach((subj) => {
         if (subj.subject_code === subjectCode) subj.difficulty = userDifficulty;
       });
-      console.log(subject.difficulty, subject.ratings_count, oldRating, userDifficulty)
+      console.log(
+        subject.difficulty,
+        subject.ratings_count,
+        oldRating,
+        userDifficulty
+      );
       subject.difficulty = replaceInAverage(
         subject.difficulty,
         subject.ratings_count,
         oldRating,
         userDifficulty
       );
-      console.log(subject.difficulty, subject.ratings_count, oldRating, userDifficulty)
+      console.log(
+        subject.difficulty,
+        subject.ratings_count,
+        oldRating,
+        userDifficulty
+      );
     } else {
       // add new difficulty
       user.rated_difficulties.push({
