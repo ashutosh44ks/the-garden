@@ -4,8 +4,9 @@
   "description": "For students of College of Technology, Pantnagar",
   "scripts": {
     "server": "cd server && nodemon server.js",
+    "auth-server": "cd server && nodemon authServer.js",
     "client": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run auth-server\" \"npm run client\""
   },
   "author": "ashutosh44ks",
   "license": "ISC",

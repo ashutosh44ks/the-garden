@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("../models/users");
+const RefreshTokens = require("../models/refresh");
 
 router.get("/get_users", async (req, res) => {
   try {
@@ -30,47 +31,11 @@ router.get("/get_user", getUserByUsername, async (req, res) => {
   res.send(res.user);
 });
 
-router.post("/register", async (req, res) => {
-  let user = req.body.user;
-  const newUser = new Users({
-    username: user.username,
-    password: user.password,
-    name: "",
-    university_id: "",
-    branch: "",
-    year: "",
-    rated_difficulties: [],
-    rated_professors: [],
-  });
-  let usernameExists = await Users.find({ username: user.username });
-  if (usernameExists.length > 0)
-    return res.status(400).send({ msg: "Username already exists" });
-  try {
-    const new_user = await newUser.save();
-    res.status(201).json(new_user);
-  } catch (e) {
-    res.status(400).json({ message: e.message });
-  }
-});
-
-router.get("/login", async (req, res) => {
-  let user = await Users.find({
-    username: req.query.username,
-    password: req.query.password,
-  });
-  if (user.length > 0) {
-    res.json({ msg: "Logging in", user: user[0] });
-  } else {
-    res.status(401).send({ msg: "Wrong Credentials, please try again" });
-  }
-});
-
 router.delete("/delete_user", async (req, res) => {
   try {
-    await Users.findOneAndRemove({
-      username: req.query.username,
-    });
-    res.json({ message: "Deleted User" });
+    const refreshToken = req.body.token;
+    await RefreshTokens.deleteOne({ refreshToken: refreshToken });
+    res.status(200).json({ msg: "User deleted" });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
