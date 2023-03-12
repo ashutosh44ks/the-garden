@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../../components/utils/api";
 
 const SubjectView = () => {
   const { subjectId } = useParams();
@@ -17,8 +17,8 @@ const SubjectView = () => {
   }
   const getFile = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/subjects/view_syllabus/${subjectId}`,
+      const { data } = await api.get(
+        `/api/subjects/view_syllabus/${subjectId}`,
         {
           responseType: "arraybuffer",
         }

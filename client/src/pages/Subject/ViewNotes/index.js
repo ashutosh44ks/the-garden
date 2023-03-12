@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { pdfjs, Document, Page } from "react-pdf";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../../components/utils/api";
 
 const ViewNotes = () => {
   // setup for react-pdf package
@@ -24,8 +24,8 @@ const ViewNotes = () => {
   const { subjectId } = useParams();
   const getFile = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/subjects/view_notes/${subjectId}`,
+      const { data } = await api.get(
+        `/api/subjects/view_notes/${subjectId}`,
         {
           responseType: "arraybuffer",
         }

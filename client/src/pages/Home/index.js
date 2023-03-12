@@ -40,7 +40,7 @@ const Home = () => {
     const getFilteredSubjects = async () => {
       try {
         const { data } = await api.post(
-          `/api/subjects/get_filtered_subjects/${year}`,
+          `/api/subjects/get_filtered_subjects?year=${year}`,
           { activeFilters }
         );
         setSubjects(data.filteredSubjects);

@@ -20,12 +20,27 @@ const subjectsSchema = new mongoose.Schema({
     min: 1,
     max: 4,
   },
+  branch: {
+    type: String,
+    required: true,
+  },
   credits: {
     type: Number,
     required: true,
   },
   tags: [String],
-  professors: [String],
+  professors: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      year: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Subjects", subjectsSchema);
