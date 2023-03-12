@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import jwt_decode from "jwt-decode";
+import api from "../../components/utils/api";
 import truncateString from "../../components/utils/truncateString";
 import toLabel from "../../components/utils/toLabel";
 import { FiAlertCircle } from "react-icons/fi";
@@ -9,6 +10,25 @@ import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  const [user, setUser] = useState({});
+  const getUserDetails = async () => {
+    const username = jwt_decode(
+      JSON.parse(localStorage.getItem("logged")).accessToken
+    ).username;
+    try {
+      const { data } = await api.get(
+        `/api/users/get_user?username=${username}`
+      );
+      setUser(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
   const [year, setYear] = useState(1);
   const [subjects, setSubjects] = useState([]);
 
@@ -19,8 +39,8 @@ const Home = () => {
   useEffect(() => {
     const getFilteredSubjects = async () => {
       try {
-        const { data } = await axios.post(
-          `http://localhost:3001/api/subjects/get_filtered_subjects/${year}`,
+        const { data } = await api.post(
+          `/api/subjects/get_filtered_subjects/${year}`,
           { activeFilters }
         );
         setSubjects(data.filteredSubjects);
@@ -38,8 +58,9 @@ const Home = () => {
         <div className="banner-text">
           <h1 className="mb-4">
             Hi,{" "}
-            {JSON.parse(localStorage.getItem("logged")).name ||
-              JSON.parse(localStorage.getItem("logged")).username}
+            {user.name?.split(" ")[0] ||
+              jwt_decode(JSON.parse(localStorage.getItem("logged")).accessToken)
+                .username}
           </h1>
           <p className="mb-2">
             Welcome to "The Garden," your one-stop platform for all your

@@ -1,26 +1,33 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import "./Profile.css";
+import jwt_decode from "jwt-decode";
+import api from "../../components/utils/api";
 import Input from "../../components/common/MUI-themed/Input";
 import Select from "../../components/common/MUI-themed/Select";
+import "./Profile.css";
 
 const Profile = () => {
   const [name, setName] = useState("");
   const [university_id, setUniversity_id] = useState("");
   const [branch, setBranch] = useState("");
   const [year, setYear] = useState("");
+  const username = jwt_decode(
+    JSON.parse(localStorage.getItem("logged")).accessToken
+  ).username;
   useEffect(() => {
-    const username = JSON.parse(localStorage.getItem("logged")).username;
-    const fetchUser = async () => {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/users/get_user?username=${username}`
-      );
-      setName(data[0].name);
-      setUniversity_id(data[0].university_id);
-      setBranch(data[0].branch);
-      setYear(data[0].year);
+    const getUserDetails = async () => {
+      try {
+        const { data } = await api.get(
+          `/api/users/get_user?username=${username}`
+        );
+        setName(data.name || "");
+        setUniversity_id(data.university_id || "");
+        setBranch(data.branch || "");
+        setYear(data.year || "");
+      } catch (e) {
+        console.log(e);
+      }
     };
-    fetchUser();
+    getUserDetails();
   }, []);
 
   const BranchList = [
@@ -29,11 +36,12 @@ const Profile = () => {
   ];
 
   const [errorMsg, setErrorMsg] = useState("");
+  const [disab, setDisab] = useState(false);
+
   const updateUserInfo = async () => {
     try {
-      const username = JSON.parse(localStorage.getItem("logged")).username;
-      const { data } = await axios.patch(
-        `http://localhost:3001/api/users/update_user?username=${username}`,
+      const { data } = await api.patch(
+        `/api/users/update_user?username=${username}`,
         {
           user: {
             name,
@@ -45,7 +53,7 @@ const Profile = () => {
       );
       console.log(data);
       setErrorMsg("");
-      localStorage.setItem("logged", JSON.stringify(data));
+      setDisab(true);
     } catch (e) {
       console.log(e);
       setErrorMsg(e.response.data.msg);
@@ -117,8 +125,13 @@ const Profile = () => {
                 {errorMsg}
               </div>
             )}
+            {}
             <div className="mt-4">
-              <button className="btn btn-primary" type="submit">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={disab}
+              >
                 Update Details
               </button>
             </div>

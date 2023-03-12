@@ -42,6 +42,9 @@ router.post("/login", async (req, res) => {
     const user = await Users.findOne({
       username: req.body.username,
     });
+    if (!user) {
+      return res.status(400).send({ msg: "Username does not exist" });
+    }
     const realPassword = await bcrypt.compare(req.body.password, user.password);
     if (!realPassword) {
       return res.status(400).send({ msg: "Incorrect password" });
@@ -72,7 +75,7 @@ router.post("/refresh_token", async (req, res) => {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return res.sendStatus(403);
       const accessToken = generateAccessToken({ username: user.username });
-      res.json({ accessToken: accessToken });
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
     });
   } catch (e) {
     res.status(500).send();

@@ -15,28 +15,30 @@ const Entry = () => {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const verifyUser = async () => {
+  const loginUser = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/users/login?username=${username}&password=${password}`
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_AUTH_API_URL}/api/auth/login`,
+        {
+          username,
+          password,
+        }
       );
-      console.log(data);
-      localStorage.setItem("logged", JSON.stringify(data.user));
+      // console.log(data);
+      localStorage.setItem("logged", JSON.stringify(data));
       navigate("/");
     } catch (e) {
       console.log(e);
-      if (e.response.status === 401) setErrorMsg(e.response.data.msg);
+      if (e.response.status === 400) setErrorMsg(e.response.data.msg);
     }
   };
-  const addUser = async () => {
+  const registerUser = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3001/api/users/register",
+        `${process.env.REACT_APP_AUTH_API_URL}/api/auth/register`,
         {
-          user: {
-            username,
-            password,
-          },
+          username,
+          password,
         }
       );
       console.log(data);
@@ -48,7 +50,7 @@ const Entry = () => {
   };
   useEffect(() => {
     setErrorMsg("");
-    const form = document.querySelector('form');
+    const form = document.querySelector("form");
     form.reset();
   }, [loginTab]);
 
@@ -63,8 +65,8 @@ const Entry = () => {
             if (!termsAgreed && !loginTab)
               return setErrorMsg("Please agree to the terms and conditions");
             if (loginTab) {
-              verifyUser();
-            } else addUser();
+              loginUser();
+            } else registerUser();
           }}
           autoComplete="off"
         >
@@ -83,9 +85,7 @@ const Entry = () => {
                   required
                 />
               </div>
-              <div className={
-                loginTab ? "mb-6" : "mb-4"
-              }>
+              <div className={loginTab ? "mb-6" : "mb-4"}>
                 <Input
                   label="Password"
                   type="password"
@@ -98,6 +98,7 @@ const Entry = () => {
               {!loginTab && (
                 <div className="flex items-center mb-4">
                   <Checkbox
+                    _id="terms"
                     val={termsAgreed}
                     setVal={setTermsAgreed}
                     text={

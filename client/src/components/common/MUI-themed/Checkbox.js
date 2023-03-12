@@ -1,17 +1,17 @@
 import React from "react";
 
-const Checkbox = ({ val, setVal, text }) => {
+const Checkbox = ({ _id, val, setVal, text }) => {
   return (
     <>
       <input
         type="checkbox"
-        id={val}
-        name={val}
+        id={_id}
+        name={_id}
         value={val}
         onChange={(e) => setVal(e.target.checked)}
         className="material-checkbox"
       />
-      <label htmlFor={val}>{text}</label>
+      <label htmlFor={_id}>{text}</label>
     </>
   );
 };

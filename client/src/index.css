@@ -53,6 +53,11 @@ h3 {
 .btn-primary:active {
   background-color: #185abc;
 }
+.btn-primary:disabled {
+  background-color: #dadce0;
+  color: #606469;
+  cursor: not-allowed;
+}
 .btn-secondary {
   background-color: white;
   color: #1a73e8;

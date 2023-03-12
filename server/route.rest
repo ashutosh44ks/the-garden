@@ -2,7 +2,7 @@ GET http://localhost:3001/api/users/get_users
 
 ###
 
-GET http://localhost:3001/api/users/get_user?username=admin
+GET http://localhost:3001/api/users/get_user?username=adminjwt2
 
 ###
 

@@ -25,15 +25,6 @@ const subjectsSchema = new mongoose.Schema({
     required: true,
   },
   tags: [String],
-  difficulty: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 3,
-  },
-  ratings_count: {
-    type: Number,
-  },
   professors: [String],
 });
 
