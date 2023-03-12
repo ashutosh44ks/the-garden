@@ -3,7 +3,6 @@ import ProtectedRoute from "./components/utils/ProtectedRoute";
 import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
-import Professor from "./pages/Professor";
 import ViewSyllabus from "./pages/Subject/ViewSyllabus";
 import Error404 from "./pages/Error404";
 import ViewNotes from "./pages/Subject/ViewNotes";
@@ -30,14 +29,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Subject />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/professor/:professorCode"
-          element={
-            <ProtectedRoute>
-              <Professor />
             </ProtectedRoute>
           }
         />
