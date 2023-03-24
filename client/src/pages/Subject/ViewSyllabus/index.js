@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../../components/utils/api";
 
 const SubjectView = () => {
+  const navigate = useNavigate();
+
   const { subjectId } = useParams();
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,28 +34,45 @@ const SubjectView = () => {
   useEffect(() => {
     getFile();
   }, []);
-  if (isLoading) return <div>Loading...</div>;
+
   if (file === null) return <div>No Syllabus</div>;
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-dark">Syllabus</h1>
-        <a
-          className="btn-primary"
-          href={`data:image/png;base64,${file}`}
-          download="syllabus.png"
-        >
-          Download
-        </a>
+      <div className="mb-8">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-dark">Syllabus</h1>
+          <a
+            className="btn-primary"
+            href={`data:image/png;base64,${file}`}
+            download="syllabus.png"
+          >
+            Download
+          </a>
+        </div>
+        <div className="text-sm text-dark-2">
+          Go back to{" "}
+          <u
+            className="text-blue cursor-pointer"
+            onClick={() => {
+              navigate(`/subject/${subjectId}`);
+            }}
+          >
+            {subjectId} page
+          </u>
+        </div>
       </div>
-      <div>
-        <img
-          src={`
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="syllabus-container">
+          <img
+            src={`
           data:image/png;base64,${file}
         `}
-          alt="file"
-        />
-      </div>
+            alt="file"
+          />
+        </div>
+      )}
     </div>
   );
 };

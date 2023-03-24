@@ -19,10 +19,19 @@
 .difficulty-dropdown .dropdown .dropdown-item:hover {
   background-color: #e8eaed;
 }
+.syllabus-container {
+  display: flex;
+  justify-content: center;
+}
+.syllabus-container img {
+  width: 75vw;
+}
 .pdf-container {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 1;
+  width: 75vw;
+  margin: auto;
 }
 .react-pdf__Page {
   min-width: auto !important;
@@ -44,6 +53,11 @@
   }
   .subject-main.card .card-body .btn-primary,
   .subject-main.card .card-body .difficulty-dropdown {
+    width: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .syllabus-container img, .pdf-container {
     width: 100%;
   }
 }
