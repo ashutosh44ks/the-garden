@@ -144,52 +144,70 @@ const Home = () => {
             ))}
           </div>
         )}
-        {subjects.length === 0 && (
-          <div className="my-5">
-            No Subjects found. Request admin to add missing subject(s) by
-            clicking{" "}
-            <u
-              className="text-blue cursor-pointer"
-              onClick={() => {
-                navigate("/about");
-              }}
+        <div className="flex flex-wrap items-stretch gap-4 my-5">
+          {subjects.map((subject) => (
+            <div
+              className="subject card cursor-pointer"
+              onClick={() => navigate(`/subject/${subject.subject_code}`)}
+              key={subject.subject_code}
             >
-              here
-            </u>
-          </div>
-        )}
-        {!!subjects.length && (
-          <div className="flex flex-wrap gap-4 my-5">
-            {subjects.map((subject) => (
-              <div
-                className="subject card cursor-pointer"
-                onClick={() => navigate(`/subject/${subject.subject_code}`)}
-                key={subject.subject_code}
-              >
-                <div className="card-body">
-                  <div className="mb-2">
-                    <h3 className="card-title">{subject.name}</h3>
-                    <div className="card-subtitle text-sm text-grey-500">
-                      {subject.subject_code}
-                    </div>
+              <div className="card-body">
+                <div className="mb-2">
+                  <h3 className="card-title">{subject.name}</h3>
+                  <div className="card-subtitle text-sm text-grey-500">
+                    {subject.subject_code}
                   </div>
-                  <p className="card-text">
-                    {truncateString(subject.description, 120)}
-                  </p>
                 </div>
-                <div className="card-footer flex gap-2">
-                  <span className="small-tab">{subject.credits} credits</span>
-                  {subject.tags.includes("gate") && (
-                    <span className="small-tab">GATE</span>
-                  )}
-                  {subject.tags.includes("practicals") && (
-                    <span className="small-tab">Practicals</span>
-                  )}
-                </div>
+                <p className="card-text">
+                  {truncateString(subject.description, 120)}
+                </p>
               </div>
-            ))}
-          </div>
-        )}
+              <div className="card-footer flex gap-2">
+                <span className="small-tab">{subject.credits} credits</span>
+                {subject.tags.includes("gate") && (
+                  <span className="small-tab">GATE</span>
+                )}
+                {subject.tags.includes("practicals") && (
+                  <span className="small-tab">Practicals</span>
+                )}
+              </div>
+            </div>
+          ))}
+          {user.role === "admin" || user.role === "moderator" ? (
+            <div
+              className="subject card cursor-pointer"
+              onClick={() => navigate("/subject/new_subject")}
+            >
+              <div className="card-body">
+                <div className="mb-2">
+                  <h3 className="card-title">Add New Subject</h3>
+                  <div className="card-subtitle text-sm text-grey-500">
+                    This method is only available to admins and moderators.
+                  </div>
+                </div>
+                <p className="card-text">
+                  Admins can directly add new subjects to the database but
+                  moderators will need approval from admins for the same.
+                </p>
+              </div>
+            </div>
+          ) : (
+            subjects.length === 0 && (
+              <div className="my-5">
+                No Subjects found. Request admin to add missing subject(s) by
+                clicking{" "}
+                <u
+                  className="text-blue cursor-pointer"
+                  onClick={() => {
+                    navigate("/contact");
+                  }}
+                >
+                  here
+                </u>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </>
   );
