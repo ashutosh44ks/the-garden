@@ -1,43 +1,25 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Layout from "../layout";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const verifyUser = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3001/api/users/login?username=${
-          JSON.parse(localStorage.getItem("logged")).username
-        }&password=${JSON.parse(localStorage.getItem("logged")).password}`
-      );
-      localStorage.setItem("logged", JSON.stringify(data.user));
-      setIsAuthenticated(true);
-    } catch (e) {
-      console.log(e);
-    }
-    setIsLoading(false);
-  };
   useEffect(() => {
-    //if nothing in localStorage, redirect to login
-    if (
-      localStorage.getItem("logged") === null ||
-      localStorage.getItem("logged") === undefined
-    ) {
-      console.log("false localStorage, redirecting to login");
+    const accessToken = JSON.parse(localStorage.getItem("logged"))?.accessToken;
+    const refreshToken = JSON.parse(
+      localStorage.getItem("logged")
+    )?.refreshToken;
+    if (accessToken && refreshToken) setIsAuthenticated(true);
+    else {
+      console.log("empty localStorage, redirecting to login");
       navigate("/entry");
-    } else {
-      verifyUser();
     }
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
-  else if (isAuthenticated)
+  if (isAuthenticated)
     return <Layout loggedIn={isAuthenticated}>{children}</Layout>;
-  else return <Navigate to="/entry" />;
+  else return <div>loading...</div>;
 };
 
 export default ProtectedRoute;

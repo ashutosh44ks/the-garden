@@ -2,7 +2,7 @@ import "./MUI-themed.css";
 
 const Select = ({ label, options, val, setVal, required, className }) => {
   return (
-    <div class={"input-group " + className}>
+    <div className={"input-group " + className}>
       <select
         value={val}
         onChange={(e) => setVal(e.target.value)}

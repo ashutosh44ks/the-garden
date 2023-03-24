@@ -26,58 +26,10 @@ const usersSchema = new mongoose.Schema({
     min: 1,
     max: 4,
   },
-  rated_difficulties: [
-    {
-      subject_code: {
-        type: String,
-        required: true,
-      },
-      difficulty: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 3,
-      },
-    },
-  ],
-  rated_professors: [
-    {
-      professor_code: {
-        type: String,
-        required: true,
-      },
-      marks_rating: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 5,
-      },
-      attendance_rating: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 5,
-      },
-      personality: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 5,
-      },
-      teaching: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 5,
-      },
-      knowledge: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 5,
-      },
-    },
-  ],
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 module.exports = mongoose.model("Users", usersSchema);

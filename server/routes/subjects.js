@@ -1,25 +1,46 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 const Subjects = require("../models/subjects");
-const Users = require("../models/users");
-const { addToAverage, replaceInAverage } = require("../utils");
+const Votes = require("../models/votes");
+const { authenticateToken } = require("../utils");
 
-router.get("/get_all_subjects/:year", async (req, res) => {
-  let year = req.params.year;
-  let filteredSubjects;
+// for admin
+router.post("/add_subject", async (req, res) => {
+  const newSubject = new Subjects({
+    subject_code: req.body.subject_code,
+    name: req.body.name,
+    description: req.body.description,
+    branch: req.body.branch,
+    year: req.body.year,
+    credits: req.body.credits,
+    tags: req.body.tags || [],
+    professors: req.body.professors || [],
+  });
   try {
-    filteredSubjects = await Subjects.find({ year: parseInt(year) });
-    if (filteredSubjects.length === 0) {
-      return res.status(404).json({ message: "Cannot find subjects" });
-    }
-    res.json({ filteredSubjects, count: filteredSubjects.length });
+    const subject = await newSubject.save();
+    res.status(201).json({ subject });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    res.status(400).json({ msg: e.message });
+  }
+});
+router.delete("/delete_subject/:code", async (req, res) => {
+  try {
+    const subject = await Subjects.findOneAndDelete({
+      subject_code: req.params.code,
+    });
+    if (subject === null) {
+      return res.status(404).json({ msg: "Cannot find subject" });
+    }
+    res.json({ subject });
+  } catch (e) {
+    res.status(500).json({ msg: e.message });
   }
 });
 
-router.post("/get_filtered_subjects/:year", async (req, res) => {
-  let year = req.params.year;
+// for users
+router.post("/get_filtered_subjects", authenticateToken, async (req, res) => {
+  let year = req.query.year;
   let filteredSubjects;
   try {
     if (req.body.activeFilters.length === 0)
@@ -30,138 +51,92 @@ router.post("/get_filtered_subjects/:year", async (req, res) => {
         tags: { $in: req.body.activeFilters },
       });
     if (filteredSubjects.length === 0) {
-      return res.status(404).json({ message: "Cannot find subjects" });
+      return res.status(404).json({ message: "Cannot find subject" });
     }
     res.json({ filteredSubjects, count: filteredSubjects.length });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    res.status(500).json({ msg: e.message });
   }
 });
-
-router.post("/set_subject/:code", async (req, res) => {
-  const newSubject = new Subjects({
-    name: req.body.name,
-    subject_code: req.params.code,
-    description: req.body.description,
-    year: req.body.year,
-    credits: req.body.credits,
-    tags: req.body.tags,
-    difficulty: req.body.difficulty,
-    ratings_count: 1,
-    professors: []
-  });
+router.get("/get_subject", authenticateToken, async (req, res) => {
   try {
-    const subject = await newSubject.save();
-    res.status(201).json({ subject });
-  } catch (e) {
-    res.status(400).json({ message: e.message });
-  }
-});
-
-router.delete("/delete_subject/:code", async (req, res) => {
-  try {
-    const subject = await Subjects.findOneAndDelete({
-      subject_code: req.params.code,
+    const subject = await Subjects.findOne({
+      subject_code: req.query.subject_code,
     });
     if (subject === null) {
       return res.status(404).json({ message: "Cannot find subject" });
     }
-    res.json({ subject });
+    // get your vote
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userVote = await Votes.findOne({
+      username: decoded.username,
+      subject_code: subject.subject_code,
+    });
+    // get average votes
+    const subjectVotes = await Votes.find({
+      subject_code: subject.subject_code,
+    });
+    let avgVotes = 0;
+    if (subjectVotes.length !== 0) {
+      subjectVotes.forEach((vote) => {
+        avgVotes += vote.vote;
+      });
+      avgVotes /= subjectVotes.length;
+    }
+    res.json({
+      subject,
+      userVote: userVote.vote ? userVote.vote : 0,
+      avgVotes,
+    });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    res.status(500).json({ msg: e.message });
   }
 });
+router.patch("/rate_difficulty", authenticateToken, async (req, res) => {
+  const { subjectCode, userDifficulty } = req.body;
 
-router.get("/get_subject/:code", async (req, res) => {
+  // get username
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  const username = decoded.username;
+
   try {
-    const subject = await Subjects.findOne({ subject_code: req.params.code });
-    if (subject.length === 0) {
-      return res.status(404).json({ message: "Cannot find subject" });
-    }
-    res.json({ subject });
-  } catch (e) {
-    res.status(500).json({ message: e.message });
-  }
-});
-
-router.patch("/rate_difficulty", async (req, res) => {
-  const { username, subjectCode, userDifficulty } = req.body;
-  try {
-    // get current user and subject
-    const user = await Users.findOne({ username: username });
-    const subject = await Subjects.findOne({ subject_code: subjectCode });
-
-    if (user === null) {
-      return res.status(404).json({ message: "Cannot find user" });
-    }
-    if (subject === null) {
-      return res.status(404).json({ message: "Cannot find subject" });
-    }
-
-    const alreadyVoted =
-      user.rated_difficulties.find(
-        (subj) => subj.subject_code === subjectCode
-      ) !== undefined;
-
+    const alreadyVoted = Votes.findOne({
+      username: username,
+      subject_code: subjectCode,
+    }).vote;
     if (alreadyVoted) {
       // update difficulty
-      let oldRating = user.rated_difficulties.find(
-        (subj) => subj.subject_code === subjectCode
-      ).difficulty;
-      user.rated_difficulties.forEach((subj) => {
-        if (subj.subject_code === subjectCode) subj.difficulty = userDifficulty;
-      });
-      console.log(
-        subject.difficulty,
-        subject.ratings_count,
-        oldRating,
-        userDifficulty
-      );
-      subject.difficulty = replaceInAverage(
-        subject.difficulty,
-        subject.ratings_count,
-        oldRating,
-        userDifficulty
-      );
-      console.log(
-        subject.difficulty,
-        subject.ratings_count,
-        oldRating,
-        userDifficulty
-      );
+      const currentVote = await Votes.findOne({
+        username: username,
+        subject_code: subjectCode,
+      }).vote;
+      currentVote.vote = userDifficulty;
+      await currentVote.save();
+      res.status(200).json({ msg: "Difficulty updated" });
     } else {
       // add new difficulty
-      user.rated_difficulties.push({
+      const newVote = new Votes({
+        username: username,
         subject_code: subjectCode,
-        difficulty: userDifficulty,
+        vote: userDifficulty,
       });
-      subject.difficulty = addToAverage(
-        subject.difficulty,
-        subject.ratings_count,
-        userDifficulty
-      );
-      subject.ratings_count += 1;
+      await newVote.save();
+      res.status(200).json({ msg: "Difficulty added" });
     }
-
-    // commit in database
-    await user.save();
-    await subject.save();
-    let newDifficulty = subject.difficulty;
-    res.json({
-      msg: `Successfully rated ${subject.name} ${userDifficulty} points, new overall rating of the subject is ${newDifficulty}`,
-    });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    res.status(500).json({ msg: e.message });
   }
 });
-
-router.get("/view_syllabus/:code", (req, res) => {
+router.get("/view_syllabus/:code", authenticateToken, (req, res) => {
   let code = req.params.code;
   var fileName = `${code}_syllabus.jpg`;
   res.sendFile(fileName, { root: __dirname + "/../data/syllabus/" });
 });
-
-router.get("/view_notes/:code", (req, res) => {
+router.get("/view_notes/:code", authenticateToken, (req, res) => {
   let code = req.params.code;
   var fileName = `${code}_notes.pdf`;
   res.sendFile(fileName, { root: __dirname + "/../data/notes/" });

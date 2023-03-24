@@ -2,18 +2,25 @@ GET http://localhost:3001/api/users/get_users
 
 ###
 
-GET http://localhost:3001/api/users/get_user?username=admin
+GET http://localhost:3001/api/users/get_user?username=adminjwt2
 
 ###
 
-POST http://localhost:3001/api/users/register
+POST http://localhost:3002/api/auth/login
 Content-Type: application/json
 
 {
-    "user" : {
-        "username": "admin",
-        "password": "1234"
-    }
+    "username": "adminjwt",
+    "password": "1234"
+}
+
+###
+
+DELETE http://localhost:3002/api/auth/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluand0IiwiaWF0IjoxNjc4NTQyMjkyfQ.Lnh5vXgsGdVj-T2NxxQikw6YNKqHZ32IDCjDk4juRwA"
 }
 
 ###
@@ -24,14 +31,6 @@ GET http://localhost:3001/api/users/login?username=admin&password=1234
 
 DELETE http://localhost:3001/api/users/delete_user?username=admin
 
-###
-
-PATCH http://localhost:3001/api/tests/63e4e8b3a45ce2c91b0ca433
-Content-Type: application/json
-
-{
-    "name": "test2"
-}
 
 ###
 
@@ -39,16 +38,21 @@ GET http://localhost:3001/api/subjects/get_all_subjects/4
 
 ###
 
-POST http://localhost:3001/api/subjects/set_subject/TIT404
+POST http://localhost:3001/api/subjects/add_subject
 Content-Type: application/json
 
 {
-    "name": "Computer System Security",
-    "description": "The protection afforded to an automated information system in order to attain the applicable objectives of preserving the integrity, availability, and confidentiality of information system resources.",
+    "subject_code": "TIT404",
+    "name": "Computer Graphics & Animations",
+    "description": "Computer graphics deals with generating images and art with the aid of computers.",
     "year": 4,
+    "branch": "Information Technology",
     "credits": 3,
     "tags": [],
-    "difficulty": 3
+    "professors": [{
+        "name": "Shikha Goswami",
+        "year": 2022
+    }]
 }
 
 ###
@@ -59,13 +63,13 @@ DELETE http://localhost:3001/api/subjects/delete_subject/TIT404
 
 ###
 
-POST http://localhost:3001/api/subjects/rate_difficulty
+PATCH http://localhost:3001/api/subjects/rate_difficulty
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzaHV0b3NoNDRrcyIsImlhdCI6MTY3ODY0Njk3NywiZXhwIjoxNjc4NjUwNTc3fQ.IcCZW5QLKTQqOsvCbE9mDHPE1pMACyjG9q-wNDxLyzw
 
 {
-    "username": "admin",
     "subjectCode": "TIT404",
-    "userDifficulty": 3
+    "userDifficulty": 1
 }
 
 ###

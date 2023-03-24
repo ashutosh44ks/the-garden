@@ -20,22 +20,10 @@ db.once("open", () => {
   console.log("Connected to MongoDB");
 });
 
-const usersRouter = require("./routes/users");
-app.use("/api/users", usersRouter);
-const subjectsRouter = require("./routes/subjects");
-app.use("/api/subjects", subjectsRouter);
+const authRouter = require("./routes/auth");
+app.use("/api/auth", authRouter);
 
-// let files = [];
-// app.post("/api/upload", (req, res) => {
-//   console.log(req.body.formData);
-//   files.push(req.body.file);
-//   res.json({ msg: "File uploaded" });
-// });
-// app.get("/api/view", (req, res) => {
-//   res.json({ file: files });
-// });
-
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
 app.listen(port, () => {
   console.log("Server listening the port http://localhost/" + port);
 });
