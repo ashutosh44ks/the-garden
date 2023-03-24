@@ -33,3 +33,17 @@
   width: 100% !important;
   border: solid 1px #dadce0;
 }
+
+@media (max-width: 740px) {
+  .subject-main.card .card-body {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .subject-main.card .card-body .w-3\/4 {
+    width: 100%;
+  }
+  .subject-main.card .card-body .btn-primary,
+  .subject-main.card .card-body .difficulty-dropdown {
+    width: 100%;
+  }
+}

@@ -58,7 +58,7 @@ const Subject = () => {
     return <div className="p-8">Subject not found</div>;
   return (
     <div className="p-8">
-      <div className="card">
+      <div className="card subject-main">
         <div className="card-body flex justify-between items-start">
           <div className="w-3/4">
             <div className="flex items-end text-dark">
@@ -103,7 +103,7 @@ const Subject = () => {
                   : "Theoretical subject"}
               </span>
             </div>
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-2 mt-2 flex-wrap">
               <span
                 className={`simple-tab 
                   ${currentDifficulty <= 3 ? "tab-theme-red" : ""}
@@ -195,7 +195,7 @@ const Subject = () => {
       </div>
       <div>
         <h3 className="mb-2">Resources</h3>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <button
             className="btn-secondary"
             onClick={() => {
