@@ -70,10 +70,16 @@ router.get("/get_subject", authenticateToken, async (req, res) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const userVote = await Votes.findOne({
+    let userVote = await Votes.findOne({
       username: decoded.username,
       subject_code: subject.subject_code,
     });
+    if(userVote===null)
+      userVote = {
+        subject_code: subject.subject_code,
+        username: decoded.username,
+        vote: 0
+      };
     // get average votes
     const subjectVotes = await Votes.find({
       subject_code: subject.subject_code,
@@ -87,7 +93,7 @@ router.get("/get_subject", authenticateToken, async (req, res) => {
     }
     res.json({
       subject,
-      userVote: userVote.vote ? userVote.vote : 0,
+      userVote: userVote.vote,
       avgVotes,
     });
   } catch (e) {

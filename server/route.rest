@@ -34,7 +34,19 @@ DELETE http://localhost:3001/api/users/delete_user?username=admin
 
 ###
 
-GET http://localhost:3001/api/subjects/get_all_subjects/4
+POST http://localhost:3001/api/subjects/get_filtered_subjects?year=4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjc5NjUzOTIzLCJleHAiOjE2Nzk2NTc1MjN9.AvBoGpRR3_2eHqCrZdqlfH1BEpIkH5aT2ysQWwYJNFI
+
+{
+    "activeFilters": []
+}
+
+###
+
+GET http://localhost:3001/api/subjects/get_subject?subject_code=TIT404
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjc5NjUzOTIzLCJleHAiOjE2Nzk2NTc1MjN9.AvBoGpRR3_2eHqCrZdqlfH1BEpIkH5aT2ysQWwYJNFI
 
 ###
 
