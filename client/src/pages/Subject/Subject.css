@@ -57,7 +57,11 @@
   }
 }
 @media (max-width: 640px) {
-  .syllabus-container img, .pdf-container {
+  .syllabus-container img,
+  .pdf-container {
+    width: 100%;
+  }
+  .new-subject-page .btn-primary {
     width: 100%;
   }
 }
