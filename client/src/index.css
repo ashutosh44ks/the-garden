@@ -160,6 +160,10 @@ h3 {
   background-color: rgba(33, 150, 243, 0.1);
 }
 
+.full-page {
+  min-height: calc(100vh - 2.8rem);
+}
+
 .modal {
   background-color: white;
   border-radius: 0.6rem;

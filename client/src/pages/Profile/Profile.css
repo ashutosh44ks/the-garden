@@ -1,6 +1,3 @@
-.profile-page {
-  min-height: calc(100vh - 2.8rem);
-}
 .profile-page .profile-input-group {
   display: grid;
   grid-template-columns: 1fr 1fr;

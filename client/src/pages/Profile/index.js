@@ -61,7 +61,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-page p-8 bg-white">
+    <div className="full-page profile-page p-8 bg-white">
       <div className="xs:px-4 sm:py-8 xs:px-4 sm:px-12">
         <h1 className="mb-2 text-dark font-medium">
           We're happy to have you here.
@@ -70,7 +70,7 @@ const Profile = () => {
           Tell us about yourself and we can start curating content specific to
           your details and need. You can always change these details later.
         </p>
-        <div className="profile-form py-4">
+        <div className="py-4">
           <form
             onSubmit={(e) => {
               e.preventDefault();
