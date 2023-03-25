@@ -19,6 +19,7 @@ const Input = ({ label, type, val, setVal, required, className }) => {
         onChange={(e) => setVal(e.target.value)}
         required={required}
         ref={materialInput}
+        placeholder="."
       />
       <label ref={materialLabel}>{label}</label>
     </div>
