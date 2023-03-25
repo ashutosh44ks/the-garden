@@ -10,7 +10,9 @@ import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
+  const [year, setYear] = useState(1);
   const [user, setUser] = useState({});
   const getUserDetails = async () => {
     const username = jwt_decode(
@@ -21,21 +23,20 @@ const Home = () => {
         `/api/users/get_user?username=${username}`
       );
       setUser(data);
+      if (data.year) setYear(data.year);
     } catch (err) {
       console.log(err);
     }
+    setLoading(false);
   };
   useEffect(() => {
     getUserDetails();
   }, []);
 
-  const [year, setYear] = useState(1);
   const [subjects, setSubjects] = useState([]);
-
   const [showFilters, setShowFilters] = useState(false);
   const tags = ["gate", "practicals"];
   const [activeFilters, setActiveFilters] = useState([]);
-
   useEffect(() => {
     const getFilteredSubjects = async () => {
       try {
@@ -49,9 +50,10 @@ const Home = () => {
         setSubjects([]);
       }
     };
-    getFilteredSubjects();
-  }, [activeFilters, year]);
+    if (!loading) getFilteredSubjects();
+  }, [activeFilters, year, loading]);
 
+  if (loading) return <div className="p-8">loading...</div>;
   return (
     <>
       <div className="bg-blue p-8 text-white flex justify-between items-center gap-8 banner">
