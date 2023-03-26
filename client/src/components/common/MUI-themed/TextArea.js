@@ -12,7 +12,7 @@ const TextArea = ({ label, rows, val, setVal, required, className }) => {
   }, []);
 
   return (
-    <div class={"input-group " + className}>
+    <div className={"input-group " + className}>
       <textarea
         rows={rows}
         value={val}
