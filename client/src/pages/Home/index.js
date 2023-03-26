@@ -12,8 +12,18 @@ const Home = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  const [year, setYear] = useState(1);
+  const [suggestedTags, setSuggestedTags] = useState([]);
+  const getCurrentSubjectTags = async () => {
+    try {
+      const { data } = await api.get(`/api/subjects/get_tags`);
+      setSuggestedTags(data.tags);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const [user, setUser] = useState({});
+  const [year, setYear] = useState(1);
   const getUserDetails = async () => {
     const username = jwt_decode(
       JSON.parse(localStorage.getItem("logged")).accessToken
@@ -30,12 +40,12 @@ const Home = () => {
     setLoading(false);
   };
   useEffect(() => {
+    getCurrentSubjectTags();
     getUserDetails();
   }, []);
 
   const [subjects, setSubjects] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-  const tags = ["gate", "practicals"];
   const [activeFilters, setActiveFilters] = useState([]);
   useEffect(() => {
     const getFilteredSubjects = async () => {
@@ -130,7 +140,7 @@ const Home = () => {
         </div>
         {showFilters && (
           <div className="mt-5 flex gap-2 filter-tabs">
-            {tags.map((tag) => (
+            {suggestedTags.map((tag) => (
               <button
                 className={`filter-tab 
                 ${activeFilters.includes(tag) ? "active" : ""}
@@ -166,12 +176,11 @@ const Home = () => {
               </div>
               <div className="card-footer flex gap-2">
                 <span className="small-tab">{subject.credits} credits</span>
-                {subject.tags.includes("gate") && (
-                  <span className="small-tab">GATE</span>
-                )}
-                {subject.tags.includes("practicals") && (
-                  <span className="small-tab">Practicals</span>
-                )}
+                {subject.tags.slice(0, 4).map((tag) => (
+                  <span className="small-tab" key={tag}>
+                    {toLabel(tag)}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

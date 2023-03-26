@@ -41,10 +41,10 @@ const Subject = () => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const vote_difficulty = async (userDifficulty) => {
     try {
-      const { data } = await api.patch(
-        "/api/subjects/rate_difficulty",
-        { subjectCode: subjectId, userDifficulty }
-      );
+      const { data } = await api.patch("/api/subjects/rate_difficulty", {
+        subjectCode: subjectId,
+        userDifficulty,
+      });
       console.log(data);
       getSubject();
     } catch (err) {
@@ -73,35 +73,18 @@ const Subject = () => {
               <span
                 className={`simple-tab ${
                   subject.credits > 4 ? "tab-theme-red" : ""
-                  } ${subject.credits === 4 ? "tab-theme-orange" : ""}
+                } ${subject.credits === 4 ? "tab-theme-orange" : ""}
                   ${subject.credits === 3 ? "tab-theme-yellow" : ""}
                   ${subject.credits < 3 ? "tab-theme-green" : ""}
                 `}
               >
                 {subject.credits} credits
               </span>
-              <span
-                className={`mr-2 text-sm simple-tab ${
-                  subject.tags.includes("gate")
-                    ? "tab-theme-red"
-                    : "tab-theme-green"
-                }`}
-              >
-                {subject.tags.includes("gate")
-                  ? "Gate Subject"
-                  : "Non-Gate Subject"}
-              </span>
-              <span
-                className={`mr-2 text-sm simple-tab ${
-                  subject.tags.includes("practicals")
-                    ? "tab-theme-yellow"
-                    : "tab-theme-green"
-                }`}
-              >
-                {subject.tags.includes("practicals")
-                  ? "Practical subject"
-                  : "Theoretical subject"}
-              </span>
+              {subject.tags.map((tag) => (
+                <span className="simple-tab tab theme-default" key={tag}>
+                  {toLabel(tag)}
+                </span>
+              ))}
             </div>
             <div className="flex gap-2 mt-2 flex-wrap">
               <span
