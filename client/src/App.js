@@ -9,8 +9,8 @@ import Error404 from "./pages/Error404";
 import ViewNotes from "./pages/Subject/ViewNotes";
 import Profile from "./pages/Profile";
 import Terms from "./pages/Terms";
-// import UploadQP from "./pages/UploadQP";
-// import ViewQP from "./pages/ViewQP";
+import UploadQP from "./pages/SubjectUpload/UploadQP";
+// import ViewQP from "./pages/SubjectUpload/ViewQP";
 
 function App() {
   return (
@@ -57,15 +57,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* <Route
-          path="/question_papers/upload"
+        <Route
+          path="/subject/:subjectId/upload_qp"
           element={
             <ProtectedRoute>
               <UploadQP />
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/question_papers/view"
           element={
             <ProtectedRoute>
