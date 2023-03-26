@@ -6,6 +6,14 @@ const Votes = require("../models/votes");
 const { authenticateToken } = require("../utils");
 
 // for admin
+router.get("/get_subjects", async (req, res) => {
+  try {
+    const subjects = await Subjects.find();
+    res.json({ subjects });
+  } catch (e) {
+    res.status(500).json({ msg: e.message });
+  }
+})
 router.post("/add_subject", async (req, res) => {
   const newSubject = new Subjects({
     subject_code: req.body.subject_code,
@@ -39,6 +47,14 @@ router.delete("/delete_subject/:code", async (req, res) => {
 });
 
 // for users
+router.get("/get_tags", authenticateToken, async (req, res) => {
+  try {
+    const tags = await Subjects.distinct("tags");
+    res.json({ tags });
+  } catch (e) {
+    res.status(500).json({ msg: e.message });
+  }
+});
 router.post("/get_filtered_subjects", authenticateToken, async (req, res) => {
   let year = req.query.year;
   let filteredSubjects;
@@ -74,11 +90,11 @@ router.get("/get_subject", authenticateToken, async (req, res) => {
       username: decoded.username,
       subject_code: subject.subject_code,
     });
-    if(userVote===null)
+    if (userVote === null)
       userVote = {
         subject_code: subject.subject_code,
         username: decoded.username,
-        vote: 0
+        vote: 0,
       };
     // get average votes
     const subjectVotes = await Votes.find({

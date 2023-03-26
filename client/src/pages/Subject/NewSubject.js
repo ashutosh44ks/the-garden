@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../components/utils/api";
 import Input from "../../components/common/MUI-themed/Input";
 import Select from "../../components/common/MUI-themed/Select";
 import TextArea from "../../components/common/MUI-themed/TextArea";
+import { FiAlertCircle } from "react-icons/fi";
 
 const NewSubject = () => {
   const navigate = useNavigate();
@@ -23,15 +24,16 @@ const NewSubject = () => {
   const [professors, setProfessors] = useState([]);
 
   const addSubject = async () => {
+    let formattedTags = tags.split(",").map((tag) => tag.trim());
     try {
       const { data } = await api.post("/api/subjects/add_subject", {
         name,
-        subject_code: subjectCode,
+        subject_code: subjectCode.toUpperCase(),
         description,
         branch,
         year,
         credits,
-        tags,
+        tags: formattedTags,
         professors,
       });
       console.log(data);
@@ -41,6 +43,19 @@ const NewSubject = () => {
       setErrorMsg(e.response.data.msg);
     }
   };
+
+  const [suggestedTags, setSuggestedTags] = useState([]);
+  const getCurrentSubjectTags = async () => {
+    try {
+      const { data } = await api.get(`/api/subjects/get_tags`);
+      setSuggestedTags(data.tags);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getCurrentSubjectTags();
+  }, []);
 
   const [numOfGrpElements, setNumOfGrpElements] = useState([]);
 
@@ -56,7 +71,8 @@ const NewSubject = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              addSubject();
+              if (subjectCode.match(/^[a-zA-Z]{3}[0-9]{3}$/)) addSubject();
+              else setErrorMsg("Enter a valid Subject Code");
             }}
           >
             <Input
@@ -66,7 +82,7 @@ const NewSubject = () => {
               setVal={setName}
               required
             />
-            <div className="flex gap-2 sm:gap-4 md:gap-8 py-3 sm:py-6">
+            <div className="flex gap-2 sm:gap-4 md:gap-8 my-5 sm:my-7">
               <Input
                 label="Subject Code"
                 type="text"
@@ -104,12 +120,14 @@ const NewSubject = () => {
               setVal={setDescription}
               required
             />
-            <div className="flex gap-2 sm:gap-4 md:gap-8 py-3 sm:py-6">
+            <div className="flex gap-2 sm:gap-4 md:gap-8 my-5 sm:my-7">
               <Input
                 label="Year"
                 type="number"
                 val={year}
-                setVal={setYear}
+                setVal={(newVal) => {
+                  if (newVal <= 4) setYear(newVal);
+                }}
                 required
                 className="w-full"
               />
@@ -122,7 +140,7 @@ const NewSubject = () => {
                 className="w-full"
               />
             </div>
-            <div className="my-1">
+            <div className="my-8">
               <Input
                 label="Tags"
                 val={tags}
@@ -130,20 +148,31 @@ const NewSubject = () => {
                 required
                 className="w-full"
               />
-              <div className="flex flex-wrap gap-1 mt-2">
-                {!!tags.length &&
-                  tags.split(",").map((tag) => (
-                    <div className="simple-tab tab-theme-default" key={tag}>
-                      {tag}
-                    </div>
-                  ))}
+              <div className="text-sm text-dark-2 flex items-center gap-2">
+                <FiAlertCircle />
+                Separate each tag by a comma (e.g. "gate, practicals")
               </div>
+              {!!suggestedTags.length && (
+                <>
+                  <div className="text-sm text-dark-2 mt-2">
+                    Suggested tags (please select these tags instead of creating
+                    something similar to avoid redundancy in the backend)
+                  </div>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {suggestedTags.map((tag) => (
+                      <div className="simple-tab tab-theme-default" key={tag}>
+                        {tag}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
-            <div className="mt-4 flex flex-col gap-3">
+            <div className="my-8 flex flex-col gap-3">
               {numOfGrpElements.map((num) => (
                 <div
                   key={num}
-                  className="flex flex-wrap xs:flex-nowrap gap-2 sm:gap-4 md:gap-8"
+                  className="flex flex-wrap xs:flex-nowrap gap-4 sm:gap-6 md:gap-8"
                 >
                   <Input
                     label="Professor Name"
@@ -174,7 +203,7 @@ const NewSubject = () => {
                           year: val,
                         });
                       else temp[num].year = val;
-                      setProfessors(temp);
+                      if (val <= new Date().getFullYear()) setProfessors(temp);
                     }}
                     required
                     className="w-full"
@@ -194,12 +223,12 @@ const NewSubject = () => {
                 Add Professor Field
               </button>
             </div>
-            {errorMsg && (
-              <div className="text-red-500 text-end text-sm err-msg">
-                {errorMsg}
-              </div>
-            )}
             <div className="mt-8">
+              {errorMsg && (
+                <div className="text-red-500 text-end text-sm err-msg">
+                  {errorMsg}
+                </div>
+              )}
               <button className="btn btn-primary" type="submit">
                 Submit
               </button>
