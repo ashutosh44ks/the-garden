@@ -5,6 +5,7 @@ import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import NewSubject from "./pages/Subject/NewSubject";
 import ViewSyllabus from "./pages/Subject/ViewSyllabus";
+import ViewCalendar from "./pages/ViewCalendar";
 import Error404 from "./pages/Error404";
 import ViewNotes from "./pages/Subject/ViewNotes";
 import Profile from "./pages/Profile";
@@ -73,6 +74,14 @@ function App() {
             </ProtectedRoute>
           }
         /> */}
+        <Route
+          path="/calendars/:calendarType"
+          element={
+            <ProtectedRoute>
+              <ViewCalendar />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
