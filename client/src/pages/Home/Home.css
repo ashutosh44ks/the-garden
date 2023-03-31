@@ -33,6 +33,18 @@
   max-width: 25rem;
 }
 
+.card-grid-design {
+  background: url("../../../public/assets/grid.png") no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.card-grid-design img {
+  height: 10rem;
+  margin-left: auto;
+  position: relative;
+  top: -2rem
+}
+
 @media (max-width: 600px) {
   .banner {
     flex-wrap: wrap-reverse;

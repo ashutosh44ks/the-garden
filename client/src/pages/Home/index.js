@@ -220,6 +220,53 @@ const Home = () => {
           )}
         </div>
       </div>
+      <div className="bg-blue p-8 text-white flex flex-col items-center justify-center">
+        <h1>Check what's next and upcoming</h1>
+        <button
+          className="btn-secondary mt-4"
+          onClick={() => navigate("/upcoming")}
+        >
+          Events and Notices
+        </button>
+      </div>
+      <div className="px-8 py-12 flex xs:flex-wrap xs:gap-12 sm:flex-nowrap sm:gap-8">
+        <div
+          className="card cursor-pointer w-full"
+          onClick={() => navigate("/semester_calendar")}
+        >
+          <div className="card-grid-design">
+            <img src={"./assets/tasks.png"} alt="calendar" />
+          </div>
+          <div className="card-body">
+            <h3 className="card-title mb-2">Semester Calendar</h3>
+            <p className="card-text">
+              Check dates for registrations, prefinals, makeup, lab finals,
+              finals, and much more!
+            </p>
+          </div>
+          <div className="card-footer flex gap-2">
+            <button className="btn btn-secondary">View Calendar</button>
+          </div>
+        </div>
+        <div
+          className="card cursor-pointer w-full"
+          onClick={() => navigate("/holiday_calendar")}
+        >
+          <div className="card-grid-design">
+            <img src={"./assets/tasks-2.png"} alt="calendar" />
+          </div>
+          <div className="card-body">
+            <h3 className="card-title mb-2">Holiday Calendar</h3>
+            <p className="card-text">
+              Check dates for yearly holidays. This calendar is updated
+              yearly.
+            </p>
+          </div>
+          <div className="card-footer flex gap-2">
+            <button className="btn btn-secondary">Mark Holidays</button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
