@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import "./Subject.css";
-import StarRating from "../../components/common/StarRating";
 
 const Subject = () => {
   const navigate = useNavigate();
