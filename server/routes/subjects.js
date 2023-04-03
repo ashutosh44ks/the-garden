@@ -13,24 +13,25 @@ router.get("/get_subjects", async (req, res) => {
   } catch (e) {
     res.status(500).json({ msg: e.message });
   }
-})
+});
 router.post("/add_subject", async (req, res) => {
-  const newSubject = new Subjects({
-    subject_code: req.body.subject_code,
-    name: req.body.name,
-    description: req.body.description,
-    branch: req.body.branch,
-    year: req.body.year,
-    credits: req.body.credits,
-    tags: req.body.tags || [],
-    professors: req.body.professors || [],
-  });
-  try {
-    const subject = await newSubject.save();
-    res.status(201).json({ subject });
-  } catch (e) {
-    res.status(400).json({ msg: e.message });
-  }
+  console.log(req.body);
+  // const newSubject = new Subjects({
+  //   subject_code: req.body.subject_code,
+  //   name: req.body.name,
+  //   description: req.body.description,
+  //   branch: req.body.branch,
+  //   year: req.body.year,
+  //   credits: req.body.credits,
+  //   tags: req.body.tags || [],
+  //   professors: req.body.professors || [],
+  // });
+  // try {
+  //   const subject = await newSubject.save();
+  //   res.status(201).json({ subject });
+  // } catch (e) {
+  //   res.status(400).json({ msg: e.message });
+  // }
 });
 router.delete("/delete_subject/:code", async (req, res) => {
   try {
