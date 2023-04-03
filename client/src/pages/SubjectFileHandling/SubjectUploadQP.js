@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
+import Input from "../../components/common/MUI-themed/Input";
 import api from "../../components/utils/api";
 import axios from "axios";
 import TextArea from "../../components/common/MUI-themed/TextArea";
@@ -28,6 +29,7 @@ const UploadQP = () => {
     },
   ];
   const [examCategory, setExamCategory] = useState("");
+  const [examYear, setExamYear] = useState(new Date().getFullYear());
 
   const [inputType, setInputType] = useState("text");
 
@@ -40,11 +42,12 @@ const UploadQP = () => {
   const uploadFile = async () => {
     let formData = new FormData();
     formData.append("subject_code", subjectId);
-    formData.append("exam_category", examCategory);
-    formData.append("files", selectedFile);
+    formData.append("category", `qp_${examCategory}`);
+    formData.append("year", examYear);
+    formData.append("file", selectedFile);
     try {
       const { data } = axios.post(
-        `${process.env.REACT_APP_BASE_API_URL}/api/subjects/upload_qp`,
+        `${process.env.REACT_APP_BASE_API_URL}/api/subjects/upload_file`,
         formData,
         {
           headers: {
@@ -108,6 +111,14 @@ const UploadQP = () => {
               setVal={setExamCategory}
               required
               className="mb-4"
+            />
+            <Input
+              label="Exam Year"
+              type="number"
+              val={examYear}
+              setVal={setExamYear}
+              className="mb-4"
+              required
             />
             <div className="flex gap-2 flex-wrap mb-4">
               <span

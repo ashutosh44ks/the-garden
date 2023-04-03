@@ -1,0 +1,34 @@
+import { useState } from "react";
+import { pdfjs, Document, Page } from "react-pdf";
+import toLabel from "../../../components/utils/toLabel";
+
+const PdfViewer = ({ file, category }) => {
+  // setup for react-pdf package
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  const [numPages, setNumPages] = useState(null);
+  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
+    setNumPages(nextNumPages);
+  }
+
+  if (file === null) return <div>No {toLabel(category)} File Found</div>;
+  return (
+    <div className="pdf-container">
+      <Document
+        file={`data:application/pdf;base64,${file}`}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page
+            key={`page_${index + 1}`}
+            pageNumber={index + 1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+            className="py-2 px-2"
+          />
+        ))}
+      </Document>
+    </div>
+  );
+};
+
+export default PdfViewer;

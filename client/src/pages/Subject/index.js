@@ -181,7 +181,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/view_syllabus`);
+              navigate(`/subject/${subjectId}/syllabus/view`);
             }}
           >
             Syllabus
@@ -189,7 +189,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/view_notes`);
+              navigate(`/subject/${subjectId}/notes/view`);
             }}
           >
             Notes
@@ -197,7 +197,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/question_papers`);
+              navigate(`/subject/${subjectId}/qp/view`);
             }}
           >
             Previous Year Papers

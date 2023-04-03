@@ -4,14 +4,12 @@ import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import NewSubject from "./pages/Subject/NewSubject";
-import ViewSyllabus from "./pages/Subject/ViewSyllabus";
 import ViewCalendar from "./pages/ViewCalendar";
 import Error404 from "./pages/Error404";
-import ViewNotes from "./pages/Subject/ViewNotes";
 import Profile from "./pages/Profile";
 import Terms from "./pages/Terms";
-import UploadQP from "./pages/SubjectUpload/UploadQP";
-// import ViewQP from "./pages/SubjectUpload/ViewQP";
+import SubjectUploadQP from "./pages/SubjectFileHandling/SubjectUploadQP";
+import SubjectView from "./pages/SubjectFileHandling/SubjectView";
 
 function App() {
   return (
@@ -43,37 +41,21 @@ function App() {
           }
         />
         <Route
-          path="/subject/:subjectId/view_syllabus"
+          path="/subject/:subjectId/qp/upload"
           element={
             <ProtectedRoute>
-              <ViewSyllabus />
+              <SubjectUploadQP />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/subject/:subjectId/view_notes"
+          path="/subject/:subjectId/:category/view"
           element={
             <ProtectedRoute>
-              <ViewNotes />
+              <SubjectView />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/subject/:subjectId/upload_qp"
-          element={
-            <ProtectedRoute>
-              <UploadQP />
-            </ProtectedRoute>
-          }
-        />
-        {/* <Route
-          path="/question_papers/view"
-          element={
-            <ProtectedRoute>
-              <ViewQP />
-            </ProtectedRoute>
-          }
-        /> */}
         <Route
           path="/calendars/:calendarType"
           element={
