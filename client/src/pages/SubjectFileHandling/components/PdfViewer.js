@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { pdfjs, Document, Page } from "react-pdf";
-import toLabel from "../../../components/utils/toLabel";
 
-const PdfViewer = ({ file, category }) => {
+const PdfViewer = ({ file }) => {
   // setup for react-pdf package
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [numPages, setNumPages] = useState(null);
@@ -10,7 +9,6 @@ const PdfViewer = ({ file, category }) => {
     setNumPages(nextNumPages);
   }
 
-  if (file === null) return <div>No {toLabel(category)} File Found</div>;
   return (
     <div className="pdf-container">
       <Document

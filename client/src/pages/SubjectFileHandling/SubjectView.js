@@ -86,10 +86,20 @@ const SubjectView = () => {
       {/* Need to create the directory part here */}
       {isLoading ? (
         <div>Loading...</div>
+      ) : file === null ? (
+        <div>
+          No {toLabel(category)} File Found,{" "}
+          <u
+            className="text-blue cursor-pointer"
+            onClick={() => navigate(`/subject/${subjectId}/${category}/upload`)}
+          >
+            Upload by clicking here
+          </u>
+        </div>
       ) : fileType === "pdf" ? (
-        <PdfViewer file={file} category={category} />
+        <PdfViewer file={file} />
       ) : (
-        <ImageViewer file={file} category={category} />
+        <ImageViewer file={file} />
       )}
     </div>
   );

@@ -1,8 +1,4 @@
-import toLabel from "../../../components/utils/toLabel";
-
-const ImageViewer = ({ category, file }) => {
-  
-  if (file === null) return <div>No {toLabel(category)} File Found</div>;
+const ImageViewer = ({ file }) => {
   return (
     <div className="syllabus-container">
       <img
