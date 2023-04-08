@@ -18,21 +18,32 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const category = req.body.category;
     const year = req.body.year;
-    cb(
-      null,
-      category + "_" + year + Date.now() + "." + file.mimetype.split("/")[1]
-    );
+    if (
+      file.mimetype.split("/")[1] ===
+      "vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+      cb(null, `${category}_${year}_${Date.now()}.docx`);
+    else
+      cb(
+        null,
+        `${category}_${year}_${Date.now()}.${file.mimetype.split("/")[1]}`
+      );
   },
 });
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = [
     "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "image/jpeg",
     "image/png",
     "image/jpg",
   ];
   if (allowedMimeTypes.includes(file.mimetype)) cb(null, true); // accept file
-  else cb(null, false); // reject file
+  else {
+    req.fileValidationError = "Forbidden extension";
+    req.allowedMimeTypes = allowedMimeTypes;
+    cb(null, false, req.fileValidationError, req.allowedMimeTypes); // reject file
+  }
 };
 const upload = multer({
   storage: storage,
@@ -41,12 +52,16 @@ const upload = multer({
   },
   fileFilter: fileFilter,
 });
-
 router.post(
   "/upload_file",
   authenticateToken,
   upload.single("file"),
   async (req, res) => {
+    if (req.fileValidationError)
+      return res.status(422).json({
+        msg: req.fileValidationError,
+        allowedMimeTypes: req.allowedMimeTypes,
+      });
     res.json({ msg: "File uploaded" });
   }
 );
