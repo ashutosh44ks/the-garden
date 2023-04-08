@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "../../components/utils/api";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
 import Input from "../../components/common/MUI-themed/Input";
-import api from "../../components/utils/api";
-import axios from "axios";
 import TextArea from "../../components/common/MUI-themed/TextArea";
 
 const UploadQP = () => {
@@ -46,15 +45,11 @@ const UploadQP = () => {
     formData.append("year", examYear);
     formData.append("file", selectedFile);
     try {
-      const { data } = axios.post(
-        `${process.env.REACT_APP_BASE_API_URL}/api/subjects/upload_file`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = api.post(`/api/subjects/upload_file`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log(data);
     } catch (e) {
       console.log(e);
