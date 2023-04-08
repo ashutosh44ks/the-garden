@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Terms from "./pages/Terms";
 import SubjectUploadQP from "./pages/SubjectFileHandling/SubjectUploadQP";
 import SubjectView from "./pages/SubjectFileHandling/SubjectView";
+import SubjectUpload from "./pages/SubjectFileHandling/SubjectUpload";
 
 function App() {
   return (
@@ -53,6 +54,14 @@ function App() {
           element={
             <ProtectedRoute>
               <SubjectView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subject/:subjectId/:category/upload"
+          element={
+            <ProtectedRoute>
+              <SubjectUpload />
             </ProtectedRoute>
           }
         />
