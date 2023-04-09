@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
+import dateFormatter from "../../components/utils/dateFormatter";
 import ImageViewer from "./components/ImageViewer";
 import PdfViewer from "./components/PdfViewer";
 import FileManager from "./components/FileManager";
@@ -24,16 +25,23 @@ const SubjectView = () => {
     }
     return window.btoa(binary);
   }
-  const getFile = async (fileName) => {
-    setFileType(fileName.split(".")[fileName.split(".").length - 1]);
+  const getFile = async (file) => {
+    const { val, name, uploader, created_at } = file;
+    setFileType(val.split(".")[val.split(".").length - 1]);
     try {
       const { data } = await api.get(
-        `/api/subjects/get_file?subject_code=${subjectId}&file_name=${fileName}`,
+        `/api/subjects/get_file?subject_code=${subjectId}&file_name=${val}`,
         {
           responseType: "arraybuffer",
         }
       );
-      setFile(_arrayBufferToBase64(data));
+      setFile({
+        data: _arrayBufferToBase64(data),
+        name,
+        type: val.split(".")[val.split(".").length - 1],
+        uploader,
+        created_at,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -45,8 +53,20 @@ const SubjectView = () => {
         `/api/subjects/get_dir_files?subject_code=${subjectId}&prefix=${category}`
       );
       // if only 1 file, we show it else we show the list of files and user clicks on one to view it
-      if (data.list.length === 1) getFile(data.list[0].dbFileName);
-      else setFileList(data.list);
+      setFileList(
+        data.list.map((file) => {
+          return {
+            name: file.userFileName || file.dbFileName.split(".")[0],
+            type: file.dbFileName.split(".")[1],
+            created_at: dateFormatter(
+              file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
+            ),
+            val: file.dbFileName,
+            uploader: file.uploader,
+          };
+        })
+      );
+      if (data.list.length === 1) getFile(data.list[0]);
     } catch (err) {
       console.log(err);
     }
@@ -61,17 +81,12 @@ const SubjectView = () => {
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-dark">{toLabel(category)}</h1>
-          <a
-            className="btn-primary"
-            href={
-              fileType === "pdf"
-                ? `data:application/pdf;base64,${file}`
-                : `data:image/png;base64,${file}`
-            }
-            download={category + "." + fileType}
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate(`/subject/${subjectId}/${category}/upload`)}
           >
-            Download
-          </a>
+            Upload
+          </button>
         </div>
         <div className="text-sm text-dark-2">
           Go back to{" "}
@@ -85,26 +100,45 @@ const SubjectView = () => {
           </u>
         </div>
       </div>
-      {/* Need to create the directory part here */}
-      {fileList.length > 0 && (
+      {fileList.length > 1 && (
         <FileManager fileList={fileList} getFile={getFile} />
       )}
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : file === null ? (
-        <div>
-          No {toLabel(category)} File Found,{" "}
-          <u
-            className="text-blue cursor-pointer"
-            onClick={() => navigate(`/subject/${subjectId}/${category}/upload`)}
-          >
-            Upload by clicking here
-          </u>
+      {fileList.length === 0 && (
+        <div className="text-sm text-dark-2 my-8">No files uploaded yet</div>
+      )}
+      {file === null ? (
+        <div className="text-sm text-dark-2 my-8">
+          Please select a file to view it
         </div>
-      ) : fileType === "pdf" ? (
-        <PdfViewer file={file} />
+      ) : isLoading ? (
+        <div className="my-8">Loading...</div>
       ) : (
-        <ImageViewer file={file} />
+        <div className="view-container my-8">
+          <div className="flex justify-between items-center mb-10">
+            <div>
+              <div>{file.name}</div>
+              <div className="text-sm text-dark-2">
+                Uploaded by {file.uploader} on {file.created_at}
+              </div>
+            </div>
+            <a
+              className="btn btn-secondary"
+              href={
+                file.type === "pdf"
+                  ? `data:application/pdf;base64,${file.data}`
+                  : `data:image/png;base64,${file.data}`
+              }
+              download={category + "." + file.type}
+            >
+              Download
+            </a>
+          </div>
+          {fileType === "pdf" ? (
+            <PdfViewer file={file.data} />
+          ) : (
+            <ImageViewer file={file.data} />
+          )}
+        </div>
       )}
     </div>
   );

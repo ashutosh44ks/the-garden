@@ -29,13 +29,33 @@
   padding: 1rem;
   color: #202124;
 }
+.view-container {
+  background-color: white;
+  border: solid 1px #dadce0;
+  border-radius: 0.6rem;
+  padding: 2rem;
+  color: #202124;
+}
 .file-tag {
-  background-color: #DAD8F2;
+  background-color: #dad8f2;
   color: blue;
   padding: 0.25rem 1rem;
   border-radius: 1rem;
 }
-
+.file-tag.pdf {
+  background-color: #f2d8d8;
+  color: #c0392b;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+}
+.file-tag.jpg,
+.file-tag.png,
+.file-tag.jpeg {
+  background-color: #d8f2d8;
+  color: green;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+}
 
 @media (max-width: 640px) {
   .syllabus-container img,

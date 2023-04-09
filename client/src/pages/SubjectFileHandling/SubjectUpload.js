@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
 import Input from "../../components/common/MUI-themed/Input";
@@ -7,6 +7,7 @@ import api from "../../components/utils/api";
 
 const SubjectUpload = () => {
   const { subjectId, category } = useParams();
+  const navigate = useNavigate();
 
   const categories = [
     {
@@ -45,6 +46,8 @@ const SubjectUpload = () => {
         },
       });
       console.log(data);
+      setFilename("");
+      setSelectedFile(null);
     } catch (e) {
       console.log(e);
     }
@@ -52,10 +55,21 @@ const SubjectUpload = () => {
 
   return (
     <div className="p-8">
-      <h1 className="mb-2 text-dark font-medium">Add Resources</h1>
+      <h1 className="text-dark font-medium">Add Resources</h1>
+      <div className="text-sm text-dark-2 mb-2">
+        Go back to{" "}
+        <u
+          className="text-blue cursor-pointer"
+          onClick={() => {
+            navigate(`/subject/${subjectId}`);
+          }}
+        >
+          {subjectId} page
+        </u>
+      </div>
       <p className="text-dark-2">
         Thank you for your interest in contributing to the community. You may
-        choose to upload a pdf or image file.
+        choose to upload a file of the following formats: png, jpg, jpeg, pdf, docx
       </p>
       <form
         className="my-10"
@@ -99,6 +113,8 @@ const SubjectUpload = () => {
               onUpload={onUpload}
               count={1}
               formats={["png", "jpg", "jpeg", "pdf", "docx"]}
+              filename={filename}
+              setFilename={setFilename}
             />
             <div className="mt-4">
               <button className="btn btn-primary" type="submit">

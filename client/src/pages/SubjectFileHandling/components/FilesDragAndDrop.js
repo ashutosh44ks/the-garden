@@ -2,9 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "./FilesDragAndDrop.css";
 
-export default function FilesDragAndDrop({ onUpload, count, formats }) {
+export default function FilesDragAndDrop({
+  onUpload,
+  count,
+  formats,
+  filename,
+  setFilename,
+}) {
   const [dragging, setDragging] = useState(false);
-  const [fileName, setFileName] = useState("");
   const drop = useRef(null);
   const drag = useRef(null);
   const input = useRef(null);
@@ -68,10 +73,9 @@ export default function FilesDragAndDrop({ onUpload, count, formats }) {
       );
       return;
     }
-    // then if files are valid, call the onUpload prop function and setFileName
+    // then if files are valid, call the onUpload prop function
     if (files && files.length) {
       onUpload(files);
-      setFileName(files[0].name);
     }
   };
 
@@ -94,7 +98,7 @@ export default function FilesDragAndDrop({ onUpload, count, formats }) {
   return (
     <div
       ref={drop}
-      className="FilesDragAndDrop mt-2"
+      className="FilesDragAndDrop mt-2 cursor-pointer"
       onClick={() => {
         input && input.current.click();
       }}
@@ -112,12 +116,12 @@ export default function FilesDragAndDrop({ onUpload, count, formats }) {
           handleUpload(files);
         }}
       />
-      {fileName && (
+      {filename && (
         <div className="FilesDragAndDrop__area">
-          {fileName} (Uploaded Successfully!)
+          {filename} (Uploaded Successfully!)
         </div>
       )}
-      {!fileName && (
+      {!filename && (
         <>
           {dragging ? (
             <div className="FilesDragAndDrop__area" ref={drag}>
