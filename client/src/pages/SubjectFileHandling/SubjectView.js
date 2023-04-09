@@ -4,6 +4,8 @@ import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import ImageViewer from "./components/ImageViewer";
 import PdfViewer from "./components/PdfViewer";
+import FileManager from "./components/FileManager";
+import "./style.css";
 
 const SubjectView = () => {
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ const SubjectView = () => {
         `/api/subjects/get_dir_files?subject_code=${subjectId}&prefix=${category}`
       );
       // if only 1 file, we show it else we show the list of files and user clicks on one to view it
-      if (data.list.length === 1) getFile(data.list[0]);
+      if (data.list.length === 1) getFile(data.list[0].dbFileName);
       else setFileList(data.list);
     } catch (err) {
       console.log(err);
@@ -84,6 +86,9 @@ const SubjectView = () => {
         </div>
       </div>
       {/* Need to create the directory part here */}
+      {fileList.length > 0 && (
+        <FileManager fileList={fileList} getFile={getFile} />
+      )}
       {isLoading ? (
         <div>Loading...</div>
       ) : file === null ? (

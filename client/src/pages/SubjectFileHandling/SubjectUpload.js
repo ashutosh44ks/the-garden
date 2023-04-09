@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
+import Input from "../../components/common/MUI-themed/Input";
 import api from "../../components/utils/api";
 
 const SubjectUpload = () => {
@@ -22,20 +23,23 @@ const SubjectUpload = () => {
     if (category) setUploadCategory(category);
   }, [category]);
 
+  const [filename, setFilename] = useState("");
   // for file upload task
   const [selectedFile, setSelectedFile] = useState(null);
   const onUpload = (files) => {
     console.log(files);
     setSelectedFile(files[0]);
+    setFilename(files[0].name.split(".")[0]);
   };
   const uploadFile = async () => {
     let formData = new FormData();
     formData.append("subject_code", subjectId);
     formData.append("category", uploadCategory);
     formData.append("year", new Date().getFullYear());
+    formData.append("filename", filename);
     formData.append("file", selectedFile);
     try {
-      const { data } = api.post(`/api/subjects/upload_file`, formData, {
+      const { data } = await api.post(`/api/subjects/upload_file`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -83,16 +87,18 @@ const SubjectUpload = () => {
               required
               className="mb-4"
             />
+            <Input
+              label="Title / Short description"
+              type="text"
+              val={filename}
+              setVal={setFilename}
+              required
+              className="mb-4"
+            />
             <FilesDragAndDrop
               onUpload={onUpload}
               count={1}
-              formats={[
-                "png",
-                "jpg",
-                "jpeg",
-                "pdf",
-                "docx",
-              ]}
+              formats={["png", "jpg", "jpeg", "pdf", "docx"]}
             />
             <div className="mt-4">
               <button className="btn btn-primary" type="submit">

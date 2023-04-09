@@ -1,30 +1,45 @@
 .syllabus-container {
-    display: flex;
-    justify-content: center;
-  }
-  .syllabus-container img {
-    width: 75vw;
-  }
-  .pdf-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 1;
-    width: 75vw;
-    margin: auto;
-  }
-  .react-pdf__Page {
-    min-width: auto !important;
-    position: inherit !important;
-  }
-  .react-pdf__Page__canvas {
-    height: 100% !important;
-    width: 100% !important;
-    border: solid 1px #dadce0;
-  }
+  display: flex;
+  justify-content: center;
+}
+.syllabus-container img {
+  width: 75vw;
+}
+.pdf-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1;
+  width: 75vw;
+  margin: auto;
+}
+.react-pdf__Page {
+  min-width: auto !important;
+  position: inherit !important;
+}
+.react-pdf__Page__canvas {
+  height: 100% !important;
+  width: 100% !important;
+  border: solid 1px #dadce0;
+}
 
-  @media (max-width: 640px) {
-    .syllabus-container img,
-    .pdf-container {
-      width: 100%;
-    }
+.file-manager {
+  background-color: white;
+  border: solid 1px #dadce0;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  color: #202124;
+}
+.file-tag {
+  background-color: #DAD8F2;
+  color: blue;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+}
+
+
+@media (max-width: 640px) {
+  .syllabus-container img,
+  .pdf-container {
+    width: 100%;
+  }
 }

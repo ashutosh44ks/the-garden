@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("../utils");
-// const jwt = require("jsonwebtoken");
-// const Subjects = require("../models/subjects");
+const SubjectFiles = require("../models/subjectFiles");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -62,17 +62,46 @@ router.post(
         msg: req.fileValidationError,
         allowedMimeTypes: req.allowedMimeTypes,
       });
-    res.json({ msg: "File uploaded" });
+    console.log(req.body)
+    const newSubjectFile = new SubjectFiles({
+      dbFileName: req.file.filename,
+      userFileName: req.body.filename,
+      uploader: req.user.username,
+      subject_code: req.body.subject_code,
+    });
+    try {
+      const uploadedFile = await newSubjectFile.save();
+      res.status(201).json({ uploadedFile });
+    } catch (e) {
+      // delete the file if it was uploaded
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.log(err);
+      });
+      res.status(400).json({ msg: e.message });
+    }
   }
 );
-router.get("/get_dir_files", (req, res) => {
+router.get("/get_dir_files", async (req, res) => {
   const subject_code = req.query.subject_code;
   const prefix = req.query.prefix;
   const allowedPrefixes = ["qp", "syllabus", "notes"];
   if (!allowedPrefixes.includes(prefix))
     res.status(422).json({ msg: "Enter a valid prefix", allowedPrefixes });
-  const files = fs.readdirSync(`./data/${subject_code}`);
-  res.json({ list: files.filter((file) => file.startsWith(prefix)) });
+
+  // const all_files = fs.readdirSync(`./data/${subject_code}`);
+  const all_files = await SubjectFiles.find({
+    subject_code: subject_code,
+  });
+  const my_files = all_files.filter((file) => file.dbFileName.startsWith(prefix));
+
+  const list = my_files.map((file) => {
+    return {
+      dbFileName: file.dbFileName,
+      userFileName: file.userFileName,
+      uploader: file.uploader,
+    };
+  });
+  res.status(200).json({ list });
 });
 router.get("/get_file", authenticateToken, (req, res) => {
   const subject_code = req.query.subject_code;
