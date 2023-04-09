@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import "./Subject.css";
-import StarRating from "../../components/common/StarRating";
 
 const Subject = () => {
   const navigate = useNavigate();
@@ -182,7 +181,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/view_syllabus`);
+              navigate(`/subject/${subjectId}/syllabus/view`);
             }}
           >
             Syllabus
@@ -190,7 +189,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/view_notes`);
+              navigate(`/subject/${subjectId}/notes/view`);
             }}
           >
             Notes
@@ -198,7 +197,7 @@ const Subject = () => {
           <button
             className="btn-secondary"
             onClick={() => {
-              navigate(`/subject/${subjectId}/question_papers`);
+              navigate(`/subject/${subjectId}/qp/view`);
             }}
           >
             Previous Year Papers
