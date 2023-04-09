@@ -62,7 +62,6 @@ router.post(
         msg: req.fileValidationError,
         allowedMimeTypes: req.allowedMimeTypes,
       });
-    console.log(req.body)
     const newSubjectFile = new SubjectFiles({
       dbFileName: req.file.filename,
       userFileName: req.body.filename,
