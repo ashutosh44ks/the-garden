@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
-const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("../utils");
 const SubjectFiles = require("../models/subjectFiles");
 
@@ -106,6 +105,17 @@ router.get("/get_file", authenticateToken, (req, res) => {
   const subject_code = req.query.subject_code;
   const fileName = req.query.file_name;
   res.sendFile(fileName, { root: __dirname + `/../data/${subject_code}` });
+});
+
+router.get("/view_syllabus/:code", authenticateToken, (req, res) => {
+  let code = req.params.code;
+  var fileName = `${code}_syllabus.jpg`;
+  res.sendFile(fileName, { root: __dirname + "/../data/syllabus/" });
+});
+router.get("/view_notes/:code", authenticateToken, (req, res) => {
+  let code = req.params.code;
+  var fileName = `${code}_notes.pdf`;
+  res.sendFile(fileName, { root: __dirname + "/../data/notes/" });
 });
 
 module.exports = router;

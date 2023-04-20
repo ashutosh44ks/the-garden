@@ -154,15 +154,5 @@ router.patch("/rate_difficulty", authenticateToken, async (req, res) => {
     res.status(500).json({ msg: e.message });
   }
 });
-router.get("/view_syllabus/:code", authenticateToken, (req, res) => {
-  let code = req.params.code;
-  var fileName = `${code}_syllabus.jpg`;
-  res.sendFile(fileName, { root: __dirname + "/../data/syllabus/" });
-});
-router.get("/view_notes/:code", authenticateToken, (req, res) => {
-  let code = req.params.code;
-  var fileName = `${code}_notes.pdf`;
-  res.sendFile(fileName, { root: __dirname + "/../data/notes/" });
-});
 
 module.exports = router;

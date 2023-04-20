@@ -26,6 +26,8 @@ const subjectsRouter = require("./routes/subjects");
 app.use("/api/subjects", subjectsRouter);
 const subjectsFileHandlingRouter = require("./routes/subjectsFileHandling");
 app.use("/api/subjects", subjectsFileHandlingRouter);
+const calendars = require("./routes/calendars");
+app.use("/api/calendars", calendars);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

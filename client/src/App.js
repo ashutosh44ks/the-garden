@@ -4,7 +4,8 @@ import Home from "./pages/Home";
 import Entry from "./pages/Entry";
 import Subject from "./pages/Subject";
 import NewSubject from "./pages/Subject/NewSubject";
-import ViewCalendar from "./pages/ViewCalendar";
+import ViewCalendar from "./pages/Calendar";
+import UploadCalendar from "./pages/Calendar/CalendarUpload";
 import Error404 from "./pages/Error404";
 import Profile from "./pages/Profile";
 import Terms from "./pages/Terms";
@@ -70,6 +71,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ViewCalendar />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendars/:calendarType/upload"
+          element={
+            <ProtectedRoute>
+              <UploadCalendar />
             </ProtectedRoute>
           }
         />
