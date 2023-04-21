@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Subjects = require("../models/subjects");
+const SubjectTexts = require("../models/subjectTexts");
 const Votes = require("../models/votes");
 const { authenticateToken } = require("../utils");
 
@@ -152,6 +153,33 @@ router.patch("/rate_difficulty", authenticateToken, async (req, res) => {
     }
   } catch (e) {
     res.status(500).json({ msg: e.message });
+  }
+});
+router.post("/upload_qp_texts", authenticateToken, async (req, res) => {
+  const newSubjectText = new SubjectTexts({
+    subject_code: req.body.subject_code,
+    category: req.body.category,
+    year: req.body.year,
+    content: req.body.content,
+    created_at: Date.now(),
+    uploader: req.user.username,
+  });
+  try {
+    const uploaded_qp = await newSubjectText.save();
+    res.status(201).json({ uploaded_qp });
+  } catch (e) {
+    res.status(400).json({ msg: e.message });
+  }
+});
+router.get("/get_qp_texts", authenticateToken, async (req, res) => {
+  const subjectCode = req.query.subject_code;
+  if (!subjectCode)
+    return res.status(404).json({ message: "Cannot find subject" });
+  try {
+    const texts = await SubjectTexts.find({ subject_code: subjectCode });
+    res.json(texts);
+  } catch (e) {
+    console.log(e);
   }
 });
 
