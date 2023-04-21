@@ -1,4 +1,4 @@
-const FileManager = ({ fileList, getFile }) => {
+const FileManager = ({ list, getFile, setActiveItem }) => {
   return (
     <div className="file-manager">
       <table className="text-dark-2 text-sm w-full">
@@ -11,20 +11,23 @@ const FileManager = ({ fileList, getFile }) => {
           </tr>
         </thead>
         <tbody>
-          {fileList.map((file) => (
+          {list.map((item) => (
             <tr
-              onClick={() => getFile(file)}
+              onClick={() => {
+                if (item.type !== "text") getFile(item);
+                else setActiveItem(item);
+              }}
               className="cursor-pointer"
-              key={file.val}
+              key={item.val}
             >
               <td className="px-4 py-2">
-                <span className={`file-tag text-sm ${file.type}`}>
-                  {file.type}
+                <span className={`file-tag text-sm ${item.type}`}>
+                  {item.type}
                 </span>
               </td>
-              <td className="px-4 py-2 text-dark">{file.name}</td>
-              <td className="px-4 py-2">{file.created_at}</td>
-              <td className="px-4 py-2">{file.uploader}</td>
+              <td className="px-4 py-2 text-dark">{item.name}</td>
+              <td className="px-4 py-2">{item.created_at}</td>
+              <td className="px-4 py-2">{item.uploader}</td>
             </tr>
           ))}
         </tbody>

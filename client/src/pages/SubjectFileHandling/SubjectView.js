@@ -12,9 +12,9 @@ const SubjectView = () => {
   const navigate = useNavigate();
   const { subjectId, category } = useParams();
 
-  const [file, setFile] = useState(null);
-  const [fileType, setFileType] = useState(null);
-  const [fileList, setFileList] = useState([]);
+  const [activeItem, setActiveItem] = useState(null);
+  const [listFiles, setListFiles] = useState([]);
+  const [listTexts, setListTexts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   function _arrayBufferToBase64(buffer) {
     var binary = "";
@@ -27,7 +27,6 @@ const SubjectView = () => {
   }
   const getFile = async (file) => {
     const { val, name, uploader, created_at } = file;
-    setFileType(val.split(".")[val.split(".").length - 1]);
     try {
       const { data } = await api.get(
         `/api/subjects/get_file?subject_code=${subjectId}&file_name=${val}`,
@@ -35,7 +34,7 @@ const SubjectView = () => {
           responseType: "arraybuffer",
         }
       );
-      setFile({
+      setActiveItem({
         data: _arrayBufferToBase64(data),
         name,
         type: val.split(".")[val.split(".").length - 1],
@@ -53,27 +52,54 @@ const SubjectView = () => {
         `/api/subjects/get_dir_files?subject_code=${subjectId}&prefix=${category}`
       );
       // if only 1 file, we show it else we show the list of files and user clicks on one to view it
-      setFileList(
+      setListFiles(
         data.list.map((file) => {
           return {
             name: file.userFileName || file.dbFileName.split(".")[0],
             type: file.dbFileName.split(".")[1],
-            created_at: dateFormatter(
-              file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
-            ),
+            created_at:
+              file.dbFileName.split("_")[0] === "qp"
+                ? dateFormatter(
+                    file.dbFileName.split(".")[0].split("_")[4].substring(0, 10)
+                  )
+                : dateFormatter(
+                    file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
+                  ),
             val: file.dbFileName,
             uploader: file.uploader,
           };
         })
       );
-      if (data.list.length === 1) getFile(data.list[0]);
+      // if (data.list.length === 1) getFile(data.list[0]);
     } catch (err) {
       console.log(err);
     }
     setIsLoading(false);
   };
+  const getListOfTexts = async () => {
+    try {
+      const { data } = await api.get(
+        `/api/subjects/get_qp_texts?subject_code=${subjectId}`
+      );
+      setListTexts(
+        data.map((item) => {
+          return {
+            name: `${item.category} - ${item.year}`,
+            type: "text",
+            created_at: dateFormatter(item.created_at?.substring(0, 10)),
+            val: item.content,
+            uploader: item.uploader,
+          };
+        })
+      );
+      // if (data.length === 1) setActiveItem(data.list[0]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     getListOfFiles();
+    getListOfTexts();
   }, []);
 
   return (
@@ -100,15 +126,18 @@ const SubjectView = () => {
           </u>
         </div>
       </div>
-      {fileList.length > 1 && (
-        <FileManager fileList={fileList} getFile={getFile} />
+      {(listTexts.length > 1 || listFiles.length > 1) && (
+        <FileManager
+          list={[...listTexts, ...listFiles]}
+          getFile={getFile}
+          setActiveItem={setActiveItem}
+        />
       )}
-      {fileList.length === 0 && (
-        <div className="text-sm text-dark-2 my-8">No files uploaded yet</div>
-      )}
-      {file === null ? (
+      {listTexts.length === 0 || listFiles.length === 0 ? (
+        <div className="text-sm text-dark-2 my-8">No items uploaded yet</div>
+      ) : activeItem === null ? (
         <div className="text-sm text-dark-2 my-8">
-          Please select a file to view it
+          Please select an item to view it
         </div>
       ) : isLoading ? (
         <div className="my-8">Loading...</div>
@@ -116,27 +145,31 @@ const SubjectView = () => {
         <div className="view-container my-8">
           <div className="flex justify-between items-center mb-10">
             <div>
-              <div>{file.name}</div>
+              <div>{activeItem.name}</div>
               <div className="text-sm text-dark-2">
-                Uploaded by {file.uploader} on {file.created_at}
+                Uploaded by {activeItem.uploader} on {activeItem.created_at}
               </div>
             </div>
-            <a
-              className="btn btn-secondary"
-              href={
-                file.type === "pdf"
-                  ? `data:application/pdf;base64,${file.data}`
-                  : `data:image/png;base64,${file.data}`
-              }
-              download={category + "." + file.type}
-            >
-              Download
-            </a>
+            {activeItem.type !== "text" && (
+              <a
+                className="btn btn-secondary"
+                href={
+                  activeItem.type === "pdf"
+                    ? `data:application/pdf;base64,${activeItem.data}`
+                    : `data:image/png;base64,${activeItem.data}`
+                }
+                download={category + "." + activeItem.type}
+              >
+                Download
+              </a>
+            )}
           </div>
-          {fileType === "pdf" ? (
-            <PdfViewer file={file.data} />
+          {activeItem.type === "text" ? (
+            <div>{activeItem.val}</div>
+          ) : activeItem.type === "pdf" ? (
+            <PdfViewer file={activeItem.data} />
           ) : (
-            <ImageViewer file={file.data} />
+            <ImageViewer file={activeItem.data} />
           )}
         </div>
       )}

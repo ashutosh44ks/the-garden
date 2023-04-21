@@ -7,7 +7,6 @@ export default function FilesDragAndDrop({
   count,
   formats,
   filename,
-  setFilename,
 }) {
   const [dragging, setDragging] = useState(false);
   const drop = useRef(null);

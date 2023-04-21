@@ -34,9 +34,11 @@ const UploadQP = () => {
 
   // for file upload task
   const [selectedFile, setSelectedFile] = useState(null);
+  const [filename, setFilename] = useState("");
   const onUpload = (files) => {
     console.log(files);
     setSelectedFile(files[0]);
+    setFilename(files[0].name);
   };
   const uploadFile = async () => {
     let formData = new FormData();
@@ -45,7 +47,7 @@ const UploadQP = () => {
     formData.append("year", examYear);
     formData.append("file", selectedFile);
     try {
-      const { data } = api.post(`/api/subjects/upload_file`, formData, {
+      const { data } = await api.post(`/api/subjects/upload_file`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -56,13 +58,17 @@ const UploadQP = () => {
     }
   };
 
-  const [numOfGrpElements, setNumOfGrpElements] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  // const [numOfGrpElements, setNumOfGrpElements] = useState([]);
+  // const [questions, setQuestions] = useState([]);
+  const [content, setContent] = useState("");
   const uploadQuestions = async () => {
     try {
-      const { data } = api.post(`/subjects/${subjectId}/upload_qp`, {
-        exam_category: examCategory,
-        questions,
+      const { data } = await api.post(`/api/subjects/upload_qp_texts`, {
+        subject_code: subjectId,
+        category: examCategory,
+        year: examYear,
+        // questions,
+        content,
       });
       console.log(data);
     } catch (e) {
@@ -138,43 +144,51 @@ const UploadQP = () => {
               </span>
             </div>
             {inputType === "text" ? (
-              <>
-                <div className="flex flex-col gap-3 mt-8">
-                  {numOfGrpElements.map((num, index) => (
-                    <TextArea
-                      label={`Question ${index + 1}`}
-                      type="text"
-                      val={questions[num] || ""}
-                      setVal={(val) => {
-                        let temp = [...questions];
-                        if (questions[num] === undefined) temp.push(val);
-                        else temp[num] = val;
-                        setQuestions(temp);
-                      }}
-                      rows={2}
-                      required
-                      className="w-full mb-2"
-                    />
-                  ))}
-                  <button
-                    className="btn btn-secondary w-full"
-                    type="button"
-                    onClick={() => {
-                      setNumOfGrpElements([
-                        ...numOfGrpElements,
-                        numOfGrpElements.length,
-                      ]);
-                    }}
-                  >
-                    Add Question
-                  </button>
-                </div>
-              </>
+              // <>
+              //   <div className="flex flex-col gap-3 mt-8">
+              //     {numOfGrpElements.map((num, index) => (
+              //       <TextArea
+              //         label={`Question ${index + 1}`}
+              //         type="text"
+              //         val={questions[num] || ""}
+              //         setVal={(val) => {
+              //           let temp = [...questions];
+              //           if (questions[num] === undefined) temp.push(val);
+              //           else temp[num] = val;
+              //           setQuestions(temp);
+              //         }}
+              //         rows={2}
+              //         required
+              //         className="w-full mb-2"
+              //       />
+              //     ))}
+              //     <button
+              //       className="btn btn-secondary w-full"
+              //       type="button"
+              //       onClick={() => {
+              //         setNumOfGrpElements([
+              //           ...numOfGrpElements,
+              //           numOfGrpElements.length,
+              //         ]);
+              //       }}
+              //     >
+              //       Add Question
+              //     </button>
+              //   </div>
+              // </>
+              <TextArea
+                label="Questions"
+                rows="8"
+                val={content}
+                setVal={setContent}
+                required
+              />
             ) : (
               <FilesDragAndDrop
                 onUpload={onUpload}
                 count={1}
-                formats={["pdf"]}
+                formats={["pdf", "jpg", "jpeg", "png"]}
+                filename={filename}
               />
             )}
             <div className="mt-4">
