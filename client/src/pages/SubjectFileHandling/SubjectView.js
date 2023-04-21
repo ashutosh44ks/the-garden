@@ -99,7 +99,7 @@ const SubjectView = () => {
   };
   useEffect(() => {
     getListOfFiles();
-    getListOfTexts();
+    if (category === "qp") getListOfTexts();
   }, []);
 
   return (

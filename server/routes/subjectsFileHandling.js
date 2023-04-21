@@ -82,7 +82,7 @@ router.post(
 router.get("/get_dir_files", async (req, res) => {
   const subject_code = req.query.subject_code;
   const prefix = req.query.prefix;
-  const allowedPrefixes = ["qp", "syllabus", "notes"];
+  const allowedPrefixes = ["qp", "syllabus", "notes", "other"];
   if (!allowedPrefixes.includes(prefix))
     res.status(422).json({ msg: "Enter a valid prefix", allowedPrefixes });
 

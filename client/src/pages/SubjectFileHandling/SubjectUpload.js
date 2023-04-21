@@ -18,6 +18,10 @@ const SubjectUpload = () => {
       label: "Notes",
       value: "notes",
     },
+    {
+      label: "Other",
+      value: "other"
+    }
   ];
   const [uploadCategory, setUploadCategory] = useState("");
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import "./Subject.css";
@@ -167,7 +167,7 @@ const Subject = () => {
             <u
               className="text-blue cursor-pointer"
               onClick={() => {
-                navigate("/about");
+                navigate("/contact");
               }}
             >
               here
@@ -178,30 +178,21 @@ const Subject = () => {
       <div>
         <h3 className="mb-2">Resources</h3>
         <div className="flex flex-wrap gap-4">
-          <button
+          <Link
             className="btn-secondary"
-            onClick={() => {
-              navigate(`/subject/${subjectId}/syllabus/view`);
-            }}
+            to={`/subject/${subjectId}/syllabus/view`}
           >
             Syllabus
-          </button>
-          <button
+          </Link>
+          <Link
             className="btn-secondary"
-            onClick={() => {
-              navigate(`/subject/${subjectId}/notes/view`);
-            }}
+            to={`/subject/${subjectId}/notes/view`}
           >
             Notes
-          </button>
-          <button
-            className="btn-secondary"
-            onClick={() => {
-              navigate(`/subject/${subjectId}/qp/view`);
-            }}
-          >
+          </Link>
+          <Link className="btn-secondary" to={`/subject/${subjectId}/qp/view`}>
             Previous Year Papers
-          </button>
+          </Link>
         </div>
       </div>
     </div>

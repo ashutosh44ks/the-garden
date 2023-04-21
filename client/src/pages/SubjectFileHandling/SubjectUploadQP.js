@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../components/utils/api";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
@@ -8,6 +8,7 @@ import TextArea from "../../components/common/MUI-themed/TextArea";
 
 const UploadQP = () => {
   const { subjectId } = useParams();
+  const navigate = useNavigate();
 
   const examCategories = [
     {
@@ -78,11 +79,23 @@ const UploadQP = () => {
 
   return (
     <div className="p-8">
-      <h1 className="mb-2 text-dark font-medium">Add Question Paper</h1>
+      <h1 className="text-dark font-medium">Add Question Paper</h1>
+      <div className="text-sm text-dark-2 mb-2">
+        Go back to{" "}
+        <u
+          className="text-blue cursor-pointer"
+          onClick={() => {
+            navigate(`/subject/${subjectId}`);
+          }}
+        >
+          {subjectId} page
+        </u>
+      </div>
       <p className="text-dark-2">
         Thank you for your interest in contributing to the community. You may
         choose to upload a file, or directly input questions below.
       </p>
+
       <form
         className="my-10"
         onSubmit={(e) => {
@@ -192,7 +205,15 @@ const UploadQP = () => {
               />
             )}
             <div className="mt-4">
-              <button className="btn btn-primary" type="submit">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={
+                  inputType === "text"
+                    ? content.length === 0
+                    : filename.length === 0
+                }
+              >
                 Upload
               </button>
             </div>
