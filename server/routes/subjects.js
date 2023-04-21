@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const Subjects = require("../models/subjects");
 const SubjectTexts = require("../models/subjectTexts");
 const Votes = require("../models/votes");
-const { authenticateToken } = require("../utils");
+const { authenticateToken, forModOnly } = require("../utils");
 
 // for admin
 router.get("/get_subjects", async (req, res) => {
@@ -15,38 +15,42 @@ router.get("/get_subjects", async (req, res) => {
     res.status(500).json({ msg: e.message });
   }
 });
-router.post("/add_subject", async (req, res) => {
-  console.log(req.body);
-  // const newSubject = new Subjects({
-  //   subject_code: req.body.subject_code,
-  //   name: req.body.name,
-  //   description: req.body.description,
-  //   branch: req.body.branch,
-  //   year: req.body.year,
-  //   credits: req.body.credits,
-  //   tags: req.body.tags || [],
-  //   professors: req.body.professors || [],
-  // });
-  // try {
-  //   const subject = await newSubject.save();
-  //   res.status(201).json({ subject });
-  // } catch (e) {
-  //   res.status(400).json({ msg: e.message });
-  // }
-});
-router.delete("/delete_subject/:code", async (req, res) => {
+router.post("/add_subject", authenticateToken, forModOnly, async (req, res) => {
+  const newSubject = new Subjects({
+    subject_code: req.body.subject_code,
+    name: req.body.name,
+    description: req.body.description,
+    branch: req.body.branch,
+    year: req.body.year,
+    credits: req.body.credits,
+    tags: req.body.tags || [],
+    professors: req.body.professors || [],
+  });
   try {
-    const subject = await Subjects.findOneAndDelete({
-      subject_code: req.params.code,
-    });
-    if (subject === null) {
-      return res.status(404).json({ msg: "Cannot find subject" });
-    }
-    res.json({ subject });
+    const subject = await newSubject.save();
+    res.status(201).json({ subject });
   } catch (e) {
-    res.status(500).json({ msg: e.message });
+    res.status(400).json({ msg: e.message });
   }
 });
+router.delete(
+  "/delete_subject/:code",
+  authenticateToken,
+  forModOnly,
+  async (req, res) => {
+    try {
+      const subject = await Subjects.findOneAndDelete({
+        subject_code: req.params.code,
+      });
+      if (subject === null) {
+        return res.status(404).json({ msg: "Cannot find subject" });
+      }
+      res.json({ subject });
+    } catch (e) {
+      res.status(500).json({ msg: e.message });
+    }
+  }
+);
 
 // for users
 router.get("/get_tags", authenticateToken, async (req, res) => {
