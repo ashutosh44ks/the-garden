@@ -34,13 +34,13 @@ router.post("/add_subject", authenticateToken, forModOnly, async (req, res) => {
   }
 });
 router.delete(
-  "/delete_subject/:code",
+  "/delete_subject",
   authenticateToken,
   forModOnly,
   async (req, res) => {
     try {
       const subject = await Subjects.findOneAndDelete({
-        subject_code: req.params.code,
+        subject_code: req.query.subject_code,
       });
       if (subject === null) {
         return res.status(404).json({ msg: "Cannot find subject" });

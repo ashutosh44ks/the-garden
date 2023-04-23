@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import "./Subject.css";
@@ -52,6 +53,21 @@ const Subject = () => {
     setOpenDropdown(false);
   };
 
+  const userRole = jwt_decode(
+    JSON.parse(localStorage.getItem("logged")).accessToken
+  )?.role;
+  const removeSubject = async () => {
+    try {
+      const { data } = await api.delete(
+        `/api/subjects/delete_subject?subject_code=${subjectId}`
+      );
+      console.log(data);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (Object.entries(subject).length === 0)
     return <div className="p-8">Subject not found</div>;
@@ -80,7 +96,7 @@ const Subject = () => {
                 {subject.credits} credits
               </span>
               {subject.tags.map((tag) => (
-                <span className="simple-tab tab theme-default" key={tag}>
+                <span className="simple-tab tab-theme-default" key={tag}>
                   {toLabel(tag)}
                 </span>
               ))}
@@ -195,6 +211,19 @@ const Subject = () => {
           </Link>
         </div>
       </div>
+      {userRole && userRole !== "user" && (
+        <div className="mt-4">
+          <h3 className="mb-2">Admin/Mod Options</h3>
+          <div className="flex flex-wrap gap-4">
+            <Link className="btn-secondary" to={`/subject/${subjectId}/edit`}>
+              Edit details
+            </Link>
+            <button className="btn-danger" onClick={removeSubject}>
+              Remove subject
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -33,7 +33,7 @@ async function forModOnly(req, res, next) {
     if (user == null) {
       return res.status(404).json({ msg: "Cannot find user" });
     }
-    if (user.role !== "moderator" && user.role !== "admin")
+    if (user.role === "user")
       return res.status(401).json({
         msg: "Unauthorised, this route is only allowed for special users",
       });

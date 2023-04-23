@@ -49,7 +49,10 @@ router.post("/login", async (req, res) => {
     if (!realPassword) {
       return res.status(400).send({ msg: "Incorrect password" });
     }
-    const accessToken = generateAccessToken({ username: userClient.username });
+    const accessToken = generateAccessToken({
+      username: userClient.username,
+      role: user.role || "user",
+    });
     // we will manually handle the expiration of the refresh token if we need to
     const refreshToken = jwt.sign(
       { username: userClient.username },
@@ -70,11 +73,15 @@ router.post("/refresh_token", async (req, res) => {
   try {
     const refreshToken = req.body.token;
     if (refreshToken == null) return res.sendStatus(401);
-    const user = await RefreshTokens.find({ refreshToken: refreshToken });
-    if (user.length === 0) return res.sendStatus(403);
+    const user = await RefreshTokens.findOne({ refreshToken: refreshToken });
+    if (!user._id) return res.sendStatus(403);
+    const userRole = await Users.findOne({ username: user.username }).role;
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return res.sendStatus(403);
-      const accessToken = generateAccessToken({ username: user.username });
+      const accessToken = generateAccessToken({
+        username: user.username,
+        role: userRole || "user",
+      });
       res.json({ accessToken: accessToken, refreshToken: refreshToken });
     });
   } catch (e) {

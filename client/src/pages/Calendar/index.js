@@ -34,23 +34,11 @@ const ViewCalendar = () => {
     setIsLoading(false);
   };
 
-  const [user, setUser] = useState({});
-  const getUserDetails = async () => {
-    const username = jwt_decode(
-      JSON.parse(localStorage.getItem("logged")).accessToken
-    ).username;
-    try {
-      const { data } = await api.get(
-        `/api/users/get_user?username=${username}`
-      );
-      setUser(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const userRole = jwt_decode(
+    JSON.parse(localStorage.getItem("logged")).accessToken
+  )?.role;
 
   useEffect(() => {
-    getUserDetails();
     getFile();
   }, []);
 
@@ -58,7 +46,7 @@ const ViewCalendar = () => {
     return (
       <div className="p-8">
         <div>No Calendar</div>
-        {(user.role === "admin" || "moderator") && (
+        {userRole && userRole !== "user" && (
           <div
             onClick={() => navigate("./upload")}
             className="text-blue cursor-pointer"
