@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import dateFormatter from "../../components/utils/dateFormatter";
@@ -102,17 +103,26 @@ const SubjectView = () => {
     if (category === "qp") getListOfTexts();
   }, []);
 
+  const userRole = jwt_decode(
+    JSON.parse(localStorage.getItem("logged")).accessToken
+  )?.role;
+
   return (
     <div className="p-8">
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-dark">{toLabel(category)}</h1>
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate(`/subject/${subjectId}/${category}/upload`)}
-          >
-            Upload
-          </button>
+          {category !== "syllabus" ||
+            (category === "syllabus" && userRole && userRole !== "user" && (
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  navigate(`/subject/${subjectId}/${category}/upload`)
+                }
+              >
+                Upload
+              </button>
+            ))}
         </div>
         <div className="text-sm text-dark-2">
           Go back to{" "}
