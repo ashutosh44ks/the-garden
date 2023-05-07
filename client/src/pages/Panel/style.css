@@ -1,0 +1,29 @@
+.user-manager {
+  background-color: white;
+  border: solid 1px #dadce0;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  color: #202124;
+}
+.user-tag {
+  background-color: #dad8f2;
+  color: blue;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  width: 5rem;
+}
+.user-tag ~ svg {
+  transform: scale(1.5);
+}
+.user-tag.admin {
+  background-color: #f2d8d8;
+  color: #c0392b;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+}
+.user-tag.mod {
+  background-color: #d8f2d8;
+  color: green;
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+}

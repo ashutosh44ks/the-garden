@@ -12,6 +12,7 @@ import Terms from "./pages/Terms";
 import SubjectUploadQP from "./pages/SubjectFileHandling/SubjectUploadQP";
 import SubjectView from "./pages/SubjectFileHandling/SubjectView";
 import SubjectUpload from "./pages/SubjectFileHandling/SubjectUpload";
+import Panel from "./pages/Panel";
 
 function App() {
   return (
@@ -87,6 +88,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/panel"
+          element={
+            <ProtectedRoute>
+              <Panel />
             </ProtectedRoute>
           }
         />

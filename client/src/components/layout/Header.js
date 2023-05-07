@@ -65,6 +65,14 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
                 <li
                   className="dropdown-item"
                   onClick={() => {
+                    navigate("/panel");
+                  }}
+                >
+                  Admin panel
+                </li>
+                <li
+                  className="dropdown-item"
+                  onClick={() => {
                     localStorage.removeItem("logged");
                     navigate("/entry");
                   }}
