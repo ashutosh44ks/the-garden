@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
-const { authenticateToken } = require("../utils");
+const { authenticateToken, forModOnly } = require("../utils");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -35,6 +35,7 @@ const upload = multer({
 router.post(
   "/upload_calendar",
   authenticateToken,
+  forModOnly,
   upload.single("file"),
   async (req, res) => {
     if (req.fileValidationError)
