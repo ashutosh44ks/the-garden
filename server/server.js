@@ -37,7 +37,7 @@ app.use("/api/subjects", subjectsFileHandlingRouter);
 const calendarsRouter = require("./routes/calendars");
 app.use("/api/calendars", calendarsRouter);
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log("Server listening the port " + port);
 });
