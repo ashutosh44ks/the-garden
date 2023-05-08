@@ -2,16 +2,18 @@
   "name": "the-garden",
   "version": "1.0.0",
   "description": "For students of College of Technology, Pantnagar",
+  "main": "index.js",
   "scripts": {
-    "server": "cd server && nodemon server.js",
-    "auth-server": "cd server && nodemon authServer.js",
-    "client": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run auth-server\" \"npm run client\""
+    "install-server": "cd backend && npm install",
+    "start-server": "cd backend && node server.js",
+    "install-auth-server": "cd backend && node authServer.js",
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
+    "start-client": "cd client && npm run start"
   },
   "author": "ashutosh44ks",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.6.0",
-    "nodemon": "^2.0.20"
+    "concurrently": "^7.6.0"
   }
 }

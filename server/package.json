@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "auth-server": "nodemon authServer.js"
+    "server": "node server.js",
+    "auth-server": "node authServer.js"
   },
   "author": "ashutosh44ks",
   "license": "ISC",
@@ -22,7 +21,6 @@
     "react-icons": "^4.7.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
-    "nodemon": "^2.0.20"
+    "dotenv": "^16.0.3"
   }
 }
