@@ -1,4 +1,41 @@
-const FileManager = ({ list, getFile, setActiveItem }) => {
+import jwt_decode from "jwt-decode";
+import api from "../../../components/utils/api";
+
+const FileManager = ({
+  subjectId,
+  list,
+  setListFiles,
+  setListTexts,
+  getFile,
+  setActiveItem,
+}) => {
+  const userRole = jwt_decode(
+    JSON.parse(localStorage.getItem("logged")).accessToken
+  )?.role;
+
+  const removeFile = async (dbFileName) => {
+    try {
+      const { data } = await api.delete(
+        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
+      );
+      console.log(data);
+      setListFiles((prev) => prev.filter((item) => item.val !== dbFileName));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const removeText = async (item_id) => {
+    try {
+      const { data } = await api.delete(
+        `/api/subjects/remove_qp_text?subject_code=${subjectId}&item_id=${item_id}`
+      );
+      console.log(data);
+      setListTexts((prev) => prev.filter((item) => item.key !== item_id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="file-manager">
       <table className="text-dark-2 text-sm w-full">
@@ -8,6 +45,7 @@ const FileManager = ({ list, getFile, setActiveItem }) => {
             <th className="text-left px-4 py-2">File Name</th>
             <th className="text-left px-4 py-2">Uploaded On</th>
             <th className="text-left px-4 py-2">Uploaded By</th>
+            {userRole !== "user" && <td className="px-4 py-2"></td>}
           </tr>
         </thead>
         <tbody>
@@ -28,6 +66,18 @@ const FileManager = ({ list, getFile, setActiveItem }) => {
               <td className="px-4 py-2 text-dark">{item.name}</td>
               <td className="px-4 py-2">{item.created_at}</td>
               <td className="px-4 py-2">{item.uploader}</td>
+              {userRole && userRole !== "user" && (
+                <td
+                  className="px-4 py-2 text-red-500"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (item.type !== "text") removeFile(item.val);
+                    else removeText(item.key);
+                  }}
+                >
+                  Remove
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

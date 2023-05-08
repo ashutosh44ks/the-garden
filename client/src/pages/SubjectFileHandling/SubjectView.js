@@ -90,6 +90,7 @@ const SubjectView = () => {
             created_at: dateFormatter(item.created_at?.substring(0, 10)),
             val: item.content,
             uploader: item.uploader,
+            key: item._id,
           };
         })
       );
@@ -112,17 +113,17 @@ const SubjectView = () => {
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-dark">{toLabel(category)}</h1>
-          {category !== "syllabus" ||
-            (category === "syllabus" && userRole && userRole !== "user" && (
-              <button
-                className="btn btn-primary"
-                onClick={() =>
-                  navigate(`/subject/${subjectId}/${category}/upload`)
-                }
-              >
-                Upload
-              </button>
-            ))}
+          {(category !== "syllabus" ||
+            (category === "syllabus" && userRole && userRole !== "user")) && (
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                navigate(`/subject/${subjectId}/${category}/upload`)
+              }
+            >
+              Upload
+            </button>
+          )}
         </div>
         <div className="text-sm text-dark-2">
           Go back to{" "}
@@ -136,11 +137,14 @@ const SubjectView = () => {
           </u>
         </div>
       </div>
-      {(listTexts.length > 1 || listFiles.length > 1) && (
+      {(listTexts.length > 0 || listFiles.length > 0) && (
         <FileManager
           list={[...listTexts, ...listFiles]}
           getFile={getFile}
           setActiveItem={setActiveItem}
+          subjectId={subjectId}
+          setListFiles={setListFiles}
+          setListTexts={setListTexts}
         />
       )}
       {listTexts.length === 0 || listFiles.length === 0 ? (

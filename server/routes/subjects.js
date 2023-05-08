@@ -186,5 +186,26 @@ router.get("/get_qp_texts", authenticateToken, async (req, res) => {
     console.log(e);
   }
 });
+router.delete(
+  "/remove_qp_text",
+  authenticateToken,
+  forModOnly,
+  async (req, res) => {
+    const subject_code = req.query.subject_code;
+    const item_id = req.query.item_id;
+    try {
+      const deletedItem = await SubjectTexts.findOne({
+        subject_code: subject_code,
+        _id: item_id,
+      });
+      if (!deletedItem)
+        return res.status(404).json({ msg: "Text not found in database" });
+      deletedItem.remove();
+      res.status(200).json({ msg: "Text deleted successfully" });
+    } catch (e) {
+      res.status(400).json({ msg: e.message });
+    }
+  }
+);
 
 module.exports = router;
