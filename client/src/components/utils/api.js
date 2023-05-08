@@ -12,7 +12,7 @@ const refreshToken = async () => {
   const refreshToken = JSON.parse(localStorage.getItem("logged")).refreshToken;
   try {
     const { data } = await axios.post(
-      `${process.env.REACT_APP_AUTH_API_URL}/api/auth/refresh_token`,
+      `${process.env.REACT_APP_BASE_API_URL}/api/auth/refresh_token`,
       {
         token: refreshToken,
       }
