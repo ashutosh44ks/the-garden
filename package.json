@@ -4,9 +4,9 @@
   "description": "For students of College of Technology, Pantnagar",
   "main": "index.js",
   "scripts": {
-    "install-server": "cd backend && npm install",
-    "start-server": "cd backend && node server.js",
-    "install-auth-server": "cd backend && node authServer.js",
+    "install-server": "cd server && npm install",
+    "start-server": "cd server && node server.js",
+    "install-auth-server": "cd server && node authServer.js",
     "install-client": "cd client && npm install",
     "build-client": "cd client && npm run build",
     "start-client": "cd client && npm run start"
