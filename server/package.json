@@ -4,8 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "server": "node server.js",
-    "auth-server": "node authServer.js"
+    "server": "node server.js"
   },
   "author": "ashutosh44ks",
   "license": "ISC",
