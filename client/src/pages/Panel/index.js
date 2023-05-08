@@ -116,6 +116,17 @@ const Panel = () => {
       console.log(err);
     }
   };
+  const removeFile = async (subjectId, dbFileName) => {
+    try {
+      const { data } = await api.delete(
+        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
+      );
+      console.log(data);
+      setListFiles((prev) => prev.filter((item) => item.dbFileName !== dbFileName));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="p-8">
@@ -201,7 +212,7 @@ const Panel = () => {
                 <td className="px-4 py-2">{dateFormatter(file.created_at)}</td>
                 <td
                   className="text-red-500 cursor-pointer"
-                  // onClick={() => deleteUser(user.username)}
+                  onClick={() => removeFile(file.subject_code, file.dbFileName)}
                 >
                   Delete
                 </td>
