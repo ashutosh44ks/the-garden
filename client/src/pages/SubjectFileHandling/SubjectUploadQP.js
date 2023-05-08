@@ -54,6 +54,8 @@ const UploadQP = () => {
         },
       });
       console.log(data);
+      setSelectedFile(null);
+      setFilename("");
     } catch (e) {
       console.log(e);
     }
@@ -72,6 +74,7 @@ const UploadQP = () => {
         content,
       });
       console.log(data);
+      setContent("");
     } catch (e) {
       console.log(e);
     }
