@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
+import dateFormatter from "../../components/utils/dateFormatter";
+import Select from "../../components/common/MUI-themed/Select";
 import { RiArrowUpSLine, RiArrowDownSLine } from "react-icons/ri";
 import "./style.css";
-import dateFormatter from "../../components/utils/dateFormatter";
 
 const Panel = () => {
   const [userList, setUserList] = useState([]);
@@ -122,11 +123,15 @@ const Panel = () => {
         `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
       );
       console.log(data);
-      setListFiles((prev) => prev.filter((item) => item.dbFileName !== dbFileName));
+      setListFiles((prev) =>
+        prev.filter((item) => item.dbFileName !== dbFileName)
+      );
     } catch (err) {
       console.log(err);
     }
   };
+
+  const [sortBy, setSortBy] = useState("created_at");
 
   return (
     <div className="p-8">
@@ -180,7 +185,21 @@ const Panel = () => {
         </table>
       </div>
       <div className="user-manager my-4">
-        <div>Recently Uploaded Files</div>
+        <div className="flex justify-between items-center my-2">
+          <h3 className="font-bold">Recently Uploaded Files</h3>
+          <Select
+            label="Sort by"
+            options={
+              <>
+                <option value="created_at">Sort by recently uploaded</option>
+                <option value="size">Sort by largest size</option>
+              </>
+            }
+            val={sortBy}
+            setVal={setSortBy}
+            required
+          />
+        </div>
         <table className="text-dark-2 text-sm w-full">
           <thead>
             <tr>
@@ -193,31 +212,39 @@ const Panel = () => {
             </tr>
           </thead>
           <tbody>
-            {listFiles.map((file) => (
-              <tr key={file.dbFileName}>
-                <td className="px-4 py-2 text-dark" title={file.dbFileName}>
-                  {file.userFileName || file.dbFileName.split(".")[0]}
-                </td>
-                <td className="px-4 py-2 text-dark">
-                  {
-                    file.dbFileName.split(".")[
-                      file.dbFileName.split(".").length - 1
-                    ]
-                  }
-                </td>
-                <td className="px-4 py-2 text-dark">
-                  {Math.trunc(file.size / 1000) + " KB"}
-                </td>
-                <td className="px-4 py-2">{file.subject_code}</td>
-                <td className="px-4 py-2">{dateFormatter(file.created_at)}</td>
-                <td
-                  className="text-red-500 cursor-pointer"
-                  onClick={() => removeFile(file.subject_code, file.dbFileName)}
-                >
-                  Delete
-                </td>
-              </tr>
-            ))}
+            {listFiles
+              .sort((a, b) => {
+                return b[sortBy] - a[sortBy];
+              })
+              .map((file) => (
+                <tr key={file.dbFileName}>
+                  <td className="px-4 py-2 text-dark" title={file.dbFileName}>
+                    {file.userFileName || file.dbFileName.split(".")[0]}
+                  </td>
+                  <td className="px-4 py-2 text-dark">
+                    {
+                      file.dbFileName.split(".")[
+                        file.dbFileName.split(".").length - 1
+                      ]
+                    }
+                  </td>
+                  <td className="px-4 py-2 text-dark">
+                    {Math.trunc(file.size / 1000) + " KB"}
+                  </td>
+                  <td className="px-4 py-2">{file.subject_code}</td>
+                  <td className="px-4 py-2">
+                    {dateFormatter(file.created_at)}
+                  </td>
+                  <td
+                    className="text-red-500 cursor-pointer"
+                    onClick={() =>
+                      removeFile(file.subject_code, file.dbFileName)
+                    }
+                  >
+                    Delete
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
