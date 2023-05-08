@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 const Users = require("../models/users");
 
 const addToAverage = (oldAvg, oldCount, newValue) => {
@@ -12,6 +13,21 @@ const generateAccessToken = (user) => {
     expiresIn: "1h",
   });
 };
+function getFiles(dir, files_) {
+  files_ = files_ || [];
+  const files = fs.readdirSync(dir);
+  for (let i in files) {
+    const name = dir + "/" + files[i];
+    if (fs.statSync(name).isDirectory()) {
+      getFiles(name, files_);
+    } else {
+      const fileSize = fs.statSync(name).size;
+      files_.push({ dbFileName: files[i], size: fileSize });
+    }
+  }
+  return files_;
+}
+
 // middleware
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"]; // this is "Bearer token"
@@ -48,5 +64,6 @@ module.exports = {
   replaceInAverage,
   generateAccessToken,
   authenticateToken,
-  forModOnly
+  forModOnly,
+  getFiles,
 };

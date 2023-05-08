@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
-const { authenticateToken, forModOnly } = require("../utils");
+const { authenticateToken, forModOnly, getFiles } = require("../utils");
 const SubjectFiles = require("../models/subjectFiles");
 
 const storage = multer.diskStorage({
@@ -79,7 +79,7 @@ router.post(
     }
   }
 );
-router.get("/get_dir_files", async (req, res) => {
+router.get("/get_dir_files", authenticateToken, async (req, res) => {
   const subject_code = req.query.subject_code;
   const prefix = req.query.prefix;
   const allowedPrefixes = ["qp", "syllabus", "notes", "other"];
@@ -139,6 +139,32 @@ router.delete(
         if (err) console.log(err);
       });
       res.status(200).json({ msg: "File deleted successfully" });
+    } catch (e) {
+      res.status(400).json({ msg: e.message });
+    }
+  }
+);
+
+router.get(
+  "/get_all_dir_files",
+  authenticateToken,
+  forModOnly,
+  async (req, res) => {
+    try {
+      let dbFiles = getFiles("./data");
+      if (!dbFiles)
+        return res.status(404).json({ msg: "No files found in db server" });
+      const all_files = await SubjectFiles.find();
+      if (!all_files)
+        return res.status(404).json({ msg: "No files found in db" });
+      let temp = all_files.map((file) => {
+        return {
+          ...file._doc,
+          size: dbFiles.find((dbFile) => dbFile.dbFileName === file.dbFileName)
+            .size,
+        };
+      });
+      res.status(200).json(temp);
     } catch (e) {
       res.status(400).json({ msg: e.message });
     }
