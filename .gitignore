@@ -20,6 +20,8 @@ build
 .env.test.local
 .env.production
 .env.production.local
+.env.development
+.env.production
 data
 
 npm-debug.log*

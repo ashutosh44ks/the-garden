@@ -31,6 +31,7 @@ const Entry = () => {
       console.log(e);
       if (e.response.status === 400) setErrorMsg(e.response.data.msg);
     }
+    setLoading(false);
   };
   const registerUser = async () => {
     try {
@@ -47,12 +48,15 @@ const Entry = () => {
       console.log(e);
       if (e.response.status === 400) setErrorMsg(e.response.data.msg);
     }
+    setLoading(false);
   };
   useEffect(() => {
     setErrorMsg("");
     const form = document.querySelector("form");
     form.reset();
   }, [loginTab]);
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
@@ -64,6 +68,7 @@ const Entry = () => {
             e.preventDefault();
             if (!termsAgreed && !loginTab)
               return setErrorMsg("Please agree to the terms and conditions");
+            setLoading(true);
             if (loginTab) {
               loginUser();
             } else registerUser();
@@ -121,7 +126,7 @@ const Entry = () => {
                 </div>
               )}
               <div>
-                <button className="w-full btn-primary">
+                <button className="w-full btn-primary" disabled={loading}>
                   {loginTab ? "Enter" : "Join"}
                 </button>
               </div>

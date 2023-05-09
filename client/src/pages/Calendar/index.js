@@ -42,7 +42,7 @@ const ViewCalendar = () => {
     getFile();
   }, []);
 
-  if (file === null)
+  if (!isLoading && file === null)
     return (
       <div className="p-8">
         <div>No Calendar</div>

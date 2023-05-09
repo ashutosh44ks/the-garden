@@ -31,7 +31,9 @@ const CalendarUpload = () => {
     setSelectedFile(files[0]);
     setFilename(files[0].name.split(".")[0]);
   };
+  const [loading, setloading] = useState(false);
   const uploadFile = async () => {
+    setloading(true);
     let formData = new FormData();
     formData.append("calendar_type", uploadCategory);
     formData.append("file", selectedFile);
@@ -46,10 +48,11 @@ const CalendarUpload = () => {
         }
       );
       console.log(data);
-      navigate(`/calendars/${calendarType}`)
+      navigate(`/calendars/${calendarType}`);
     } catch (e) {
       console.log(e);
     }
+    setloading(false);
   };
 
   return (
@@ -97,7 +100,11 @@ const CalendarUpload = () => {
               setFilename={setFilename}
             />
             <div className="mt-4">
-              <button className="btn btn-primary" type="submit">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={loading}
+              >
                 Upload
               </button>
             </div>

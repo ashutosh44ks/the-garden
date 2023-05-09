@@ -69,7 +69,7 @@ router.post(
     });
     try {
       const uploadedFile = await newSubjectFile.save();
-      res.status(201).json({ uploadedFile });
+      res.status(201).json({ msg: "File uploaded successfully", uploadedFile });
     } catch (e) {
       // delete the file if it was uploaded
       fs.unlink(req.file.path, (err) => {

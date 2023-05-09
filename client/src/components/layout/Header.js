@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import { HiUserCircle } from "react-icons/hi";
 import { HiOutlineShare } from "react-icons/hi";
 import "./layout.css";
@@ -7,6 +8,10 @@ import "./layout.css";
 const Header = ({ loggedIn, loginTab, setLoginTab }) => {
   let navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
+
+  const userRole = loggedIn
+    ? jwt_decode(JSON.parse(localStorage.getItem("logged")).accessToken)?.role
+    : null;
 
   return (
     <div className="header flex justify-between items-center px-6 bg-white">
@@ -62,14 +67,16 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
                 >
                   Edit Profile
                 </li>
-                <li
-                  className="dropdown-item"
-                  onClick={() => {
-                    navigate("/panel");
-                  }}
-                >
-                  Admin panel
-                </li>
+                {userRole && userRole !== "user" && (
+                  <li
+                    className="dropdown-item"
+                    onClick={() => {
+                      navigate("/panel");
+                    }}
+                  >
+                    Admin panel
+                  </li>
+                )}
                 <li
                   className="dropdown-item"
                   onClick={() => {

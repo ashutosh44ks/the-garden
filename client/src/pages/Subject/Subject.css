@@ -20,6 +20,11 @@
   background-color: #e8eaed;
 }
 
+.card.professor-card {
+  min-width: 12.5rem;
+  max-width: 14rem;
+}
+
 @media (max-width: 740px) {
   .subject-main.card .card-body {
     flex-direction: column;

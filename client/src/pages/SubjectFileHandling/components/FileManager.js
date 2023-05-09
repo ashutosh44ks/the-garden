@@ -8,6 +8,7 @@ const FileManager = ({
   setListTexts,
   getFile,
   setActiveItem,
+  isLoading,
 }) => {
   const userRole = jwt_decode(
     JSON.parse(localStorage.getItem("logged")).accessToken
@@ -45,41 +46,50 @@ const FileManager = ({
             <th className="text-left px-4 py-2">File Name</th>
             <th className="text-left px-4 py-2">Uploaded On</th>
             <th className="text-left px-4 py-2">Uploaded By</th>
-            {userRole !== "user" && <td className="px-4 py-2"></td>}
+            {userRole && userRole !== "user" && <td className="px-4 py-2"></td>}
           </tr>
         </thead>
         <tbody>
-          {list.map((item) => (
-            <tr
-              onClick={() => {
-                if (item.type !== "text") getFile(item);
-                else setActiveItem(item);
-              }}
-              className="cursor-pointer"
-              key={item.val}
-            >
-              <td className="px-4 py-2">
-                <span className={`file-tag text-sm ${item.type}`}>
-                  {item.type}
-                </span>
-              </td>
-              <td className="px-4 py-2 text-dark">{item.name}</td>
-              <td className="px-4 py-2">{item.created_at}</td>
-              <td className="px-4 py-2">{item.uploader}</td>
-              {userRole && userRole !== "user" && (
-                <td
-                  className="px-4 py-2 text-red-500"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (item.type !== "text") removeFile(item.val);
-                    else removeText(item.key);
+          {isLoading
+            ? [1, 2, 3, 4, 5].map((_) => (
+                <tr className="">
+                  <td
+                    className="px-4 py-2 skeleton-loading h-[2rem]"
+                    colSpan={userRole && userRole !== "user" ? 5 : 4}
+                  ></td>
+                </tr>
+              ))
+            : list.map((item) => (
+                <tr
+                  onClick={() => {
+                    if (item.type !== "text") getFile(item);
+                    else setActiveItem(item);
                   }}
+                  className="cursor-pointer"
+                  key={item.val}
                 >
-                  Remove
-                </td>
-              )}
-            </tr>
-          ))}
+                  <td className="px-4 py-2">
+                    <span className={`file-tag text-sm ${item.type}`}>
+                      {item.type}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-dark">{item.name}</td>
+                  <td className="px-4 py-2">{item.created_at}</td>
+                  <td className="px-4 py-2">{item.uploader}</td>
+                  {userRole && userRole !== "user" && (
+                    <td
+                      className="px-4 py-2 text-red-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (item.type !== "text") removeFile(item.val);
+                        else removeText(item.key);
+                      }}
+                    >
+                      Remove
+                    </td>
+                  )}
+                </tr>
+              ))}
         </tbody>
       </table>
     </div>

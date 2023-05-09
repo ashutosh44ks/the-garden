@@ -23,7 +23,9 @@ const NewSubject = () => {
   const [tags, setTags] = useState("");
   const [professors, setProfessors] = useState([]);
 
+  const [loading, setLoading] = useState(false);
   const addSubject = async () => {
+    setLoading(true);
     let formattedTags = tags.split(",").map((tag) => tag.trim());
     try {
       const { data } = await api.post("/api/subjects/add_subject", {
@@ -42,6 +44,7 @@ const NewSubject = () => {
       console.log(e);
       setErrorMsg(e.response.data.msg);
     }
+    setLoading(false);
   };
 
   const [suggestedTags, setSuggestedTags] = useState([]);
@@ -229,7 +232,11 @@ const NewSubject = () => {
                   {errorMsg}
                 </div>
               )}
-              <button className="btn btn-primary" type="submit">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={loading}
+              >
                 Submit
               </button>
             </div>

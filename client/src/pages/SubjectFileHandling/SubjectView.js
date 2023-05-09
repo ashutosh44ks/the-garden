@@ -45,9 +45,9 @@ const SubjectView = () => {
     } catch (err) {
       console.log(err);
     }
-    setIsLoading(false);
   };
   const getListOfFiles = async () => {
+    setIsLoading(true);
     try {
       const { data } = await api.get(
         `/api/subjects/get_dir_files?subject_code=${subjectId}&prefix=${category}`
@@ -112,18 +112,25 @@ const SubjectView = () => {
     <div className="p-8">
       <div className="mb-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-dark">{toLabel(category)}</h1>
-          {(category !== "syllabus" ||
-            (category === "syllabus" && userRole && userRole !== "user")) && (
-            <button
-              className="btn btn-primary"
-              onClick={() =>
-                navigate(`/subject/${subjectId}/${category}/upload`)
-              }
-            >
-              Upload
+          <h1 className="text-2xl font-bold text-dark">
+            {category === "qp" ? "Question Papers" : toLabel(category)}
+          </h1>
+          <div className="flex gap-4">
+            <button className="btn btn-secondary" onClick={getListOfFiles}>
+              Refresh
             </button>
-          )}
+            {(category !== "syllabus" ||
+              (category === "syllabus" && userRole && userRole !== "user")) && (
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  navigate(`/subject/${subjectId}/${category}/upload`)
+                }
+              >
+                Upload
+              </button>
+            )}
+          </div>
         </div>
         <div className="text-sm text-dark-2">
           Go back to{" "}
@@ -145,16 +152,17 @@ const SubjectView = () => {
           subjectId={subjectId}
           setListFiles={setListFiles}
           setListTexts={setListTexts}
+          isLoading={isLoading}
         />
       )}
-      {listTexts.length === 0 || listFiles.length === 0 ? (
+      {isLoading ? (
+        <div className="text-sm text-dark-2 my-8">Loading...</div>
+      ) : listTexts.length === 0 || listFiles.length === 0 ? (
         <div className="text-sm text-dark-2 my-8">No items uploaded yet</div>
       ) : activeItem === null ? (
         <div className="text-sm text-dark-2 my-8">
           Please select an item to view it
         </div>
-      ) : isLoading ? (
-        <div className="my-8">Loading...</div>
       ) : (
         <div className="view-container my-8">
           <div className="flex justify-between items-center mb-10">

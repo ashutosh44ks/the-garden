@@ -21,11 +21,10 @@ const Subject = () => {
       setSubject(data.subject);
       setMyRatedDifficulty(data.userVote);
       setCurrentDifficulty(data.avgVotes);
-      setIsLoading(false);
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
   useEffect(() => {
     getSubject();
@@ -68,8 +67,58 @@ const Subject = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (Object.entries(subject).length === 0)
+  if (isLoading)
+    return (
+      <div className="p-8">
+        <div className="card subject-main">
+          <div className="skeleton-loading card subject-main"></div>
+        </div>
+        <div className="my-4">
+          <h3 className="mb-2">Professor History</h3>
+          <div className="flex flex-wrap gap-4">
+            <div className="skeleton-loading card professor-card"></div>
+            <div className="skeleton-loading card professor-card"></div>
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-2">Resources</h3>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              className="btn-secondary"
+              to={`/subject/${subjectId}/syllabus/view`}
+            >
+              Syllabus
+            </Link>
+            <Link
+              className="btn-secondary"
+              to={`/subject/${subjectId}/notes/view`}
+            >
+              Notes
+            </Link>
+            <Link
+              className="btn-secondary"
+              to={`/subject/${subjectId}/qp/view`}
+            >
+              Previous Year Papers
+            </Link>
+          </div>
+        </div>
+        {userRole && userRole !== "user" && (
+          <div className="mt-4">
+            <h3 className="mb-2">Admin/Mod Options</h3>
+            <div className="flex flex-wrap gap-4">
+              <Link className="btn-secondary" to={`/subject/${subjectId}/edit`}>
+                Edit details
+              </Link>
+              <button className="btn-danger" onClick={removeSubject}>
+                Remove subject
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  if (!isLoading && Object.entries(subject).length === 0)
     return <div className="p-8">Subject not found</div>;
   return (
     <div className="p-8">
@@ -165,10 +214,10 @@ const Subject = () => {
       <div className="my-4">
         <h3 className="mb-2">Professor History</h3>
         <div className="flex flex-wrap gap-4">
-          {subject.professors.length > 0 &&
-            subject.professors.map((professor) => {
+          {subject.professors?.length > 0 &&
+            subject.professors?.map((professor) => {
               return (
-                <div className="card" key={professor.name}>
+                <div className="card professor-card" key={professor.name}>
                   <div className="card-body">
                     <h3 className="card-title">{professor.name}</h3>
                     <div className="text-dark text-sm">{professor.year}</div>
@@ -177,7 +226,7 @@ const Subject = () => {
               );
             })}
         </div>
-        {subject.professors.length === 0 && (
+        {subject.professors?.length === 0 && (
           <div className="text-dark">
             No professors found. Request admin to add professor(s) by clicking{" "}
             <u

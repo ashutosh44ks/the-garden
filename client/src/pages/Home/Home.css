@@ -30,7 +30,7 @@
   color: #1a73e8;
 }
 .subject.card {
-  max-width: 25rem;
+  width: 25rem;
 }
 
 .card-grid-design {
@@ -43,7 +43,7 @@
   height: 10rem;
   margin-left: auto;
   position: relative;
-  top: -2rem
+  top: -2rem;
 }
 
 @media (max-width: 600px) {
