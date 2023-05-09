@@ -39,6 +39,8 @@ const SubjectUpload = () => {
     setTitle(files[0].name.split(".")[0]);
     setFilename(files[0].name.split(".")[0]);
   };
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState("");
   const uploadFile = async () => {
     const userRole = jwt_decode(
       JSON.parse(localStorage.getItem("logged")).accessToken
@@ -47,7 +49,7 @@ const SubjectUpload = () => {
       alert("Sorry, this feature is only available for mods and admins");
       return;
     }
-
+    setLoading(true);
     let formData = new FormData();
     formData.append("subject_code", subjectId);
     formData.append("category", uploadCategory);
@@ -61,11 +63,14 @@ const SubjectUpload = () => {
         },
       });
       console.log(data);
+      setTitle("");
       setFilename("");
       setSelectedFile(null);
+      setMsg(data.msg);
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   return (
@@ -132,13 +137,16 @@ const SubjectUpload = () => {
               filename={filename}
               setFilename={setFilename}
             />
+            <div className="text-green-500 relative">
+              <div className="absolute right-0">{msg}</div>
+            </div>
             <div className="mt-4">
               <button
                 className="btn btn-primary"
                 type="submit"
-                disabled={!title || !selectedFile}
+                disabled={!title || !selectedFile || loading}
               >
-                Upload
+                Uploads
               </button>
             </div>
           </div>

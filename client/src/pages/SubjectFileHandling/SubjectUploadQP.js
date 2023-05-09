@@ -36,12 +36,15 @@ const UploadQP = () => {
   // for file upload task
   const [selectedFile, setSelectedFile] = useState(null);
   const [filename, setFilename] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState("");
   const onUpload = (files) => {
     console.log(files);
     setSelectedFile(files[0]);
     setFilename(files[0].name);
   };
   const uploadFile = async () => {
+    setLoading(true);
     let formData = new FormData();
     formData.append("subject_code", subjectId);
     formData.append("category", `qp_${examCategory}`);
@@ -56,15 +59,18 @@ const UploadQP = () => {
       console.log(data);
       setSelectedFile(null);
       setFilename("");
+      setMsg(data.msg);
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   // const [numOfGrpElements, setNumOfGrpElements] = useState([]);
   // const [questions, setQuestions] = useState([]);
   const [content, setContent] = useState("");
   const uploadQuestions = async () => {
+    setLoading(true);
     try {
       const { data } = await api.post(`/api/subjects/upload_qp_texts`, {
         subject_code: subjectId,
@@ -75,9 +81,11 @@ const UploadQP = () => {
       });
       console.log(data);
       setContent("");
+      setMsg(data.msg);
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   return (
@@ -98,7 +106,6 @@ const UploadQP = () => {
         Thank you for your interest in contributing to the community. You may
         choose to upload a file, or directly input questions below.
       </p>
-
       <form
         className="my-10"
         onSubmit={(e) => {
@@ -207,14 +214,18 @@ const UploadQP = () => {
                 filename={filename}
               />
             )}
+            <div className="text-green-500 relative">
+              <div className="absolute right-0">{msg}</div>
+            </div>
             <div className="mt-4">
               <button
                 className="btn btn-primary"
                 type="submit"
                 disabled={
-                  inputType === "text"
+                  loading ||
+                  (inputType === "text"
                     ? content.length === 0
-                    : filename.length === 0
+                    : filename.length === 0)
                 }
               >
                 Upload

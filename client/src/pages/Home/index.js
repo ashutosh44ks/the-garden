@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
-import truncateString from "../../components/utils/truncateString";
 import toLabel from "../../components/utils/toLabel";
+import SubjectGrid from "./components/SubjectGrid";
 import { FiAlertCircle } from "react-icons/fi";
 import { MdFilterList } from "react-icons/md";
 import "./Home.css";
@@ -13,7 +13,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   const [suggestedTags, setSuggestedTags] = useState([]);
-  const getCurrentSubjectTags = async () => {
+  const getSubjectTags = async () => {
     try {
       const { data } = await api.get(`/api/subjects/get_tags`);
       setSuggestedTags(data.tags);
@@ -37,10 +37,9 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     }
-    setLoading(false);
   };
   useEffect(() => {
-    getCurrentSubjectTags();
+    getSubjectTags();
     getUserDetails();
   }, []);
 
@@ -49,6 +48,7 @@ const Home = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   useEffect(() => {
     const getFilteredSubjects = async () => {
+      setLoading(true)
       try {
         const { data } = await api.post(
           `/api/subjects/get_filtered_subjects?year=${year}`,
@@ -59,18 +59,18 @@ const Home = () => {
         console.log(err);
         setSubjects([]);
       }
+      setLoading(false);
     };
-    if (!loading) getFilteredSubjects();
-  }, [activeFilters, year, loading]);
+    if (user.name) getFilteredSubjects();
+  }, [activeFilters, year, user]);
 
-  if (loading) return <div className="p-8">loading...</div>;
   return (
     <>
       <div className="bg-blue p-8 text-white flex justify-between items-center gap-8 banner">
         <div className="banner-text">
           <h1 className="mb-4">
             Hi,{" "}
-            {user.name?.split(" ")[0] ||
+            {user?.name?.split(" ")[0] ||
               jwt_decode(JSON.parse(localStorage.getItem("logged")).accessToken)
                 .username}
           </h1>
@@ -156,69 +156,11 @@ const Home = () => {
             ))}
           </div>
         )}
-        <div className="flex flex-wrap items-stretch gap-4 my-5">
-          {subjects.map((subject) => (
-            <div
-              className="subject card cursor-pointer"
-              onClick={() => navigate(`/subject/${subject.subject_code}`)}
-              key={subject.subject_code}
-            >
-              <div className="card-body">
-                <div className="mb-2">
-                  <h3 className="card-title">{subject.name}</h3>
-                  <div className="card-subtitle text-sm text-grey-500">
-                    {subject.subject_code}
-                  </div>
-                </div>
-                <p className="card-text">
-                  {truncateString(subject.description, 120)}
-                </p>
-              </div>
-              <div className="card-footer flex gap-2">
-                <span className="small-tab">{subject.credits} credits</span>
-                {subject.tags.slice(0, 4).map((tag) => (
-                  <span className="small-tab" key={tag}>
-                    {toLabel(tag)}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-          {user.role === "admin" || user.role === "moderator" ? (
-            <div
-              className="subject card cursor-pointer"
-              onClick={() => navigate("/subject/new_subject")}
-            >
-              <div className="card-body">
-                <div className="mb-2">
-                  <h3 className="card-title">Add New Subject</h3>
-                  <div className="card-subtitle text-sm text-grey-500">
-                    This method is only available to admins and moderators.
-                  </div>
-                </div>
-                <p className="card-text">
-                  Admins can directly add new subjects to the database but
-                  moderators will need approval from admins for the same.
-                </p>
-              </div>
-            </div>
-          ) : (
-            subjects.length === 0 && (
-              <div className="my-5">
-                No Subjects found. Request admin to add missing subject(s) by
-                clicking{" "}
-                <u
-                  className="text-blue cursor-pointer"
-                  onClick={() => {
-                    navigate("/contact");
-                  }}
-                >
-                  here
-                </u>
-              </div>
-            )
-          )}
-        </div>
+        <SubjectGrid
+          subjects={subjects}
+          userRole={user.role}
+          loading={loading}
+        />
       </div>
       <div className="bg-blue p-8 text-white flex flex-col items-center justify-center">
         <h1>Check what's next and upcoming</h1>

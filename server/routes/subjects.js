@@ -73,7 +73,7 @@ router.post("/get_filtered_subjects", authenticateToken, async (req, res) => {
         tags: { $in: req.body.activeFilters },
       });
     if (filteredSubjects.length === 0) {
-      return res.status(404).json({ message: "Cannot find subject" });
+      return res.status(404).json({ msg: "Cannot find subject" });
     }
     res.json({ filteredSubjects, count: filteredSubjects.length });
   } catch (e) {
@@ -86,7 +86,7 @@ router.get("/get_subject", authenticateToken, async (req, res) => {
       subject_code: req.query.subject_code,
     });
     if (subject === null) {
-      return res.status(404).json({ message: "Cannot find subject" });
+      return res.status(404).json({ msg: "Cannot find subject" });
     }
     // get your vote
     const authHeader = req.headers["authorization"];
@@ -170,15 +170,14 @@ router.post("/upload_qp_texts", authenticateToken, async (req, res) => {
   });
   try {
     const uploaded_qp = await newSubjectText.save();
-    res.status(201).json({ uploaded_qp });
+    res.status(201).json({ msg: "Text uploaded successfully", uploaded_qp });
   } catch (e) {
     res.status(400).json({ msg: e.message });
   }
 });
 router.get("/get_qp_texts", authenticateToken, async (req, res) => {
   const subjectCode = req.query.subject_code;
-  if (!subjectCode)
-    return res.status(404).json({ message: "Cannot find subject" });
+  if (!subjectCode) return res.status(404).json({ msg: "Cannot find subject" });
   try {
     const texts = await SubjectTexts.find({ subject_code: subjectCode });
     res.json(texts);

@@ -9,9 +9,9 @@ const Header = ({ loggedIn, loginTab, setLoginTab }) => {
   let navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  const userRole = jwt_decode(
-    JSON.parse(localStorage.getItem("logged")).accessToken
-  )?.role;
+  const userRole = loggedIn
+    ? jwt_decode(JSON.parse(localStorage.getItem("logged")).accessToken)?.role
+    : null;
 
   return (
     <div className="header flex justify-between items-center px-6 bg-white">
