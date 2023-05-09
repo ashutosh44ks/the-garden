@@ -61,7 +61,7 @@ const Home = () => {
       }
       setLoading(false);
     };
-    if (user.name) getFilteredSubjects();
+    if (user.username) getFilteredSubjects();
   }, [activeFilters, year, user]);
 
   return (
