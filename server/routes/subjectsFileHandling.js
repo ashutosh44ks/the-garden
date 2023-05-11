@@ -157,13 +157,20 @@ router.get(
       const all_files = await SubjectFiles.find();
       if (!all_files)
         return res.status(404).json({ msg: "No files found in db" });
-      let temp = all_files.map((file) => {
-        return {
-          ...file._doc,
-          size: dbFiles.find((dbFile) => dbFile.dbFileName === file.dbFileName)
-            .size,
-        };
-      });
+      let temp = all_files
+        .filter((file) =>
+          dbFiles.find((dbFile) => dbFile.dbFileName === file.dbFileName)
+        )
+        .map((file) => {
+          let dbFile = dbFiles.find(
+            (dbFile) => dbFile.dbFileName === file.dbFileName
+          );
+          if (dbFile)
+            return {
+              ...file._doc,
+              size: dbFile.size,
+            };
+        });
       res.status(200).json(temp);
     } catch (e) {
       res.status(400).json({ msg: e.message });

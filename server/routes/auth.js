@@ -51,7 +51,7 @@ router.post("/login", async (req, res) => {
     }
     const accessToken = generateAccessToken({
       username: userClient.username,
-      role: user.role || "user",
+      role: user.role,
     });
     // we will manually handle the expiration of the refresh token if we need to
     const refreshToken = jwt.sign(
@@ -75,12 +75,12 @@ router.post("/refresh_token", async (req, res) => {
     if (refreshToken == null) return res.sendStatus(401);
     const user = await RefreshTokens.findOne({ refreshToken: refreshToken });
     if (!user._id) return res.sendStatus(403);
-    const userRole = await Users.findOne({ username: user.username }).role;
+    const myUser = await Users.findOne({ username: user.username });
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return res.sendStatus(403);
       const accessToken = generateAccessToken({
         username: user.username,
-        role: userRole || "user",
+        role: myUser.role,
       });
       res.json({ accessToken: accessToken, refreshToken: refreshToken });
     });

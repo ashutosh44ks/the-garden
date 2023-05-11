@@ -10,7 +10,7 @@ const replaceInAverage = (oldAvg, oldCount, oldValue, newValue) => {
 };
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "30min",
   });
 };
 function getFiles(dir, files_) {
