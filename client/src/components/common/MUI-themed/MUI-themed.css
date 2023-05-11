@@ -6,7 +6,7 @@
   transition: all 0.2s ease-in-out;
 }
 .input-group:hover {
-  border: solid 1px black;
+  border: solid 1px rgba(14, 126, 199, 0.5);
 }
 .input-group input:focus,
 .input-group textarea:focus,

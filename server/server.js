@@ -36,6 +36,8 @@ const subjectsFileHandlingRouter = require("./routes/subjectsFileHandling");
 app.use("/api/subjects", subjectsFileHandlingRouter);
 const calendarsRouter = require("./routes/calendars");
 app.use("/api/calendars", calendarsRouter);
+const miscRouter = require("./routes/misc");
+app.use("/api/misc", miscRouter);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

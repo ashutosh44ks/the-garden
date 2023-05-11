@@ -191,8 +191,8 @@ const Panel = () => {
             label="Sort by"
             options={
               <>
-                <option value="created_at">Sort by recently uploaded</option>
-                <option value="size">Sort by largest size</option>
+                <option value="created_at">Recently uploaded</option>
+                <option value="size">Largest size</option>
               </>
             }
             val={sortBy}
