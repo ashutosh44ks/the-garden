@@ -75,7 +75,7 @@ const ViewCalendar = () => {
         )}
       </div>
       {isLoading ? (
-        <div className="my-8">Loading...</div>
+        <div className="my-8 text-dark-2">Loading...</div>
       ) : file !== null ? (
         <PdfViewer file={file} />
       ) : (
