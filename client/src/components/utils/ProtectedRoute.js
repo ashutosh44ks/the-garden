@@ -19,7 +19,6 @@ const ProtectedRoute = ({ children }) => {
 
   if (isAuthenticated)
     return <Layout loggedIn={isAuthenticated}>{children}</Layout>;
-  else return <div>loading...</div>;
 };
 
 export default ProtectedRoute;

@@ -18,7 +18,7 @@
   background-size: cover;
 }
 @media (max-width: 580px) {
-  .card div {
+  .entry .card div {
     width: 100%;
   }
   .login-side {

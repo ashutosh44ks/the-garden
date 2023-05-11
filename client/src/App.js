@@ -13,6 +13,8 @@ import SubjectUploadQP from "./pages/SubjectFileHandling/SubjectUploadQP";
 import SubjectView from "./pages/SubjectFileHandling/SubjectView";
 import SubjectUpload from "./pages/SubjectFileHandling/SubjectUpload";
 import Panel from "./pages/Panel";
+import Upcoming from "./pages/Upcoming";
+import AddEvent from "./pages/Upcoming/AddEvent";
 
 function App() {
   return (
@@ -88,6 +90,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/upcoming"
+          element={
+            <ProtectedRoute>
+              <Upcoming />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add_event"
+          element={
+            <ProtectedRoute>
+              <AddEvent />
             </ProtectedRoute>
           }
         />
