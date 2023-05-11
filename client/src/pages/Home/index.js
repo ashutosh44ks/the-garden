@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
@@ -48,7 +48,7 @@ const Home = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   useEffect(() => {
     const getFilteredSubjects = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const { data } = await api.post(
           `/api/subjects/get_filtered_subjects?year=${year}`,
@@ -164,18 +164,12 @@ const Home = () => {
       </div>
       <div className="bg-blue p-8 text-white flex flex-col items-center justify-center">
         <h1>Check what's next and upcoming</h1>
-        <button
-          className="btn-secondary mt-4"
-          onClick={() => navigate("/upcoming")}
-        >
+        <Link className="btn-secondary mt-4" to="/upcoming">
           Events and Notices
-        </button>
+        </Link>
       </div>
       <div className="px-8 py-12 flex xs:flex-wrap xs:gap-12 sm:flex-nowrap sm:gap-8">
-        <div
-          className="card cursor-pointer w-full"
-          onClick={() => navigate("/calendars/semester")}
-        >
+        <Link className="card w-full" to="/calendars/semester">
           <div className="card-grid-design">
             <img src={"./assets/tasks.png"} alt="calendar" />
           </div>
@@ -189,11 +183,8 @@ const Home = () => {
           <div className="card-footer flex gap-2">
             <button className="btn btn-secondary">View Calendar</button>
           </div>
-        </div>
-        <div
-          className="card cursor-pointer w-full"
-          onClick={() => navigate("/calendars/holiday")}
-        >
+        </Link>
+        <Link className="card w-full" to="/calendars/holiday">
           <div className="card-grid-design">
             <img src={"./assets/tasks-2.png"} alt="calendar" />
           </div>
@@ -206,7 +197,7 @@ const Home = () => {
           <div className="card-footer flex gap-2">
             <button className="btn btn-secondary">Mark Holidays</button>
           </div>
-        </div>
+        </Link>
       </div>
     </>
   );

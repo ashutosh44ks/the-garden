@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   let navigate = useNavigate();
@@ -13,63 +13,64 @@ const Footer = () => {
           <img src="/assets/logo.webp" alt="logo" className="logo" />
           <h2>The Garden</h2>
         </div>
-        <ul className="flex items-center footer-items">
-          <li
-            className="cursor-pointer hover-blue"
-            onClick={() => (window.location.href = "https://gbpuat.ac.in/")}
+        <div className="flex items-center footer-items">
+          <a
+            className="hover-blue"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://gbpuat.ac.in/"
           >
             University site
-          </li>
-          <li
-            className="cursor-pointer hover-blue"
-            onClick={() => (window.location.href = "gbpuat.auams.in")}
+          </a>
+          <a
+            className="hover-blue"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://gbpuat.auams.in/"
           >
             AUAMS site
-          </li>
-          <li
-            className="cursor-pointer hover-blue"
-            onClick={() =>
-              (window.location.href = "http://www.gbpuat-tech.ac.in/")
-            }
+          </a>
+          <a
+            className="hover-blue"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://www.gbpuat-tech.ac.in/"
           >
             College site
-          </li>
-          <li
-            className="cursor-pointer hover-blue"
-            onClick={() => navigate("/about")}
-          >
+          </a>
+          <Link className="hover-blue" to="about">
             About us
-          </li>
-          <li
-            className="cursor-pointer hover-blue"
-            onClick={() =>
-              (window.location.href =
-                "https://github.com/ashutosh44ks/the-garden")
-            }
+          </Link>
+          <a
+            className="hover-blue"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/ashutosh44ks/the-garden"
           >
             Github repository
-          </li>
-        </ul>
+          </a>
+        </div>
       </div>
       <div className="flex items-center justify-between mx-8 py-6 separator-top footer-last">
         <div className="flex gap-3">
-          <span
-            className="cursor-pointer hover-blue"
-            onClick={() => navigate("/terms")}
-          >
+          <Link className="hover-blue" to="/terms">
             Terms
-          </span>
+          </Link>
           <span className="cursor-default">|</span>
-          <span
-            className="cursor-pointer hover-blue"
-            onClick={() => navigate("/terms")}
-          >
+          <Link className="hover-blue" to="/terms">
             Privacy
-          </span>
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <span>Contact us to report bugs or request features</span>
-          <button className="btn-primary">Contact Us</button>
+          <a
+            className="btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/ashutosh44ks/the-garden/issues"
+          >
+            Contact Us
+          </a>
         </div>
       </div>
     </div>

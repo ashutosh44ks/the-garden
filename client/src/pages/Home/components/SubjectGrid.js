@@ -1,5 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import truncateString from "../../../components/utils/truncateString";
 import toLabel from "../../../components/utils/toLabel";
 
@@ -27,8 +26,6 @@ const PlaceholderCards = () => {
 };
 
 const SubjectGrid = ({ subjects, userRole, loading }) => {
-  const navigate = useNavigate();
-
   return (
     <div className="flex flex-wrap items-stretch gap-4 my-5">
       {loading ? (
@@ -36,9 +33,9 @@ const SubjectGrid = ({ subjects, userRole, loading }) => {
       ) : (
         <>
           {subjects.map((subject) => (
-            <div
-              className="subject card cursor-pointer"
-              onClick={() => navigate(`/subject/${subject.subject_code}`)}
+            <Link
+              className="subject card"
+              to={`/subject/${subject.subject_code}`}
               key={subject.subject_code}
             >
               <div className="card-body">
@@ -60,13 +57,10 @@ const SubjectGrid = ({ subjects, userRole, loading }) => {
                   </span>
                 ))}
               </div>
-            </div>
+            </Link>
           ))}
           {userRole === "admin" || userRole === "moderator" ? (
-            <div
-              className="subject card cursor-pointer"
-              onClick={() => navigate("/subject/new_subject")}
-            >
+            <Link className="subject card" to="/subject/new_subject">
               <div className="card-body">
                 <div className="mb-2">
                   <h3 className="card-title">Add New Subject</h3>
@@ -79,20 +73,20 @@ const SubjectGrid = ({ subjects, userRole, loading }) => {
                   moderators will need approval from admins for the same.
                 </p>
               </div>
-            </div>
+            </Link>
           ) : (
             subjects.length === 0 && (
-              <div className="my-5">
+              <div className="my-5 text-dark-2">
                 No Subjects found. Request admin to add missing subject(s) by
                 clicking{" "}
-                <u
-                  className="text-blue cursor-pointer"
-                  onClick={() => {
-                    navigate("/contact");
-                  }}
+                <a
+                  className="text-blue"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/ashutosh44ks/the-garden/issues"
                 >
                   here
-                </u>
+                </a>
               </div>
             )
           )}
