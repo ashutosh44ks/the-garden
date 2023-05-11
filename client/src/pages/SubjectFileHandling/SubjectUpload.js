@@ -74,84 +74,82 @@ const SubjectUpload = () => {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-dark font-medium">Add Resources</h1>
-      <div className="text-sm text-dark-2 mb-2">
-        Go back to{" "}
-        <u
-          className="text-blue cursor-pointer"
-          onClick={() => {
-            navigate(`/subject/${subjectId}`);
+    <div className="p-8 bg-white">
+      <div className="xs:px-4 sm:py-8 xs:px-4 sm:px-12">
+        <h1 className="text-dark font-medium">Add Resources</h1>
+        <div className="text-sm text-dark-2 mb-2">
+          Go back to{" "}
+          <u
+            className="text-blue cursor-pointer"
+            onClick={() => {
+              navigate(`/subject/${subjectId}`);
+            }}
+          >
+            {subjectId} page
+          </u>
+        </div>
+        <p className="text-dark-2">
+          Thank you for your interest in contributing to the community. You may
+          choose to upload a file of the following formats: png, jpg, jpeg, pdf,
+          docx
+        </p>
+        <form
+          className="my-10"
+          onSubmit={(e) => {
+            e.preventDefault();
+            uploadFile();
           }}
         >
-          {subjectId} page
-        </u>
-      </div>
-      <p className="text-dark-2">
-        Thank you for your interest in contributing to the community. You may
-        choose to upload a file of the following formats: png, jpg, jpeg, pdf,
-        docx
-      </p>
-      <form
-        className="my-10"
-        onSubmit={(e) => {
-          e.preventDefault();
-          uploadFile();
-        }}
-      >
-        <div className="card px-2 py-4">
-          <div className="card-body">
-            <Select
-              label="Category"
-              options={
-                <>
-                  <option value="" disabled>
-                    Select Category
-                  </option>
-                  {categories.map((category) => {
-                    return (
-                      <option key={category.value} value={category.value}>
-                        {category.label}
-                      </option>
-                    );
-                  })}
-                </>
-              }
-              val={uploadCategory}
-              setVal={setUploadCategory}
-              required
-              className="mb-4"
-            />
-            <Input
-              label="Title / Short description"
-              type="text"
-              val={title}
-              setVal={setTitle}
-              required
-              className="mb-4"
-            />
-            <FilesDragAndDrop
-              onUpload={onUpload}
-              count={1}
-              formats={["png", "jpg", "jpeg", "pdf", "docx"]}
-              filename={filename}
-              setFilename={setFilename}
-            />
-            <div className="text-green-500 relative">
-              <div className="absolute right-0">{msg}</div>
-            </div>
-            <div className="mt-4">
-              <button
-                className="btn btn-primary"
-                type="submit"
-                disabled={!title || !selectedFile || loading}
-              >
-                Uploads
-              </button>
-            </div>
+          <Select
+            label="Category"
+            options={
+              <>
+                <option value="" disabled>
+                  Select Category
+                </option>
+                {categories.map((category) => {
+                  return (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  );
+                })}
+              </>
+            }
+            val={uploadCategory}
+            setVal={setUploadCategory}
+            required
+            className="mb-4"
+          />
+          <Input
+            label="Title / Short description"
+            type="text"
+            val={title}
+            setVal={setTitle}
+            required
+            className="mb-4"
+          />
+          <FilesDragAndDrop
+            onUpload={onUpload}
+            count={1}
+            formats={["png", "jpg", "jpeg", "pdf", "docx"]}
+            filename={filename}
+            setFilename={setFilename}
+          />
+          <div className="text-green-500 relative">
+            <div className="absolute right-0">{msg}</div>
           </div>
-        </div>
-      </form>
+          <div className="mt-4">
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={!title || !selectedFile || loading}
+            >
+              Uploads
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

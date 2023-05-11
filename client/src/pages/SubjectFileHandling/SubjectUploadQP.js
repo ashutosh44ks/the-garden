@@ -89,151 +89,149 @@ const UploadQP = () => {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-dark font-medium">Add Question Paper</h1>
-      <div className="text-sm text-dark-2 mb-2">
-        Go back to{" "}
-        <u
-          className="text-blue cursor-pointer"
-          onClick={() => {
-            navigate(`/subject/${subjectId}`);
+    <div className="p-8 bg-white">
+      <div className="xs:px-4 sm:py-8 xs:px-4 sm:px-12">
+        <h1 className="text-dark font-medium">Add Question Paper</h1>
+        <div className="text-sm text-dark-2 mb-2">
+          Go back to{" "}
+          <u
+            className="text-blue cursor-pointer"
+            onClick={() => {
+              navigate(`/subject/${subjectId}`);
+            }}
+          >
+            {subjectId} page
+          </u>
+        </div>
+        <p className="text-dark-2">
+          Thank you for your interest in contributing to the community. You may
+          choose to upload a file, or directly input questions below.
+        </p>
+        <form
+          className="my-10"
+          onSubmit={(e) => {
+            e.preventDefault();
+            inputType === "text" ? uploadQuestions() : uploadFile();
           }}
         >
-          {subjectId} page
-        </u>
-      </div>
-      <p className="text-dark-2">
-        Thank you for your interest in contributing to the community. You may
-        choose to upload a file, or directly input questions below.
-      </p>
-      <form
-        className="my-10"
-        onSubmit={(e) => {
-          e.preventDefault();
-          inputType === "text" ? uploadQuestions() : uploadFile();
-        }}
-      >
-        <div className="card px-2 py-4">
-          <div className="card-body">
-            <Select
-              label="Exam Category"
-              options={
-                <>
-                  <option value="" disabled>
-                    Select Exam
-                  </option>
-                  {examCategories.map((category) => {
-                    return (
-                      <option key={category.value} value={category.value}>
-                        {category.label}
-                      </option>
-                    );
-                  })}
-                </>
-              }
-              val={examCategory}
-              setVal={setExamCategory}
-              required
-              className="mb-4"
-            />
-            <Input
-              label="Exam Year"
-              type="number"
-              val={examYear}
-              setVal={setExamYear}
-              className="mb-4"
-              required
-            />
-            <div className="flex gap-2 flex-wrap mb-4">
-              <span
-                className={`simple-tab ${
-                  inputType === "text" ? "tab-theme-blue" : "tab-theme-default"
-                } cursor-pointer`}
-                onClick={() => {
-                  setInputType("text");
-                }}
-              >
-                Text Input
-              </span>
-              <span
-                className={`simple-tab ${
-                  inputType === "file" ? "tab-theme-blue" : "tab-theme-default"
-                } cursor-pointer`}
-                onClick={() => {
-                  setInputType("file");
-                }}
-              >
-                File Input
-              </span>
-            </div>
-            {inputType === "text" ? (
-              // <>
-              //   <div className="flex flex-col gap-3 mt-8">
-              //     {numOfGrpElements.map((num, index) => (
-              //       <TextArea
-              //         label={`Question ${index + 1}`}
-              //         type="text"
-              //         val={questions[num] || ""}
-              //         setVal={(val) => {
-              //           let temp = [...questions];
-              //           if (questions[num] === undefined) temp.push(val);
-              //           else temp[num] = val;
-              //           setQuestions(temp);
-              //         }}
-              //         rows={2}
-              //         required
-              //         className="w-full mb-2"
-              //       />
-              //     ))}
-              //     <button
-              //       className="btn btn-secondary w-full"
-              //       type="button"
-              //       onClick={() => {
-              //         setNumOfGrpElements([
-              //           ...numOfGrpElements,
-              //           numOfGrpElements.length,
-              //         ]);
-              //       }}
-              //     >
-              //       Add Question
-              //     </button>
-              //   </div>
-              // </>
-              <TextArea
-                label="Questions"
-                rows="8"
-                val={content}
-                setVal={setContent}
-                required
-              />
-            ) : (
-              <FilesDragAndDrop
-                onUpload={onUpload}
-                count={1}
-                formats={["pdf", "jpg", "jpeg", "png"]}
-                filename={filename}
-              />
-            )}
-            <div className="text-green-500 relative">
-              <div className="absolute right-0">{msg}</div>
-            </div>
-            <div className="mt-4">
-              <button
-                className="btn btn-primary"
-                type="submit"
-                disabled={
-                  loading ||
-                  (inputType === "text"
-                    ? content.length === 0
-                    : filename.length === 0)
-                }
-              >
-                Upload
-              </button>
-            </div>
+          <Select
+            label="Exam Category"
+            options={
+              <>
+                <option value="" disabled>
+                  Select Exam
+                </option>
+                {examCategories.map((category) => {
+                  return (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  );
+                })}
+              </>
+            }
+            val={examCategory}
+            setVal={setExamCategory}
+            required
+            className="mb-4"
+          />
+          <Input
+            label="Exam Year"
+            type="number"
+            val={examYear}
+            setVal={setExamYear}
+            className="mb-4"
+            required
+          />
+          <div className="flex gap-2 flex-wrap mb-4">
+            <span
+              className={`simple-tab ${
+                inputType === "text" ? "tab-theme-blue" : "tab-theme-default"
+              } cursor-pointer`}
+              onClick={() => {
+                setInputType("text");
+              }}
+            >
+              Text Input
+            </span>
+            <span
+              className={`simple-tab ${
+                inputType === "file" ? "tab-theme-blue" : "tab-theme-default"
+              } cursor-pointer`}
+              onClick={() => {
+                setInputType("file");
+              }}
+            >
+              File Input
+            </span>
           </div>
-        </div>
-      </form>
+          {inputType === "text" ? (
+            // <>
+            //   <div className="flex flex-col gap-3 mt-8">
+            //     {numOfGrpElements.map((num, index) => (
+            //       <TextArea
+            //         label={`Question ${index + 1}`}
+            //         type="text"
+            //         val={questions[num] || ""}
+            //         setVal={(val) => {
+            //           let temp = [...questions];
+            //           if (questions[num] === undefined) temp.push(val);
+            //           else temp[num] = val;
+            //           setQuestions(temp);
+            //         }}
+            //         rows={2}
+            //         required
+            //         className="w-full mb-2"
+            //       />
+            //     ))}
+            //     <button
+            //       className="btn btn-secondary w-full"
+            //       type="button"
+            //       onClick={() => {
+            //         setNumOfGrpElements([
+            //           ...numOfGrpElements,
+            //           numOfGrpElements.length,
+            //         ]);
+            //       }}
+            //     >
+            //       Add Question
+            //     </button>
+            //   </div>
+            // </>
+            <TextArea
+              label="Questions"
+              rows="8"
+              val={content}
+              setVal={setContent}
+              required
+            />
+          ) : (
+            <FilesDragAndDrop
+              onUpload={onUpload}
+              count={1}
+              formats={["pdf", "jpg", "jpeg", "png"]}
+              filename={filename}
+            />
+          )}
+          <div className="text-green-500 relative">
+            <div className="absolute right-0">{msg}</div>
+          </div>
+          <div className="mt-4">
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={
+                loading ||
+                (inputType === "text"
+                  ? content.length === 0
+                  : filename.length === 0)
+              }
+            >
+              Upload
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
