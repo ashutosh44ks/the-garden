@@ -10,6 +10,8 @@ const Entry = () => {
   let navigate = useNavigate();
 
   const [loginTab, setLoginTab] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(false);
@@ -54,9 +56,9 @@ const Entry = () => {
     setErrorMsg("");
     const form = document.querySelector("form");
     form.reset();
+    setLoading(false);
   }, [loginTab]);
 
-  const [loading, setLoading] = useState(false);
 
   return (
     <>

@@ -129,7 +129,7 @@ const NewSubject = () => {
                 type="number"
                 val={year}
                 setVal={(newVal) => {
-                  if (newVal <= 4) setYear(newVal);
+                  if (newVal <= 4 && newVal >= 1) setYear(newVal);
                 }}
                 required
                 className="w-full"
@@ -148,7 +148,6 @@ const NewSubject = () => {
                 label="Tags"
                 val={tags}
                 setVal={setTags}
-                required
                 className="w-full"
               />
               <div className="text-sm text-dark-2 flex items-center gap-2">

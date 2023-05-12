@@ -116,7 +116,9 @@ const Profile = () => {
                 label="Year"
                 type="number"
                 val={year}
-                setVal={setYear}
+                setVal={(newVal) => {
+                  if (newVal <= 4 && newVal >= 1) setYear(newVal);
+                }}
                 required
               />
             </div>

@@ -73,7 +73,7 @@ const FileManager = ({
                       {item.type}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-dark">{item.name}</td>
+                  <td className="px-4 py-2 text-dark break-words">{item.name}</td>
                   <td className="px-4 py-2">{item.created_at}</td>
                   <td className="px-4 py-2">{item.uploader}</td>
                   {userRole && userRole !== "user" && (
