@@ -45,7 +45,7 @@ const SubjectUpload = () => {
     const userRole = jwt_decode(
       JSON.parse(localStorage.getItem("logged")).accessToken
     )?.role;
-    if (uploadCategory === "syllabus" && userRole && userRole !== "user") {
+    if (uploadCategory === "syllabus" && userRole && userRole === "user") {
       alert("Sorry, this feature is only available for mods and admins");
       return;
     }
@@ -145,7 +145,7 @@ const SubjectUpload = () => {
               type="submit"
               disabled={!title || !selectedFile || loading}
             >
-              Uploads
+              Upload
             </button>
           </div>
         </form>

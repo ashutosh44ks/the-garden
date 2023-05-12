@@ -157,7 +157,7 @@ const SubjectView = () => {
       )}
       {isLoading ? (
         <div className="text-sm text-dark-2 my-8">Loading...</div>
-      ) : listTexts.length === 0 || listFiles.length === 0 ? (
+      ) : listTexts.length === 0 && listFiles.length === 0 ? (
         <div className="text-sm text-dark-2 my-8">No items uploaded yet</div>
       ) : activeItem === null ? (
         <div className="text-sm text-dark-2 my-8">
@@ -187,9 +187,12 @@ const SubjectView = () => {
             )}
           </div>
           {activeItem.type === "text" ? (
-            <div>{activeItem.val}</div>
+            <div className="whitespace-pre-line break-words">{activeItem.val}</div>
           ) : activeItem.type === "pdf" ? (
             <PdfViewer file={activeItem.data} />
+          ) : activeItem.type === "docx" ? (
+            <div className="text-dark">Not supported yet. You can still download the file to your device.
+            </div>
           ) : (
             <ImageViewer file={activeItem.data} />
           )}

@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
     await newUser.save();
     res.status(201).json({ msg: "User created" });
   } catch (e) {
-    res.status(500).send();
+    res.status(500);
   }
 });
 
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
     await newRefreshToken.save();
     res.json({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (e) {
-    res.status(500).send();
+    res.status(500);
   }
 });
 
@@ -85,7 +85,7 @@ router.post("/refresh_token", async (req, res) => {
       res.json({ accessToken: accessToken, refreshToken: refreshToken });
     });
   } catch (e) {
-    res.status(500).send();
+    res.status(500);
   }
 });
 
@@ -96,7 +96,7 @@ router.delete("/logout", async (req, res) => {
     await RefreshTokens.deleteOne({ refreshToken: refreshToken });
     res.status(200).json({ msg: "Logged out" });
   } catch (e) {
-    res.status(500).send();
+    res.status(500);
   }
 });
 

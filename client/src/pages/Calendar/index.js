@@ -53,7 +53,7 @@ const ViewCalendar = () => {
           <>
             <div className="flex gap-4">
               {userRole && userRole !== "user" && (
-                <Link to="/upload" className="btn-secondary">
+                <Link to="./upload" className="btn-secondary">
                   Upload
                 </Link>
               )}
