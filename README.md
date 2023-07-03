@@ -13,7 +13,7 @@ Limitations of deployment due to using free version deployment option of Render.
 - File storage is cleaned after each server session
 
 ### How to run the project in local
-1. Clone this repository
+1. Clone this repository's dev branch
 2. Install node modules in root, client & server
 3. Add .env file in server directory with the following variables ```DATABASE_URL, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, FRONTEND_URL```
     - I use mongo db locally so it's ```mongodb://127.0.0.1/the-garden``` for me
