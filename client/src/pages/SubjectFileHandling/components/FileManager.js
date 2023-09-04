@@ -1,12 +1,12 @@
 import jwt_decode from "jwt-decode";
 import api from "../../../components/utils/api";
+import { removeFileFromStorage } from "../../../components/utils/fileHandling";
 
 const FileManager = ({
   subjectId,
   list,
   setListFiles,
   setListTexts,
-  getFile,
   setActiveItem,
   isLoading,
 }) => {
@@ -14,15 +14,29 @@ const FileManager = ({
     JSON.parse(localStorage.getItem("logged")).accessToken
   )?.role;
 
-  const removeFile = async (dbFileName) => {
+  const removeFileRefData = async (dbFileName) => {
     try {
       const { data } = await api.delete(
-        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
+        `/api/subjects/remove_file?dbFileName=${dbFileName}`
       );
       console.log(data);
-      setListFiles((prev) => prev.filter((item) => item.val !== dbFileName));
+      setListFiles((prev) =>
+        prev.filter((item) => item.dbFileName !== dbFileName)
+      );
     } catch (err) {
       console.log(err);
+    }
+  };
+  const removeFile = async (dbFileName) => {
+    try {
+      await removeFileFromStorage(`${subjectId}/${dbFileName}`);
+      removeFileRefData(dbFileName);
+    } catch (err) {
+      console.log(err);
+      if (err.code === "storage/object-not-found") {
+        console.log("File not found in storage, deleting reference");
+        removeFileRefData(dbFileName);
+      }
     }
   };
   const removeText = async (item_id) => {
@@ -62,18 +76,19 @@ const FileManager = ({
             : list.map((item) => (
                 <tr
                   onClick={() => {
-                    if (item.type !== "text") getFile(item);
-                    else setActiveItem(item);
+                    setActiveItem(item);
                   }}
                   className="cursor-pointer"
-                  key={item.val}
+                  key={item.dbFileName}
                 >
                   <td className="px-4 py-2">
                     <span className={`file-tag text-sm ${item.type}`}>
                       {item.type}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-dark break-words">{item.name}</td>
+                  <td className="px-4 py-2 text-dark break-words">
+                    {item.name}
+                  </td>
                   <td className="px-4 py-2">{item.created_at}</td>
                   <td className="px-4 py-2">{item.uploader}</td>
                   {userRole && userRole !== "user" && (
@@ -81,7 +96,7 @@ const FileManager = ({
                       className="px-4 py-2 text-red-500"
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (item.type !== "text") removeFile(item.val);
+                        if (item.type !== "text") removeFile(item.dbFileName);
                         else removeText(item.key);
                       }}
                     >

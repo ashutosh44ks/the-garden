@@ -5,6 +5,11 @@ import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
 import Input from "../../components/common/MUI-themed/Input";
 import api from "../../components/utils/api";
+import {
+  uploadFileToStorage,
+  createFilePath,
+  removeFileFromStorage,
+} from "../../components/utils/fileHandling";
 
 const SubjectUpload = () => {
   const { subjectId, category } = useParams();
@@ -41,6 +46,29 @@ const SubjectUpload = () => {
   };
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const uploadFileRefData = async (dbFileName, downloadUrl) => {
+    console.log("sending link to backend", downloadUrl);
+    try {
+      const { data } = await api.post(`/api/subjects/upload_file`, {
+        fileName: title,
+        dbFileName: createFilePath(dbFileName, selectedFile.type),
+        downloadUrl,
+      });
+      console.log(data);
+      setTitle("");
+      setFilename("");
+      setSelectedFile(null);
+      setMsg(data.msg);
+    } catch (e) {
+      console.log(e);
+      setMsg(e.response.data.msg);
+      // Delete file from storage
+      removeFileFromStorage(`${subjectId}/${dbFileName}`);
+    }
+    setLoading(false);
+  };
+
   const uploadFile = async () => {
     const userRole = jwt_decode(
       JSON.parse(localStorage.getItem("logged")).accessToken
@@ -50,27 +78,17 @@ const SubjectUpload = () => {
       return;
     }
     setLoading(true);
-    let formData = new FormData();
-    formData.append("subject_code", subjectId);
-    formData.append("category", uploadCategory);
-    formData.append("year", new Date().getFullYear());
-    formData.append("filename", title);
-    formData.append("file", selectedFile);
-    try {
-      const { data } = await api.post(`/api/subjects/upload_file`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(data);
-      setTitle("");
-      setFilename("");
-      setSelectedFile(null);
-      setMsg(data.msg);
-    } catch (e) {
-      console.log(e);
+    let dbFileName = `${uploadCategory}_${new Date().getFullYear()}_${Date.now()}`;
+    let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
+      selectedFile,
+      `${subjectId}/${dbFileName}`
+    );
+    if (!status) {
+      setMsg(msg + " " + constraint.toString());
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    uploadFileRefData(dbFileName, downloadUrl);
   };
 
   return (

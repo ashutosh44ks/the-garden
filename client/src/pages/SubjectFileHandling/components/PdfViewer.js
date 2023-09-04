@@ -8,11 +8,10 @@ const PdfViewer = ({ file }) => {
   function onDocumentLoadSuccess({ numPages: nextNumPages }) {
     setNumPages(nextNumPages);
   }
-
   return (
     <div className="pdf-container">
       <Document
-        file={`data:application/pdf;base64,${file}`}
+        file={file}
         onLoadSuccess={onDocumentLoadSuccess}
       >
         {Array.from(new Array(numPages), (el, index) => (
