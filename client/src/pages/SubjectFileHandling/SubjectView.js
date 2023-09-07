@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { downloadFileFromStorage } from "../../components/utils/fileHandling";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
@@ -28,13 +27,18 @@ const SubjectView = () => {
       setListFiles(
         data.list.map((file) => {
           return {
-            name: file.fileName || file.dbFileName.split(".")[0],
+            name:
+              file.dbFileName.split("_")[0] === "qp"
+                ? `${toLabel(file.dbFileName.split("_")[1])} - ${
+                    file.dbFileName.split("_")[2]
+                  }`
+                : file.fileName || file.dbFileName.split(".")[0],
             dbFileName: file.dbFileName,
             type: file.dbFileName.split(".")[1],
             created_at:
               file.dbFileName.split("_")[0] === "qp"
                 ? dateFormatter(
-                    file.dbFileName.split(".")[0].split("_")[4].substring(0, 10)
+                    file.dbFileName.split(".")[0].split("_")[3].substring(0, 10)
                   )
                 : dateFormatter(
                     file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
@@ -58,7 +62,7 @@ const SubjectView = () => {
       setListTexts(
         data.map((item) => {
           return {
-            name: `${item.category} - ${item.year}`,
+            name: `${toLabel(item.category)} - ${item.year}`,
             type: "text",
             created_at: dateFormatter(item.created_at?.substring(0, 10)),
             val: item.content,

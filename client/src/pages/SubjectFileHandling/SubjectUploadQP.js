@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../components/utils/api";
+import {
+  uploadFileToStorage,
+  createFilePath,
+  removeFileFromStorage,
+} from "../../components/utils/fileHandling";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
 import Input from "../../components/common/MUI-themed/Input";
@@ -43,27 +48,40 @@ const UploadQP = () => {
     setSelectedFile(files[0]);
     setFilename(files[0].name);
   };
-  const uploadFile = async () => {
-    setLoading(true);
-    let formData = new FormData();
-    formData.append("subject_code", subjectId);
-    formData.append("category", `qp_${examCategory}`);
-    formData.append("year", examYear);
-    formData.append("file", selectedFile);
+  
+  const uploadFileRefData = async (dbFileName, downloadUrl) => {
+    console.log("sending link to backend", downloadUrl);
     try {
-      const { data } = await api.post(`/api/subjects/upload_file`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const { data } = await api.post(`/api/subjects/upload_file`, {
+        fileName: filename,
+        dbFileName: createFilePath(dbFileName, selectedFile.type),
+        downloadUrl,
       });
       console.log(data);
-      setSelectedFile(null);
       setFilename("");
+      setSelectedFile(null);
       setMsg(data.msg);
     } catch (e) {
       console.log(e);
+      setMsg(e.response.data.msg);
+      // Delete file from storage
+      removeFileFromStorage(`${subjectId}/${dbFileName}`);
     }
     setLoading(false);
+  };
+  const uploadFile = async () => {
+    setLoading(true);
+    let dbFileName = `qp_${examCategory}_${examYear}_${Date.now()}`;
+    let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
+      selectedFile,
+      `${subjectId}/${dbFileName}`
+    );
+    if (!status) {
+      setMsg(msg + " " + constraint.toString());
+      setLoading(false);
+      return;
+    }
+    uploadFileRefData(dbFileName, downloadUrl);
   };
 
   // const [numOfGrpElements, setNumOfGrpElements] = useState([]);

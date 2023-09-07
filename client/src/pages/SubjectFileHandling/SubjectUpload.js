@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import FilesDragAndDrop from "./components/FilesDragAndDrop";
-import Select from "../../components/common/MUI-themed/Select";
-import Input from "../../components/common/MUI-themed/Input";
 import api from "../../components/utils/api";
 import {
   uploadFileToStorage,
   createFilePath,
   removeFileFromStorage,
 } from "../../components/utils/fileHandling";
+import FilesDragAndDrop from "./components/FilesDragAndDrop";
+import Select from "../../components/common/MUI-themed/Select";
+import Input from "../../components/common/MUI-themed/Input";
 
 const SubjectUpload = () => {
   const { subjectId, category } = useParams();
