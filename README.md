@@ -4,11 +4,16 @@ Welcome to "The Garden," your go-to platform for all things academic. As a stude
 Note - This app is NOT affiliated to College of Technology, GBPUAT in any way or form. 
 
 ### Tech Stack Used
-#### Dev branch (full stack) :
 - MERN Stack - MongoDB, Mongoose, Express.js, React JS, Node.js, Tailwind CSS
 
-### How to run ```dev``` in local
-1. Clone this repository
+### Deployement
+The project is deployed on Render.com (https://thegarden.onrender.com).
+Limitations of deployment due to using free version deployment option of Render.com
+- The first API call might take a minute to complete as render.com starts a new server then
+- File storage is cleaned after each server session
+
+### How to run the project in local
+1. Clone this repository's dev branch
 2. Install node modules in root, client & server
 3. Add .env file in server directory with the following variables ```DATABASE_URL, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, FRONTEND_URL```
     - I use mongo db locally so it's ```mongodb://127.0.0.1/the-garden``` for me

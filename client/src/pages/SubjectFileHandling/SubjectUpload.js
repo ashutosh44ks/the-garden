@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import api from "../../components/utils/api";
+import {
+  uploadFileToStorage,
+  createFilePath,
+  removeFileFromStorage,
+} from "../../components/utils/fileHandling";
 import FilesDragAndDrop from "./components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
 import Input from "../../components/common/MUI-themed/Input";
-import api from "../../components/utils/api";
 
 const SubjectUpload = () => {
   const { subjectId, category } = useParams();
@@ -41,6 +46,33 @@ const SubjectUpload = () => {
   };
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const uploadFileRefData = async (dbFullPath, downloadUrl) => {
+    try {
+      const { data } = await api.post(`/api/subjects/upload_file_ref`, {
+        name: title,
+        dbFullPath,
+        downloadUrl,
+        size: selectedFile.size,
+        type: dbFullPath.split(".")[dbFullPath.split(".").length - 1],
+        uploader: jwt_decode(
+          JSON.parse(localStorage.getItem("logged")).accessToken
+        )?.username,
+      });
+      console.log(data);
+      setTitle("");
+      setFilename("");
+      setSelectedFile(null);
+      setMsg(data.msg);
+    } catch (e) {
+      console.log(e);
+      setMsg(e.response.data.msg);
+      // Delete file from storage
+      removeFileFromStorage(dbFullPath);
+    }
+    setLoading(false);
+  };
+
   const uploadFile = async () => {
     const userRole = jwt_decode(
       JSON.parse(localStorage.getItem("logged")).accessToken
@@ -50,27 +82,20 @@ const SubjectUpload = () => {
       return;
     }
     setLoading(true);
-    let formData = new FormData();
-    formData.append("subject_code", subjectId);
-    formData.append("category", uploadCategory);
-    formData.append("year", new Date().getFullYear());
-    formData.append("filename", title);
-    formData.append("file", selectedFile);
-    try {
-      const { data } = await api.post(`/api/subjects/upload_file`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(data);
-      setTitle("");
-      setFilename("");
-      setSelectedFile(null);
-      setMsg(data.msg);
-    } catch (e) {
-      console.log(e);
+    let dbFullPath = createFilePath(
+      `${subjectId}/${uploadCategory}_${Date.now()}`,
+      selectedFile.type
+    );
+    let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
+      selectedFile,
+      dbFullPath
+    );
+    if (!status) {
+      setMsg(msg + " " + constraint.toString());
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    uploadFileRefData(dbFullPath, downloadUrl);
   };
 
   return (

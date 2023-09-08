@@ -1,22 +1,36 @@
 const mongoose = require("mongoose");
 
 const subjectFilesSchema = new mongoose.Schema({
-  dbFileName: {
+  name: {
+    type: String,
+    required: true,
+  },
+  dbFullPath: {
     type: String,
     required: true,
     unique: true,
   },
-  userFileName: {
+  downloadUrl: {
     type: String,
+    required: true,
+    unique: true,
+  },
+  size: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
   },
   uploader: {
     type: String,
     required: true,
   },
-  subject_code: {
+  created_at: {
     type: String,
-    required: true,
-  }
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model("SubjectFiles", subjectFilesSchema);

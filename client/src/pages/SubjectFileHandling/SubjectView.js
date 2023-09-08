@@ -17,35 +17,6 @@ const SubjectView = () => {
   const [listFiles, setListFiles] = useState([]);
   const [listTexts, setListTexts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  function _arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  }
-  const getFile = async (file) => {
-    const { val, name, uploader, created_at } = file;
-    try {
-      const { data } = await api.get(
-        `/api/subjects/get_file?subject_code=${subjectId}&file_name=${val}`,
-        {
-          responseType: "arraybuffer",
-        }
-      );
-      setActiveItem({
-        data: _arrayBufferToBase64(data),
-        name,
-        type: val.split(".")[val.split(".").length - 1],
-        uploader,
-        created_at,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const getListOfFiles = async () => {
     setIsLoading(true);
     try {
@@ -56,17 +27,11 @@ const SubjectView = () => {
       setListFiles(
         data.list.map((file) => {
           return {
-            name: file.userFileName || file.dbFileName.split(".")[0],
-            type: file.dbFileName.split(".")[1],
-            created_at:
-              file.dbFileName.split("_")[0] === "qp"
-                ? dateFormatter(
-                    file.dbFileName.split(".")[0].split("_")[4].substring(0, 10)
-                  )
-                : dateFormatter(
-                    file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
-                  ),
-            val: file.dbFileName,
+            name: file.name,
+            dbFullPath: file.dbFullPath,
+            type: file.type,
+            created_at: dateFormatter(file.created_at?.substring(0, 10)),
+            val: file.downloadUrl,
             uploader: file.uploader,
           };
         })
@@ -85,7 +50,7 @@ const SubjectView = () => {
       setListTexts(
         data.map((item) => {
           return {
-            name: `${item.category} - ${item.year}`,
+            name: `${toLabel(item.category)} - ${item.year}`,
             type: "text",
             created_at: dateFormatter(item.created_at?.substring(0, 10)),
             val: item.content,
@@ -147,7 +112,7 @@ const SubjectView = () => {
       {(listTexts.length > 0 || listFiles.length > 0) && (
         <FileManager
           list={[...listTexts, ...listFiles]}
-          getFile={getFile}
+          // getFile={getFile}
           setActiveItem={setActiveItem}
           subjectId={subjectId}
           setListFiles={setListFiles}
@@ -175,11 +140,9 @@ const SubjectView = () => {
             {activeItem.type !== "text" && (
               <a
                 className="btn btn-secondary"
-                href={
-                  activeItem.type === "pdf"
-                    ? `data:application/pdf;base64,${activeItem.data}`
-                    : `data:image/png;base64,${activeItem.data}`
-                }
+                href={activeItem.val}
+                target="_blank"
+                rel="noreferrer"
                 download={category + "." + activeItem.type}
               >
                 Download
@@ -187,14 +150,17 @@ const SubjectView = () => {
             )}
           </div>
           {activeItem.type === "text" ? (
-            <div className="whitespace-pre-line break-words">{activeItem.val}</div>
+            <div className="whitespace-pre-line break-words">
+              {activeItem.val}
+            </div>
           ) : activeItem.type === "pdf" ? (
-            <PdfViewer file={activeItem.data} />
+            <PdfViewer file={activeItem.val} />
           ) : activeItem.type === "docx" ? (
-            <div className="text-dark">Not supported yet. You can still download the file to your device.
+            <div className="text-dark">
+              Not supported yet. You can still download the file to your device.
             </div>
           ) : (
-            <ImageViewer file={activeItem.data} />
+            <ImageViewer file={activeItem.val} />
           )}
         </div>
       )}
