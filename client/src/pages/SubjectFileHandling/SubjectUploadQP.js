@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import {
   uploadFileToStorage,
@@ -48,14 +49,18 @@ const UploadQP = () => {
     setSelectedFile(files[0]);
     setFilename(files[0].name);
   };
-  
-  const uploadFileRefData = async (dbFileName, downloadUrl) => {
-    console.log("sending link to backend", downloadUrl);
+
+  const uploadFileRefData = async (dbFullPath, downloadUrl) => {
     try {
-      const { data } = await api.post(`/api/subjects/upload_file`, {
-        fileName: filename,
-        dbFileName: createFilePath(dbFileName, selectedFile.type),
+      const { data } = await api.post(`/api/subjects/upload_file_ref`, {
+        name: filename,
+        dbFullPath,
         downloadUrl,
+        size: selectedFile.size,
+        type: dbFullPath.split(".")[dbFullPath.split(".").length - 1],
+        uploader: jwt_decode(
+          JSON.parse(localStorage.getItem("logged")).accessToken
+        )?.username,
       });
       console.log(data);
       setFilename("");
@@ -65,23 +70,26 @@ const UploadQP = () => {
       console.log(e);
       setMsg(e.response.data.msg);
       // Delete file from storage
-      removeFileFromStorage(`${subjectId}/${dbFileName}`);
+      removeFileFromStorage(dbFullPath);
     }
     setLoading(false);
   };
   const uploadFile = async () => {
     setLoading(true);
-    let dbFileName = `qp_${examCategory}_${examYear}_${Date.now()}`;
+    let dbFullPath = createFilePath(
+      `${subjectId}/qp_${examCategory}_${Date.now()}`,
+      selectedFile.type
+    );
     let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
       selectedFile,
-      `${subjectId}/${dbFileName}`
+      dbFullPath
     );
     if (!status) {
       setMsg(msg + " " + constraint.toString());
       setLoading(false);
       return;
     }
-    uploadFileRefData(dbFileName, downloadUrl);
+    uploadFileRefData(dbFullPath, downloadUrl);
   };
 
   // const [numOfGrpElements, setNumOfGrpElements] = useState([]);

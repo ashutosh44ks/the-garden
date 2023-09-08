@@ -27,22 +27,10 @@ const SubjectView = () => {
       setListFiles(
         data.list.map((file) => {
           return {
-            name:
-              file.dbFileName.split("_")[0] === "qp"
-                ? `${toLabel(file.dbFileName.split("_")[1])} - ${
-                    file.dbFileName.split("_")[2]
-                  }`
-                : file.fileName || file.dbFileName.split(".")[0],
-            dbFileName: file.dbFileName,
-            type: file.dbFileName.split(".")[1],
-            created_at:
-              file.dbFileName.split("_")[0] === "qp"
-                ? dateFormatter(
-                    file.dbFileName.split(".")[0].split("_")[3].substring(0, 10)
-                  )
-                : dateFormatter(
-                    file.dbFileName.split(".")[0].split("_")[2].substring(0, 10)
-                  ),
+            name: file.name,
+            dbFullPath: file.dbFullPath,
+            type: file.type,
+            created_at: dateFormatter(file.created_at?.substring(0, 10)),
             val: file.downloadUrl,
             uploader: file.uploader,
           };

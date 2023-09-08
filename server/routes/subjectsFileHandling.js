@@ -3,14 +3,9 @@ const router = express.Router();
 const { authenticateToken, forModOnly } = require("../utils");
 const SubjectFiles = require("../models/subjectFiles");
 
-router.post("/upload_file", authenticateToken, async (req, res) => {
+router.post("/upload_file_ref", authenticateToken, async (req, res) => {
   try {
-    const newSubjectFile = new SubjectFiles({
-      downloadUrl: req.body.downloadUrl,
-      dbFileName: req.body.dbFileName,
-      fileName: req.body.fileName,
-      uploader: req.user.username,
-    });
+    const newSubjectFile = new SubjectFiles(req.body);
     const uploadedFile = await newSubjectFile.save();
     res.status(201).json({ msg: "File uploaded successfully", uploadedFile });
   } catch (e) {
@@ -18,27 +13,39 @@ router.post("/upload_file", authenticateToken, async (req, res) => {
   }
 });
 router.get("/get_dir_files", authenticateToken, async (req, res) => {
-  const subject_code = req.query.subject_code;
-  const prefix = req.query.prefix;
-  const allowedPrefixes = ["qp", "syllabus", "notes", "other"];
-  if (!allowedPrefixes.includes(prefix))
-    res.status(422).json({ msg: "Enter a valid prefix", allowedPrefixes });
-  const all_files = await SubjectFiles.find({
-    subject_code: subject_code,
-  });
-  const list = all_files.filter((file) => file.dbFileName.startsWith(prefix));
-  res.status(200).json({ list });
+  try {
+    const subject_code = req.query.subject_code;
+    const prefix = req.query.prefix;
+    const allowedPrefixes = ["qp", "syllabus", "notes", "other"];
+    if (!allowedPrefixes.includes(prefix))
+      res.status(422).json({ msg: "Enter a valid prefix", allowedPrefixes });
+    const all_files = await SubjectFiles.find({
+      subject_code: subject_code,
+    });
+    if (!all_files)
+      return res.status(404).json({ msg: "No files found in db" });
+
+    const list = all_files.filter((file) => {
+      let dbFileName =
+        file.dbFullPath.split("/")[file.dbFullPath.split("/").length - 1];
+      if (dbFileName.split("_")[0] === prefix) return true;
+      else return false;
+    });
+    res.status(200).json({ list });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
 });
 
 router.delete(
-  "/remove_file",
+  "/remove_file_ref",
   authenticateToken,
   forModOnly,
   async (req, res) => {
-    const dbFileName = req.query.dbFileName;
+    const dbFullPath = req.query.dbFullPath;
     try {
       const deletedFile = await SubjectFiles.findOne({
-        dbFileName,
+        dbFullPath,
       });
       if (!deletedFile)
         return res.status(404).json({ msg: "File not found in database" });
@@ -49,7 +56,6 @@ router.delete(
     }
   }
 );
-// done & tested above
 
 // router.get(
 //   "/get_all_dir_files",

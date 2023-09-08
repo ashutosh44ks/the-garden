@@ -47,13 +47,17 @@ const SubjectUpload = () => {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const uploadFileRefData = async (dbFileName, downloadUrl) => {
-    console.log("sending link to backend", downloadUrl);
+  const uploadFileRefData = async (dbFullPath, downloadUrl) => {
     try {
-      const { data } = await api.post(`/api/subjects/upload_file`, {
-        fileName: title,
-        dbFileName: createFilePath(dbFileName, selectedFile.type),
+      const { data } = await api.post(`/api/subjects/upload_file_ref`, {
+        name: title,
+        dbFullPath,
         downloadUrl,
+        size: selectedFile.size,
+        type: dbFullPath.split(".")[dbFullPath.split(".").length - 1],
+        uploader: jwt_decode(
+          JSON.parse(localStorage.getItem("logged")).accessToken
+        )?.username,
       });
       console.log(data);
       setTitle("");
@@ -64,7 +68,7 @@ const SubjectUpload = () => {
       console.log(e);
       setMsg(e.response.data.msg);
       // Delete file from storage
-      removeFileFromStorage(`${subjectId}/${dbFileName}`);
+      removeFileFromStorage(dbFullPath);
     }
     setLoading(false);
   };
@@ -78,17 +82,20 @@ const SubjectUpload = () => {
       return;
     }
     setLoading(true);
-    let dbFileName = `${uploadCategory}_${new Date().getFullYear()}_${Date.now()}`;
+    let dbFullPath = createFilePath(
+      `${subjectId}/${uploadCategory}_${Date.now()}`,
+      selectedFile.type
+    );
     let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
       selectedFile,
-      `${subjectId}/${dbFileName}`
+      dbFullPath
     );
     if (!status) {
       setMsg(msg + " " + constraint.toString());
       setLoading(false);
       return;
     }
-    uploadFileRefData(dbFileName, downloadUrl);
+    uploadFileRefData(dbFullPath, downloadUrl);
   };
 
   return (

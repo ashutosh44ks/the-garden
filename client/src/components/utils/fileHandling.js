@@ -46,10 +46,9 @@ export const uploadFileToStorage = async (file, path) => {
   const fileFilterData = fileFilter(file.type, file.size);
   if (!fileFilterData.status) return fileFilterData;
 
-  let filePath = createFilePath(path, file.type);
-  const subjectDirRef = ref(storage, filePath);
-  await uploadBytes(subjectDirRef, file);
-  const downloadUrl = await getDownloadURL(subjectDirRef);
+  const fileRef = ref(storage, path);
+  await uploadBytes(fileRef, file);
+  const downloadUrl = await getDownloadURL(fileRef);
   return {
     status: true,
     downloadUrl,

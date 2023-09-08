@@ -14,28 +14,28 @@ const FileManager = ({
     JSON.parse(localStorage.getItem("logged")).accessToken
   )?.role;
 
-  const removeFileRefData = async (dbFileName) => {
+  const removeFileRefData = async (dbFullPath) => {
     try {
       const { data } = await api.delete(
-        `/api/subjects/remove_file?dbFileName=${dbFileName}`
+        `/api/subjects/remove_file_ref?dbFullPath=${dbFullPath}`
       );
       console.log(data);
       setListFiles((prev) =>
-        prev.filter((item) => item.dbFileName !== dbFileName)
+        prev.filter((item) => item.dbFullPath !== dbFullPath)
       );
     } catch (err) {
       console.log(err);
     }
   };
-  const removeFile = async (dbFileName) => {
+  const removeFile = async (dbFullPath) => {
     try {
-      await removeFileFromStorage(`${subjectId}/${dbFileName}`);
-      removeFileRefData(dbFileName);
+      await removeFileFromStorage(dbFullPath);
+      removeFileRefData(dbFullPath);
     } catch (err) {
       console.log(err);
       if (err.code === "storage/object-not-found") {
         console.log("File not found in storage, deleting reference");
-        removeFileRefData(dbFileName);
+        removeFileRefData(dbFullPath);
       }
     }
   };
@@ -79,7 +79,7 @@ const FileManager = ({
                     setActiveItem(item);
                   }}
                   className="cursor-pointer"
-                  key={item.dbFileName}
+                  key={item.downloadUrl}
                 >
                   <td className="px-4 py-2">
                     <span className={`file-tag text-sm ${item.type}`}>
@@ -96,7 +96,7 @@ const FileManager = ({
                       className="px-4 py-2 text-red-500"
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (item.type !== "text") removeFile(item.dbFileName);
+                        if (item.type !== "text") removeFile(item.dbFullPath);
                         else removeText(item.key);
                       }}
                     >
