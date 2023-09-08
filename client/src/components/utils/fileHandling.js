@@ -4,6 +4,8 @@ import {
   ref,
   uploadBytes,
   deleteObject,
+  listAll,
+  getMetadata,
 } from "firebase/storage";
 
 export const createFilePath = (path, mimetype) => {
@@ -64,4 +66,26 @@ export const removeFileFromStorage = async (path) => {
   // Create a reference to the file to delete
   const fileRef = ref(storage, path);
   await deleteObject(fileRef);
+};
+
+// Get all files from storage
+export const getAllFiles = async () => {
+  const rootRef = ref(storage, "/");
+  // recursively get all files from root directory
+  const listAllFiles = async (dirRef) => {
+    let files = [];
+    const res = await listAll(dirRef);
+    // get metadata of each file
+    for (const item of res.items) {
+      const metadata = await getMetadata(item);
+      files.push(metadata);
+    }
+    // recursively get all files from sub-directories
+    for (const item of res.prefixes) {
+      const subFiles = await listAllFiles(item);
+      files = files.concat(subFiles);
+    }
+    return files;
+  };
+  return await listAllFiles(rootRef);
 };

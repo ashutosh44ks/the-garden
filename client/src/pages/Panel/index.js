@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
+import {
+  getAllFiles,
+  removeFileFromStorage,
+} from "../../components/utils/fileHandling";
 import dateFormatter from "../../components/utils/dateFormatter";
 import Select from "../../components/common/MUI-themed/Select";
 import { RiArrowUpSLine, RiArrowDownSLine } from "react-icons/ri";
@@ -17,17 +21,29 @@ const Panel = () => {
     }
   };
   const [listFiles, setListFiles] = useState([]);
+  const getTheDate = (fileName) => {
+    switch (fileName.split("_")[0]) {
+      case "qp":
+        return fileName.split(".")[0].split("_")[3].substring(0, 10);
+      case "calendar":
+        return "";
+      default:
+        return fileName.split(".")[0].split("_")[2].substring(0, 10);
+    }
+  };
   const getListOfFiles = async () => {
     try {
-      const { data } = await api.get(`/api/subjects/get_all_dir_files`);
+      let files = await getAllFiles();
       setListFiles(
-        data.map((file) => {
+        files.map((file) => {
+          let isNotCalendar = file.name.split("_").length > 1;
           return {
-            ...file,
-            created_at:
-              file.dbFileName.split("_")[0] === "qp"
-                ? file.dbFileName.split(".")[0].split("_")[4].substring(0, 10)
-                : file.dbFileName.split(".")[0].split("_")[2].substring(0, 10),
+            name: file.name,
+            fullPath: file.fullPath,
+            subject_code: file.fullPath.split("/")[0],
+            created_at: isNotCalendar ? getTheDate(file.name) : "",
+            type: file.name.split(".")[file.name.split(".").length - 1],
+            size: file.size,
           };
         })
       );
@@ -39,6 +55,21 @@ const Panel = () => {
     getUsers();
     getListOfFiles();
   }, []);
+
+  const removeFile = async (subjectId, path, filename) => {
+    try {
+      await removeFileFromStorage(path);
+      const { data } = await api.delete(
+        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${filename}`
+      );
+      console.log(data);
+      setListFiles((prev) =>
+        prev.filter((item) => item.name !== filename)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const isValidAction = (username) => {
     const currentUser = jwt_decode(
@@ -113,19 +144,6 @@ const Panel = () => {
       );
       console.log(data);
       getUsers();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const removeFile = async (subjectId, dbFileName) => {
-    try {
-      const { data } = await api.delete(
-        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
-      );
-      console.log(data);
-      setListFiles((prev) =>
-        prev.filter((item) => item.dbFileName !== dbFileName)
-      );
     } catch (err) {
       console.log(err);
     }
@@ -217,17 +235,9 @@ const Panel = () => {
                 return b[sortBy] - a[sortBy];
               })
               .map((file) => (
-                <tr key={file.dbFileName}>
-                  <td className="px-4 py-2 text-dark" title={file.dbFileName}>
-                    {file.userFileName || file.dbFileName.split(".")[0]}
-                  </td>
-                  <td className="px-4 py-2 text-dark">
-                    {
-                      file.dbFileName.split(".")[
-                        file.dbFileName.split(".").length - 1
-                      ]
-                    }
-                  </td>
+                <tr key={file.fullPath}>
+                  <td className="px-4 py-2 text-dark">{file.name}</td>
+                  <td className="px-4 py-2 text-dark">{file.type}</td>
                   <td className="px-4 py-2 text-dark">
                     {Math.trunc(file.size / 1000) + " KB"}
                   </td>
@@ -238,7 +248,7 @@ const Panel = () => {
                   <td
                     className="text-red-500 cursor-pointer"
                     onClick={() =>
-                      removeFile(file.subject_code, file.dbFileName)
+                      removeFile(file.subject_code, file.fullPath, file.name)
                     }
                   >
                     Delete
