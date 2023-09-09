@@ -9,24 +9,13 @@ const ViewCalendar = () => {
 
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  function _arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  }
-  const getFile = async () => {
+  const getCalendar = async () => {
+    setIsLoading(true);
     try {
       const { data } = await api.get(
-        `/api/calendars/get_calendar?calendar_type=${calendarType}`,
-        {
-          responseType: "arraybuffer",
-        }
+        `/api/calendars/get_calendar?type=${calendarType}`
       );
-      setFile(_arrayBufferToBase64(data));
+      setFile(data);
     } catch (err) {
       console.log(err);
     }
@@ -38,7 +27,7 @@ const ViewCalendar = () => {
   )?.role;
 
   useEffect(() => {
-    getFile();
+    getCalendar();
   }, []);
 
   return (

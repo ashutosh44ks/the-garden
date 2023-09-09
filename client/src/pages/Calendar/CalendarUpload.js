@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "../../components/utils/api";
+import { uploadFileToStorage, removeFileFromStorage } from "../../components/utils/fileHandling";
 import FilesDragAndDrop from "../SubjectFileHandling/components/FilesDragAndDrop";
 import Select from "../../components/common/MUI-themed/Select";
-import api from "../../components/utils/api";
 
 const CalendarUpload = () => {
   const { calendarType } = useParams();
@@ -31,28 +32,39 @@ const CalendarUpload = () => {
     setSelectedFile(files[0]);
     setFilename(files[0].name.split(".")[0]);
   };
-  const [loading, setloading] = useState(false);
-  const uploadFile = async () => {
-    setloading(true);
-    let formData = new FormData();
-    formData.append("calendar_type", uploadCategory);
-    formData.append("file", selectedFile);
+  const [loading, setLoading] = useState(false);
+  const uploadFileRef = async (downloadUrl) => {
+    setLoading(true);
     try {
-      const { data } = await api.post(
-        `/api/calendars/upload_calendar`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = await api.post(`/api/calendars/upload_calendar`, {
+        type: uploadCategory,
+        downloadUrl,
+      });
       console.log(data);
       navigate(`/calendars/${calendarType}`);
     } catch (e) {
       console.log(e);
+      removeFileFromStorage(`calendars/${uploadCategory}`);
     }
-    setloading(false);
+    setLoading(false);
+  };
+
+  const uploadFile = async () => {
+    try {
+      let { status, downloadUrl, msg, constraint } = await uploadFileToStorage(
+        selectedFile,
+        `calendars/${uploadCategory}`
+      );
+      if (!status) {
+        // setMsg(msg + " " + constraint.toString());
+        console.log(msg + " " + constraint.toString());
+        setLoading(false);
+        return;
+      }
+      uploadFileRef(downloadUrl);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

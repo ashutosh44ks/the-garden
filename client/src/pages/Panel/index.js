@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
+import {
+  getAllFiles,
+  removeFileFromStorage,
+  getDownloadUrlFromPath,
+} from "../../components/utils/fileHandling";
 import dateFormatter from "../../components/utils/dateFormatter";
 import Select from "../../components/common/MUI-themed/Select";
 import { RiArrowUpSLine, RiArrowDownSLine } from "react-icons/ri";
@@ -19,15 +24,20 @@ const Panel = () => {
   const [listFiles, setListFiles] = useState([]);
   const getListOfFiles = async () => {
     try {
-      const { data } = await api.get(`/api/subjects/get_all_dir_files`);
+      let files = await getAllFiles();
       setListFiles(
-        data.map((file) => {
+        files.map((file) => {
+          let isCalendarType = file.fullPath.split("/")[0] === "calendars";
+          let temp = file.name.split(".")[0].split("_");
           return {
-            ...file,
-            created_at:
-              file.dbFileName.split("_")[0] === "qp"
-                ? file.dbFileName.split(".")[0].split("_")[4].substring(0, 10)
-                : file.dbFileName.split(".")[0].split("_")[2].substring(0, 10),
+            name: file.name,
+            fullPath: file.fullPath,
+            subject_code: file.fullPath.split("/")[0],
+            created_at: isCalendarType
+              ? ""
+              : dateFormatter(temp[temp.length - 1].substring(0, 10)),
+            type: file.name.split(".")[file.name.split(".").length - 1],
+            size: file.size,
           };
         })
       );
@@ -39,6 +49,19 @@ const Panel = () => {
     getUsers();
     getListOfFiles();
   }, []);
+
+  const removeFile = async (subjectId, path, filename) => {
+    try {
+      await removeFileFromStorage(path);
+      const { data } = await api.delete(
+        `/api/subjects/remove_file_ref?subject_code=${subjectId}&dbFullPath=${path}`
+      );
+      console.log(data);
+      setListFiles((prev) => prev.filter((item) => item.name !== filename));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const isValidAction = (username) => {
     const currentUser = jwt_decode(
@@ -117,19 +140,6 @@ const Panel = () => {
       console.log(err);
     }
   };
-  const removeFile = async (subjectId, dbFileName) => {
-    try {
-      const { data } = await api.delete(
-        `/api/subjects/remove_file?subject_code=${subjectId}&dbFileName=${dbFileName}`
-      );
-      console.log(data);
-      setListFiles((prev) =>
-        prev.filter((item) => item.dbFileName !== dbFileName)
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const [sortBy, setSortBy] = useState("created_at");
 
@@ -186,7 +196,7 @@ const Panel = () => {
       </div>
       <div className="user-manager my-4">
         <div className="flex justify-between items-center my-2">
-          <h3 className="font-bold">Recently Uploaded Files</h3>
+          <h3 className="font-bold text-dark">Recently Uploaded Files</h3>
           <Select
             label="Sort by"
             options={
@@ -203,10 +213,10 @@ const Panel = () => {
         <table className="text-dark-2 text-sm w-full">
           <thead>
             <tr>
-              <th className="text-left px-4 py-2">Name</th>
+              <th className="text-left px-4 py-2">DB FileName</th>
               <th className="text-left px-4 py-2">Type</th>
               <th className="text-left px-4 py-2">Size</th>
-              <th className="text-left px-4 py-2">Subject Code</th>
+              <th className="text-left px-4 py-2">DB Dir</th>
               <th className="text-left px-4 py-2">Created At</th>
               <th></th>
             </tr>
@@ -217,28 +227,24 @@ const Panel = () => {
                 return b[sortBy] - a[sortBy];
               })
               .map((file) => (
-                <tr key={file.dbFileName}>
-                  <td className="px-4 py-2 text-dark" title={file.dbFileName}>
-                    {file.userFileName || file.dbFileName.split(".")[0]}
-                  </td>
-                  <td className="px-4 py-2 text-dark">
-                    {
-                      file.dbFileName.split(".")[
-                        file.dbFileName.split(".").length - 1
-                      ]
-                    }
-                  </td>
+                <tr
+                  key={file.fullPath}
+                  onClick={async () => {
+                    window.open(await getDownloadUrlFromPath(file.fullPath));
+                  }}
+                  className="cursor-pointer"
+                >
+                  <td className="px-4 py-2 text-dark">{file.name}</td>
+                  <td className="px-4 py-2 text-dark">{file.type}</td>
                   <td className="px-4 py-2 text-dark">
                     {Math.trunc(file.size / 1000) + " KB"}
                   </td>
                   <td className="px-4 py-2">{file.subject_code}</td>
-                  <td className="px-4 py-2">
-                    {dateFormatter(file.created_at)}
-                  </td>
+                  <td className="px-4 py-2">{file.created_at}</td>
                   <td
                     className="text-red-500 cursor-pointer"
                     onClick={() =>
-                      removeFile(file.subject_code, file.dbFileName)
+                      removeFile(file.subject_code, file.fullPath, file.name)
                     }
                   >
                     Delete
