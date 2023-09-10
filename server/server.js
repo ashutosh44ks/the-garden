@@ -26,6 +26,10 @@ db.once("open", () => {
   console.log("Connected to MongoDB", process.env.DATABASE_URL);
 });
 
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
+
 const authRouter = require("./routes/auth");
 app.use("/api/auth", authRouter);
 const usersRouter = require("./routes/users");
