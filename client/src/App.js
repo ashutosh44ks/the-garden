@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import api from "./components/utils/api";
 import ProtectedRoute from "./components/utils/ProtectedRoute";
 import Home from "./pages/Home";
 import Entry from "./pages/Entry";
@@ -17,8 +19,30 @@ import Upcoming from "./pages/Upcoming";
 import AddEvent from "./pages/Upcoming/AddEvent";
 
 function App() {
+  const [activeBackend, setActiveBackend] = useState(false);
+  const checkServer = async () => {
+    console.log("checking server...");
+    try {
+      await api.get("/");
+      setActiveBackend(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkServer();
+    }, 10000);
+    if (activeBackend) clearInterval(interval);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Router>
+      {!activeBackend && (
+        <div className="bg-white p-2 rounded fixed left-[1rem] bottom-[1rem] border border-slate-300 text-xs">
+          Starting backend...
+        </div>
+      )}
       <Routes>
         <Route path="/entry" element={<Entry />} />
         <Route
