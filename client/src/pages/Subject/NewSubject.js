@@ -26,7 +26,8 @@ const NewSubject = () => {
   const [loading, setLoading] = useState(false);
   const addSubject = async () => {
     setLoading(true);
-    let formattedTags = tags.split(",").map((tag) => tag.trim());
+    let formattedTags =
+      tags.length > 0 ? tags.split(",").map((tag) => tag.trim()) : [];
     try {
       const { data } = await api.post("/api/subjects/add_subject", {
         name,
