@@ -19,18 +19,25 @@ router.get("/get_dir_files", authenticateToken, async (req, res) => {
     const allowedPrefixes = ["qp", "syllabus", "notes", "other"];
     if (!allowedPrefixes.includes(prefix))
       res.status(422).json({ msg: "Enter a valid prefix", allowedPrefixes });
-    const all_files = await SubjectFiles.find({
-      subject_code: subject_code,
-    });
+    const all_files = await SubjectFiles.find();
     if (!all_files)
       return res.status(404).json({ msg: "No files found in db" });
 
     const list = all_files.filter((file) => {
       let dbFileName =
         file.dbFullPath.split("/")[file.dbFullPath.split("/").length - 1];
-      if (dbFileName.split("_")[0] === prefix) return true;
+      let subjectCode = file.dbFullPath.split("/")[0];
+      if (subjectCode === subject_code && dbFileName.split("_")[0] === prefix)
+        return true;
       else return false;
     });
+
+    if (!list.length)
+      return res
+        .status(404)
+        .json({
+          msg: `No files found in db for ${prefix} && ${subject_code}`,
+        });
     res.status(200).json({ list });
   } catch (err) {
     res.status(400).json({ msg: err.message });
