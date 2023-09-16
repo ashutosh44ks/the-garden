@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../components/utils/api";
 import Input from "../../components/common/MUI-themed/Input";
 import Select from "../../components/common/MUI-themed/Select";
@@ -8,6 +8,7 @@ import { FiAlertCircle } from "react-icons/fi";
 
 const NewSubject = () => {
   const navigate = useNavigate();
+
   const BranchList = [
     { value: "IT", label: "Information Technology" },
     { value: "CSE", label: "Computer Engineering" },
@@ -18,7 +19,7 @@ const NewSubject = () => {
   const [subjectCode, setSubjectCode] = useState("");
   const [description, setDescription] = useState("");
   const [branch, setBranch] = useState("");
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState(useParams().year || "");
   const [credits, setCredits] = useState("");
   const [tags, setTags] = useState("");
   const [professors, setProfessors] = useState([]);

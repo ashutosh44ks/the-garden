@@ -37,7 +37,7 @@ function App() {
           }
         />
         <Route
-          path="/subject/new_subject"
+          path="/subject/new_subject/:year"
           element={
             <ProtectedRoute>
               <NewSubject />

@@ -25,7 +25,7 @@ const PlaceholderCards = () => {
   ));
 };
 
-const SubjectGrid = ({ subjects, userRole, loading }) => {
+const SubjectGrid = ({ subjects, userRole, loading, year }) => {
   return (
     <div className="flex flex-wrap items-stretch gap-4 my-5">
       {loading ? (
@@ -60,7 +60,7 @@ const SubjectGrid = ({ subjects, userRole, loading }) => {
             </Link>
           ))}
           {userRole === "admin" || userRole === "moderator" ? (
-            <Link className="subject card" to="/subject/new_subject">
+            <Link className="subject card" to={`/subject/new_subject/${year}`}>
               <div className="card-body">
                 <div className="mb-2">
                   <h3 className="card-title">Add New Subject</h3>
