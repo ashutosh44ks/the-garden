@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Subjects = require("../models/subjects");
 const SubjectTexts = require("../models/subjectTexts");
+const SubjectFiles = require("../models/subjectFiles");
 const Votes = require("../models/votes");
 const { authenticateToken, forModOnly } = require("../utils");
 
@@ -39,13 +40,27 @@ router.delete(
   forModOnly,
   async (req, res) => {
     try {
-      const subject = await Subjects.findOneAndDelete({
+      const subject = await Subjects.findOne({
         subject_code: req.query.subject_code,
       });
       if (subject === null) {
         return res.status(404).json({ msg: "Cannot find subject" });
       }
-      res.json({ subject });
+      subject.remove();
+      const subjectFiles = await SubjectFiles.find();
+      subjectFiles.forEach((file) => {
+        if (file.dbFullPath.split("/")[0] === req.query.subject_code)
+          file.remove();
+      });
+      const subjectTexts = await SubjectTexts.find();
+      subjectTexts.forEach((text) => {
+        if (text.subject_code === req.query.subject_code) text.remove();
+      });
+      const subjectVotes = await Votes.find();
+      subjectVotes.forEach((vote) => {
+        if (vote.subject_code === req.query.subject_code) vote.remove();
+      });
+      res.status(200).json({ msg: "Subject deleted successfully" });
     } catch (e) {
       res.status(500).json({ msg: e.message });
     }

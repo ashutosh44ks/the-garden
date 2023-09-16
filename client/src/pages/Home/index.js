@@ -157,6 +157,7 @@ const Home = () => {
           </div>
         )}
         <SubjectGrid
+          year={year}
           subjects={subjects}
           userRole={user.role}
           loading={loading}
