@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
 import toLabel from "../../components/utils/toLabel";
 import "./Subject.css";
+import { removeDirFromStorage } from "../../components/utils/fileHandling";
 
 const Subject = () => {
   const navigate = useNavigate();
@@ -56,11 +57,20 @@ const Subject = () => {
     JSON.parse(localStorage.getItem("logged")).accessToken
   )?.role;
   const removeSubject = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to remove this subject? All data from backend + files from firebase storage will be deleted."
+    );
+    if (!confirm) return;
+    const alert = window.confirm(
+      "Check network calls and firebase storage to confirm. In case of error, manually delete residuals to avoid clutter."
+    );
+    if (!alert) return;
     try {
       const { data } = await api.delete(
         `/api/subjects/delete_subject?subject_code=${subjectId}`
       );
       console.log(data);
+      await removeDirFromStorage(`${subjectId}`);
       navigate("/");
     } catch (err) {
       console.log(err);

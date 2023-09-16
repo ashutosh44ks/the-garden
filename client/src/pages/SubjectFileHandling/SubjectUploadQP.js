@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
+import toLabel from "../../components/utils/toLabel";
 import {
   uploadFileToStorage,
   createFilePath,
@@ -123,10 +124,10 @@ const UploadQP = () => {
           <u
             className="text-blue cursor-pointer"
             onClick={() => {
-              navigate(`/subject/${subjectId}`);
+              navigate(`/subject/${subjectId}/qp/view`);
             }}
           >
-            {subjectId} page
+            QP page
           </u>
         </div>
         <p className="text-dark-2">

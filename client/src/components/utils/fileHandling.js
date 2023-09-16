@@ -67,6 +67,24 @@ export const removeFileFromStorage = async (path) => {
   await deleteObject(fileRef);
 };
 
+// Delete All files from Firebase Storage
+export const removeDirFromStorage = async (path) => {
+  const rootRef = ref(storage, path);
+  // recursively delete all files from path directory
+  const deleteAllFiles = async (dirRef) => {
+    const res = await listAll(dirRef);
+    // delete each file
+    for (const item of res.items) {
+      await deleteObject(item);
+    }
+    // recursively delete all files from sub-directories
+    for (const item of res.prefixes) {
+      await deleteAllFiles(item);
+    }
+  };
+  await deleteAllFiles(rootRef);
+};
+
 // Get all files from storage
 export const getAllFiles = async () => {
   const rootRef = ref(storage, "/");

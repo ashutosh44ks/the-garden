@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import api from "../../components/utils/api";
+import toLabel from "../../components/utils/toLabel";
 import {
   uploadFileToStorage,
   createFilePath,
@@ -38,14 +39,16 @@ const SubjectUpload = () => {
   const [title, setTitle] = useState("");
   // for file upload task
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState("");
+  
   const onUpload = (files) => {
     console.log(files);
+    setMsg("");
     setSelectedFile(files[0]);
     setTitle(files[0].name.split(".")[0]);
     setFilename(files[0].name.split(".")[0]);
   };
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
 
   const uploadFileRefData = async (dbFullPath, downloadUrl) => {
     try {
@@ -107,10 +110,10 @@ const SubjectUpload = () => {
           <u
             className="text-blue cursor-pointer"
             onClick={() => {
-              navigate(`/subject/${subjectId}`);
+              navigate(`/subject/${subjectId}/${category}/view`);
             }}
           >
-            {subjectId} page
+            {toLabel(category)} page
           </u>
         </div>
         <p className="text-dark-2">
