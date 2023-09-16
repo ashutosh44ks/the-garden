@@ -7,14 +7,14 @@ const PlaceholderCards = () => {
     <div className="subject card" key={item}>
       <div className="card-body">
         <div className="mb-2">
-          <h3 className="card-title skeleton-loading"></h3>
+          <h3 className="card-title skeleton-loading">{}</h3>
           <div className="card-subtitle text-sm skeleton-loading"></div>
         </div>
-        <p className="card-text">
+        <div className="card-text">
           <div className="skeleton-loading"></div>
           <div className="skeleton-loading"></div>
           <div className="skeleton-loading"></div>
-        </p>
+        </div>
       </div>
       <div className="card-footer flex gap-2">
         {[1, 2, 3].map((tag) => (
