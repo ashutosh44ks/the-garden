@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+// allow cross-origin requests
 const app = express();
 app.use(
   cors({
